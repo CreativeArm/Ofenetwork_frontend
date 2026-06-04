@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useBodyScrollLock } from "../lib/use-body-scroll-lock";
 import { AdminStatusBadge } from "./admin-ui";
 
 type NotificationStatus = "Draft" | "Scheduled" | "Sent" | "Live";
@@ -51,6 +52,8 @@ export function AdminNotificationCenter({ items }: AdminNotificationCenterProps)
   const [draftAudience, setDraftAudience] = useState<(typeof audiences)[number]>("All users");
   const [draftChannel, setDraftChannel] = useState<(typeof channels)[number]>("Dashboard");
   const [draftStatus, setDraftStatus] = useState<(typeof statuses)[number]>("Draft");
+
+  useBodyScrollLock(isComposeOpen);
 
   const closeCompose = () => {
     setIsComposeOpen(false);

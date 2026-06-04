@@ -1,5 +1,6 @@
 "use client";
 
+import { useBodyScrollLock } from "../lib/use-body-scroll-lock";
 import { Icon } from "./icons";
 
 export type TransactionSubmittedPopupContent = {
@@ -15,6 +16,8 @@ export function TransactionSubmittedPopup({
   content: TransactionSubmittedPopupContent | null;
   onClose: () => void;
 }) {
+  useBodyScrollLock(Boolean(content));
+
   if (!content) {
     return null;
   }

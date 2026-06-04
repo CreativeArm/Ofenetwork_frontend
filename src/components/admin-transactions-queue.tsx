@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { useBodyScrollLock } from "../lib/use-body-scroll-lock";
 import { AdminStatusBadge } from "./admin-ui";
 
 const API_BASE_URL =
@@ -94,6 +95,8 @@ export function AdminTransactionsQueue({ items }: AdminTransactionsQueueProps) {
   const activeSubmittedDetails = activeTransaction
     ? getSubmittedDetails(activeTransaction)
     : [];
+
+  useBodyScrollLock(Boolean(activeTransaction));
 
   const filteredTransactions = useMemo(() => {
     if (selectedFilter === "All") {

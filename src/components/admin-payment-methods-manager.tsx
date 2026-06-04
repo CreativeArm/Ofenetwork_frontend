@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { useBodyScrollLock } from "../lib/use-body-scroll-lock";
 import { AdminStatusBadge } from "./admin-ui";
 
 type PaymentMethodStatus = "Primary" | "Active" | "Paused";
@@ -45,6 +46,8 @@ export function AdminPaymentMethodsManager({
     () => methods.find((item) => item.channel === activeMethodName) ?? null,
     [activeMethodName, methods],
   );
+
+  useBodyScrollLock(Boolean(activeMethod) || isAddModalOpen);
 
   const resetDraft = () => {
     setDraftChannel("");

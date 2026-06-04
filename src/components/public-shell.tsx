@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import type { ReactNode } from "react";
 import { publicNavigation } from "../lib/mock-data";
+import { useBodyScrollLock } from "../lib/use-body-scroll-lock";
 import { Icon } from "./icons";
 
 interface PublicShellProps {
@@ -44,6 +45,8 @@ const mobileFooterGroups = [
 
 export function PublicShell({ children }: PublicShellProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  useBodyScrollLock(isMobileMenuOpen);
 
   return (
     <div className="min-h-screen bg-white">

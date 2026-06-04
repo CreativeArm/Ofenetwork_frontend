@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { useBodyScrollLock } from "../lib/use-body-scroll-lock";
 import { AdminStatusBadge } from "./admin-ui";
 
 type TicketStatus = "Open" | "Pending User" | "Resolved";
@@ -54,6 +55,8 @@ export function AdminSupportQueue({ items }: AdminSupportQueueProps) {
   const [activeTicketId, setActiveTicketId] = useState<string | null>(null);
 
   const activeTicket = tickets.find((ticket) => ticket.id === activeTicketId) ?? null;
+
+  useBodyScrollLock(Boolean(activeTicket));
 
   const filteredTickets = useMemo(() => {
     if (selectedFilter === "All") {

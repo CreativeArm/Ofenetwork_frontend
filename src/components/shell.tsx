@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState, type ChangeEvent, type ReactNode } from "react";
 import { adminNavigation, userNavigation } from "../lib/mock-data";
+import { useBodyScrollLock } from "../lib/use-body-scroll-lock";
 import { BonusBalanceAmount } from "./bonus-balance";
 import { Icon } from "./icons";
 import { ServiceIcon, type ServiceIconName } from "./service-icon";
@@ -96,6 +97,13 @@ export function AppShell({ children, activeSlug, title, subtitle, admin = false 
   const unreadCount = notifications.length;
   const profileName = storedUserName ?? (admin ? "Admin" : "User");
   const profileInitial = profileName.charAt(0);
+  const isOverlayOpen =
+    isMobileNavOpen ||
+    isNotificationOpen ||
+    isProfileOpen ||
+    Boolean(activeNotification);
+
+  useBodyScrollLock(isOverlayOpen);
 
   useEffect(() => {
     if (typeof window === "undefined") {

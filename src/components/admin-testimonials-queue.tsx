@@ -5,6 +5,7 @@ import {
   updateTestimonialStatus,
   type BackendTestimonial,
 } from "../lib/admin-backend";
+import { useBodyScrollLock } from "../lib/use-body-scroll-lock";
 import { AdminStatusBadge } from "./admin-ui";
 
 type TestimonialStatus = BackendTestimonial["status"];
@@ -56,6 +57,8 @@ export function AdminTestimonialsQueue({ items }: AdminTestimonialsQueueProps) {
 
   const activeTestimonial =
     testimonials.find((item) => item.id === activeTestimonialId) ?? null;
+
+  useBodyScrollLock(Boolean(activeTestimonial));
 
   const filteredTestimonials = useMemo(() => {
     if (selectedFilter === "All") {

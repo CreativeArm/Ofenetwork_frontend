@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { updateKycStatus, type BackendKycStatus } from "../lib/admin-backend";
+import { useBodyScrollLock } from "../lib/use-body-scroll-lock";
 import { AdminStatusBadge } from "./admin-ui";
 
 type KycStatus = "Pending" | "Flagged" | "Approved";
@@ -49,6 +50,8 @@ export function AdminKycQueue({ items }: AdminKycQueueProps) {
   const activeProofIsImage =
     activeRecord?.proofHref.startsWith("data:image/") ||
     /\.(png|jpe?g|webp|gif|svg)(?:$|\?)/i.test(activeRecord?.proofHref ?? "");
+
+  useBodyScrollLock(Boolean(activeRecord));
 
   const filteredRecords = useMemo(() => {
     if (selectedFilter === "All") {

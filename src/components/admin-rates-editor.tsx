@@ -7,6 +7,7 @@ import {
   deleteRate,
   updateRate,
 } from "../lib/admin-backend";
+import { useBodyScrollLock } from "../lib/use-body-scroll-lock";
 
 interface RateItem {
   id: string;
@@ -32,6 +33,8 @@ export function AdminRatesEditor({ initialRates }: AdminRatesEditorProps) {
   const [draftName, setDraftName] = useState("");
   const [draftDeposit, setDraftDeposit] = useState("");
   const [draftWithdrawal, setDraftWithdrawal] = useState("");
+
+  useBodyScrollLock(Boolean(activeRate) || isAddModalOpen);
 
   const openEditor = (rate: RateItem) => {
     setActiveRateId(rate.id);

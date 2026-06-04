@@ -7,6 +7,7 @@ import {
   removeUserBonus,
   type BackendAdminUser,
 } from "../lib/admin-backend";
+import { useBodyScrollLock } from "../lib/use-body-scroll-lock";
 import { AdminStatusBadge } from "./admin-ui";
 
 type BonusType = "REFERRAL_BONUS" | "THRESHOLD_BONUS";
@@ -63,6 +64,8 @@ export function AdminUsersBonusManager({ users }: AdminUsersBonusManagerProps) {
     () => items.find((user) => user.id === activeUserId) ?? null,
     [activeUserId, items],
   );
+
+  useBodyScrollLock(Boolean(activeUser));
 
   const openBonusModal = (user: BackendAdminUser) => {
     setActiveUserId(user.id);

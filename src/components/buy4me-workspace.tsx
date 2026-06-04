@@ -11,6 +11,7 @@ import {
   type BackendBuy4MeOrder,
 } from "../lib/admin-backend";
 import { buy4MeCategories, buy4MeSteps, supportReasons } from "../lib/mock-data";
+import { useBodyScrollLock } from "../lib/use-body-scroll-lock";
 import { KycVerificationGate } from "./kyc-verification-gate";
 import {
   TransactionSubmittedPopup,
@@ -238,6 +239,8 @@ export function Buy4MeWorkspace() {
     activeOrder.status === "AWAITING_PAYMENT" &&
     acceptedQuoteIds.includes(activeOrder.id);
   const showCancelledOrder = activeOrder?.status === "CANCELLED";
+
+  useBodyScrollLock(Boolean(activeOrder));
 
   const submitRequest = async () => {
     if (!userId) {

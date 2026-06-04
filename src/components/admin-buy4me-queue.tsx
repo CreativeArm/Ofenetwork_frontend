@@ -6,6 +6,7 @@ import {
   updateBuy4MeStatus,
   type BackendBuy4MeOrder,
 } from "../lib/admin-backend";
+import { useBodyScrollLock } from "../lib/use-body-scroll-lock";
 import { AdminStatusBadge } from "./admin-ui";
 
 type Buy4MeStatus =
@@ -120,6 +121,8 @@ export function AdminBuy4MeQueue({ items }: AdminBuy4MeQueueProps) {
 
     return orders.filter((item) => item.status === selectedFilter);
   }, [orders, selectedFilter]);
+
+  useBodyScrollLock(Boolean(activeOrder));
 
   const openOrder = (order: AdminBuy4MeOrderRecord) => {
     setActiveOrderId(order.id);
