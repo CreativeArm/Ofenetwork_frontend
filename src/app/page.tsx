@@ -33,7 +33,7 @@ export default async function HomePage() {
 
   return (
     <PublicShell>
-      <section className="relative left-1/2 right-1/2 w-screen max-w-none -translate-x-1/2 overflow-hidden bg-white px-5 py-10 sm:py-14 lg:min-h-[680px] lg:px-0 lg:py-10">
+      <section className="relative left-1/2 right-1/2 w-screen max-w-none -translate-x-1/2 overflow-hidden bg-white px-5 py-10 sm:py-14 lg:min-h-[680px] lg:bg-[#f8faf8] lg:px-0 lg:py-10">
         <div className="absolute inset-0 hidden lg:block" aria-hidden="true">
           <Image
             src={heroBackground}
@@ -46,7 +46,7 @@ export default async function HomePage() {
           />
         </div>
 
-        <div className="mx-auto grid max-w-7xl items-center gap-8 lg:min-h-[620px] lg:grid-cols-[1.05fr_0.95fr] lg:px-8">
+        <div className="relative z-10 mx-auto grid max-w-7xl items-center gap-8 lg:min-h-[620px] lg:grid-cols-[1.05fr_0.95fr] lg:px-8">
           <Reveal mode="load">
             <div className="relative z-10 mx-auto max-w-[620px] text-center lg:mx-0 lg:max-w-2xl lg:text-left">
               <div className="inline-flex w-full max-w-[320px] items-center justify-center rounded-full  px-5 py-2 text-sm font-medium text-[#007a61] sm:max-w-[420px] sm:text-lg lg:w-auto lg:max-w-none lg:justify-start  lg:px-4 lg:text-sm lg:text-emerald-700">
