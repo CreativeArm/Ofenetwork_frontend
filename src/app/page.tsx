@@ -31,7 +31,7 @@ export default async function HomePage() {
 
   return (
     <PublicShell>
-      <section className="relative overflow-hidden bg-white py-12 sm:py-16 lg:min-h-[680px] lg:py-10">
+      <section className="relative overflow-hidden bg-white py-10 sm:py-14 lg:min-h-[680px] lg:py-10">
         <div className="absolute inset-0 hidden lg:block" aria-hidden="true">
           <Image
             src={heroBackground}
@@ -46,41 +46,41 @@ export default async function HomePage() {
 
         <div className="grid items-center gap-8 lg:min-h-[620px] lg:grid-cols-[1.05fr_0.95fr]">
           <Reveal mode="load">
-            <div className="relative z-10 mx-auto max-w-[720px] text-center lg:mx-0 lg:max-w-2xl lg:text-left">
-              <div className="inline-flex min-w-[min(100%,420px)] items-center justify-center rounded-full bg-emerald-100/80 px-6 py-3 text-base font-medium text-emerald-700 sm:text-lg lg:min-w-0 lg:justify-start lg:bg-emerald-50 lg:px-4 lg:py-2 lg:text-sm">
+            <div className="relative z-10 mx-auto max-w-[620px] text-center lg:mx-0 lg:max-w-2xl lg:text-left">
+              <div className="inline-flex w-full max-w-[320px] items-center justify-center rounded-full bg-emerald-100/80 px-5 py-2.5 text-sm font-medium text-emerald-700 sm:max-w-[380px] sm:text-base lg:w-auto lg:max-w-none lg:justify-start lg:bg-emerald-50 lg:px-4 lg:py-2 lg:text-sm">
                 Welcome to OfeNetworks.ng
                 <span className="hidden lg:inline">+</span>
               </div>
-              <h1 className="mx-auto mt-8 max-w-[650px] text-[3.4rem] font-extrabold leading-[0.98] tracking-[-0.08em] text-slate-900 sm:text-[4.6rem] lg:mx-0 lg:mt-6 lg:max-w-xl lg:text-8xl lg:leading-tight lg:tracking-tight">
+              <h1 className="mx-auto mt-7 max-w-[560px] text-[2.85rem] font-extrabold leading-[0.98] tracking-[-0.055em] text-slate-900 min-[390px]:text-[3.15rem] sm:text-[4rem] lg:mx-0 lg:mt-6 lg:max-w-xl lg:text-7xl lg:leading-[1.02] lg:tracking-[-0.05em] xl:text-8xl">
                 Your Trusted Hub For{" "}
                 <span className="block text-[#0f7b36] lg:inline">
                   Digital Finance
                 </span>
               </h1>
-              <p className="mx-auto mt-7 max-w-[560px] text-[1.36rem] leading-[1.08] tracking-[-0.04em] text-slate-900 sm:text-2xl lg:mx-0 lg:mt-5 lg:max-w-xl lg:text-lg lg:leading-8 lg:tracking-normal lg:text-slate-600">
+              <p className="mx-auto mt-5 max-w-[440px] text-base leading-6 text-slate-700 sm:max-w-[520px] sm:text-xl sm:leading-7 lg:mx-0 lg:mt-5 lg:max-w-xl lg:text-lg lg:leading-8 lg:text-slate-600">
                 Buy, sell, swap and manage your digital assets securely with
                 speed, ease and reliability.
               </p>
-              <div className="mx-auto mt-8 grid max-w-[455px] grid-cols-2 gap-4 sm:mt-9 lg:mx-0 lg:flex lg:max-w-none lg:flex-wrap">
+              <div className="mx-auto mt-7 grid max-w-[380px] grid-cols-2 gap-3 sm:mt-8 sm:max-w-[455px] sm:gap-4 lg:mx-0 lg:flex lg:max-w-none lg:flex-wrap">
                 <Link
                   href="/dashboard"
-                  className="rounded-full bg-[#0f7b36] px-4 py-3.5 text-center text-base font-medium text-white sm:text-lg lg:rounded-2xl lg:px-6 lg:text-sm lg:font-semibold"
+                  className="rounded-full bg-[#0f7b36] px-4 py-3 text-center text-sm font-medium text-white sm:py-3.5 sm:text-base lg:rounded-2xl lg:px-6 lg:text-sm lg:font-semibold"
                 >
                   Get Started
                 </Link>
                 <Link
                   href="/services"
-                  className="rounded-full border border-[#d7e2db] bg-white px-4 py-3.5 text-center text-base font-medium text-slate-700 sm:text-lg lg:rounded-2xl lg:px-6 lg:text-sm lg:font-semibold"
+                  className="rounded-full border border-[#d7e2db] bg-white px-4 py-3 text-center text-sm font-medium text-slate-700 sm:py-3.5 sm:text-base lg:rounded-2xl lg:px-6 lg:text-sm lg:font-semibold"
                 >
                   Explore Services
                 </Link>
               </div>
-              <div className="mx-auto mt-10 flex max-w-[560px] flex-nowrap items-center justify-center gap-3 text-xs text-slate-500 sm:gap-5 sm:text-base lg:mx-0 lg:mt-10 lg:max-w-none lg:flex-wrap lg:justify-start lg:gap-8 lg:text-sm lg:text-slate-600">
+              <div className="mx-auto mt-8 flex max-w-[520px] flex-wrap items-center justify-center gap-x-4 gap-y-3 text-xs text-slate-500 sm:mt-10 sm:flex-nowrap sm:gap-5 sm:text-sm lg:mx-0 lg:max-w-none lg:justify-start lg:gap-8 lg:text-sm lg:text-slate-600">
                 {["Secure & Reliable", "Instant Transactions", "24/7 Support"].map(
                   (item) => (
-                    <div key={item} className="flex min-w-0 items-center gap-2 sm:gap-3">
+                    <div key={item} className="flex min-w-0 items-center gap-2">
                       <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 sm:h-6 sm:w-6 lg:h-auto lg:w-auto lg:bg-emerald-50 lg:p-2">
-                        <Icon name="check" className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                        <Icon name="check" className="h-3.5 w-3.5 lg:h-4 lg:w-4" />
                       </span>
                       <span className="whitespace-nowrap">{item}</span>
                     </div>
