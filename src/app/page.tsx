@@ -12,7 +12,6 @@ import {
   mapBackendRatesToBoard,
 } from "../lib/admin-backend";
 import heroBackground from "../images/Hero_background.png";
-import heroImg from "../images/hero_img.png";
 
 export default async function HomePage() {
   const liveRates = await fetchRates()
@@ -32,7 +31,7 @@ export default async function HomePage() {
 
   return (
     <PublicShell>
-      <section className="relative overflow-hidden bg-white py-4 lg:min-h-[680px] lg:py-10">
+      <section className="relative overflow-hidden bg-white py-12 sm:py-16 lg:min-h-[680px] lg:py-10">
         <div className="absolute inset-0 hidden lg:block" aria-hidden="true">
           <Image
             src={heroBackground}
@@ -47,58 +46,47 @@ export default async function HomePage() {
 
         <div className="grid items-center gap-8 lg:min-h-[620px] lg:grid-cols-[1.05fr_0.95fr]">
           <Reveal mode="load">
-        <div className="relative z-10 max-w-2xl">
-          <div className="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-4 py-2 text-sm font-medium text-emerald-700">
-            Welcome to OfeNetworks.ng
-            <span>+</span>
-          </div>
-          <h1 className="mt-6 max-w-xl text-5xl leading-tight sm:tracking-[-0.5rem] tracking-tight text-slate-900 md:text-8xl font-extrabold">
-            Your Trusted Hub for{" "}
-            <span className="text-[#0f7b36]">Digital Finance</span>
-          </h1>
-          <p className="mt-5 max-w-xl text-lg leading-8 text-slate-600">
-            Buy, sell, swap and manage your digital assets securely with speed,
-            ease and reliability.
-          </p>
-          <div className="mt-8 flex flex-wrap gap-4">
-            <Link
-              href="/dashboard"
-              className="rounded-2xl bg-[#0f7b36] px-6 py-3.5 text-sm font-semibold text-white"
-            >
-              Get Started
-            </Link>
-            <Link
-              href="/services"
-              className="rounded-2xl border border-[#d7e2db] bg-white px-6 py-3.5 text-sm font-semibold text-slate-700"
-            >
-              Explore Services
-            </Link>
-          </div>
-          <div className="mt-10 flex flex-wrap gap-8 text-sm text-slate-600">
-            {["Secure & Reliable", "Instant Transactions", "24/7 Support"].map(
-              (item) => (
-                <div key={item} className="flex items-center gap-2">
-                  <span className="rounded-full bg-emerald-50 p-2 text-emerald-600">
-                    <Icon name="check" className="h-4 w-4" />
-                  </span>
-                  {item}
-                </div>
-              ),
-            )}
-          </div>
-        </div>
-          </Reveal>
-
-          <Reveal mode="load" delay={0.12} distance={30} className="lg:hidden">
-            <div className="relative overflow-hidden rounded-[34px] bg-[radial-gradient(circle_at_top,#eefaf1,white_60%)] p-3">
-              <Image
-                src={heroImg}
-                alt="OFENetworks finance hero illustration"
-                priority
-                quality={72}
-                sizes="(max-width: 1024px) 100vw, 0px"
-                className="h-auto w-full object-contain"
-              />
+            <div className="relative z-10 mx-auto max-w-[720px] text-center lg:mx-0 lg:max-w-2xl lg:text-left">
+              <div className="inline-flex min-w-[min(100%,420px)] items-center justify-center rounded-full bg-emerald-100/80 px-6 py-3 text-base font-medium text-emerald-700 sm:text-lg lg:min-w-0 lg:justify-start lg:bg-emerald-50 lg:px-4 lg:py-2 lg:text-sm">
+                Welcome to OfeNetworks.ng
+                <span className="hidden lg:inline">+</span>
+              </div>
+              <h1 className="mx-auto mt-8 max-w-[650px] text-[3.4rem] font-extrabold leading-[0.98] tracking-[-0.08em] text-slate-900 sm:text-[4.6rem] lg:mx-0 lg:mt-6 lg:max-w-xl lg:text-8xl lg:leading-tight lg:tracking-tight">
+                Your Trusted Hub For{" "}
+                <span className="block text-[#0f7b36] lg:inline">
+                  Digital Finance
+                </span>
+              </h1>
+              <p className="mx-auto mt-7 max-w-[560px] text-[1.36rem] leading-[1.08] tracking-[-0.04em] text-slate-900 sm:text-2xl lg:mx-0 lg:mt-5 lg:max-w-xl lg:text-lg lg:leading-8 lg:tracking-normal lg:text-slate-600">
+                Buy, sell, swap and manage your digital assets securely with
+                speed, ease and reliability.
+              </p>
+              <div className="mx-auto mt-8 grid max-w-[455px] grid-cols-2 gap-4 sm:mt-9 lg:mx-0 lg:flex lg:max-w-none lg:flex-wrap">
+                <Link
+                  href="/dashboard"
+                  className="rounded-full bg-[#0f7b36] px-4 py-3.5 text-center text-base font-medium text-white sm:text-lg lg:rounded-2xl lg:px-6 lg:text-sm lg:font-semibold"
+                >
+                  Get Started
+                </Link>
+                <Link
+                  href="/services"
+                  className="rounded-full border border-[#d7e2db] bg-white px-4 py-3.5 text-center text-base font-medium text-slate-700 sm:text-lg lg:rounded-2xl lg:px-6 lg:text-sm lg:font-semibold"
+                >
+                  Explore Services
+                </Link>
+              </div>
+              <div className="mx-auto mt-10 flex max-w-[560px] flex-nowrap items-center justify-center gap-3 text-xs text-slate-500 sm:gap-5 sm:text-base lg:mx-0 lg:mt-10 lg:max-w-none lg:flex-wrap lg:justify-start lg:gap-8 lg:text-sm lg:text-slate-600">
+                {["Secure & Reliable", "Instant Transactions", "24/7 Support"].map(
+                  (item) => (
+                    <div key={item} className="flex min-w-0 items-center gap-2 sm:gap-3">
+                      <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 sm:h-6 sm:w-6 lg:h-auto lg:w-auto lg:bg-emerald-50 lg:p-2">
+                        <Icon name="check" className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                      </span>
+                      <span className="whitespace-nowrap">{item}</span>
+                    </div>
+                  ),
+                )}
+              </div>
             </div>
           </Reveal>
         </div>
