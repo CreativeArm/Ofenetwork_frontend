@@ -176,20 +176,20 @@ export function PublicShell({ children }: PublicShellProps) {
             ))}
           </div>
 
-          <div className="mt-12 border-y border-white/10 py-7">
+          <div className="mt-12 border-y border-white/10 py-8">
             <div className="flex items-center gap-3 text-sm text-slate-300/85">
               <Icon name="mail" className="h-4 w-4 shrink-0 text-emerald-200" />
               <Link href="mailto:hello@Ofenetwork.ng" className="transition hover:text-white">
                 hello@Ofenetwork.ng
               </Link>
             </div>
-            <div className="mt-4 flex items-start gap-3 text-sm leading-6 text-slate-300/85">
+            <div className="mt-5 flex items-start gap-3 text-sm leading-6 text-slate-300/85">
               <Icon name="pin" className="mt-1 h-4 w-4 shrink-0 text-emerald-200" />
               <span>Secure transactions. Transparent rates. Reliable support.</span>
             </div>
           </div>
 
-          <div className="pt-7 text-center">
+          <div className="pt-8 text-center">
             <p className="text-xs text-slate-400">
               &copy; 2026 OfeNetworks.ng. All rights reserved.
             </p>
