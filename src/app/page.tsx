@@ -100,7 +100,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="relative left-1/2 right-1/2 mt-10 w-screen max-w-none -translate-x-1/2 overflow-hidden border-y border-[#eef2ef] bg-white py-10 md:py-14">
+      <section className="relative left-1/2 right-1/2 mt-10 w-screen max-w-none -translate-x-1/2 overflow-hidden border-y border-[#e8f1eb] bg-[linear-gradient(180deg,#f8fcf9_0%,#eff7f1_100%)] py-10 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)] md:py-14">
         <Reveal className="mx-auto max-w-3xl px-4 text-center md:px-8">
           <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[#0f7b36]">
             Live Exchange Rates
@@ -119,7 +119,8 @@ export default async function HomePage() {
         </Reveal>
       </section>
 
-      <section className="mt-12">
+      <section className="relative left-1/2 right-1/2 mt-0 w-screen max-w-none -translate-x-1/2 overflow-hidden bg-[radial-gradient(circle_at_12%_18%,rgba(15,123,54,0.08),transparent_28%),linear-gradient(180deg,#ffffff_0%,#f7fbf8_55%,#ffffff_100%)] px-4 py-12 md:px-8 md:py-16">
+        <div className="mx-auto max-w-7xl">
         <Reveal className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
           <div className="max-w-2xl">
             <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[#0f7b36]">
@@ -364,9 +365,10 @@ export default async function HomePage() {
             </StaggerItem>
           </Stagger>
         </Stagger>
+        </div>
       </section>
 
-      <section className="mt-12 rounded-[32px] border border-[#e7eee9] bg-white p-6 shadow-[0_14px_40px_rgba(15,23,32,0.04)]">
+      <section className="mt-12 rounded-[32px] border border-[#e7eee9] bg-[linear-gradient(180deg,#ffffff_0%,#fbfdfb_100%)] p-6 shadow-[0_14px_40px_rgba(15,23,32,0.04)]">
         <Reveal className="text-center">
           <h2 className="text-3xl font-semibold text-slate-900">
             What Our Users Say
