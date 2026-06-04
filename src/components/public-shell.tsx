@@ -86,12 +86,17 @@ export function PublicShell({ children }: PublicShellProps) {
           <div className="relative md:hidden">
             <button
               type="button"
-              aria-label={isMobileMenuOpen ? "Close mobile menu" : "Open mobile menu"}
+              aria-label={
+                isMobileMenuOpen ? "Close mobile menu" : "Open mobile menu"
+              }
               aria-expanded={isMobileMenuOpen}
               onClick={() => setIsMobileMenuOpen((current) => !current)}
               className="flex items-center justify-center rounded-xl border border-[#d8e3dc] p-2 text-slate-700"
             >
-              <Icon name={isMobileMenuOpen ? "x" : "menu"} className="h-5 w-5" />
+              <Icon
+                name={isMobileMenuOpen ? "x" : "menu"}
+                className="h-5 w-5"
+              />
             </button>
             {isMobileMenuOpen ? (
               <button
@@ -136,7 +141,9 @@ export function PublicShell({ children }: PublicShellProps) {
           </div>
         </div>
       </header>
-      <main className="mx-auto max-w-7xl px-4 pb-8 pt-[104px] md:px-8 md:pb-10 md:pt-[112px]">{children}</main>
+      <main className="mx-auto max-w-7xl px-4 pb-8 pt-[104px] md:px-8 md:pb-10 md:pt-[112px]">
+        {children}
+      </main>
       <footer className="border-t border-[#e7eee9] bg-[#0f1720] text-white">
         <div className="md:hidden bg-[#0f1720] px-6 py-12 text-slate-300">
           <div className="flex items-start gap-4">
@@ -154,17 +161,18 @@ export function PublicShell({ children }: PublicShellProps) {
           </div>
 
           <p className="mt-8 max-w-[360px] text-sm leading-7 text-slate-400">
-            Built for fast manual transaction processing, referral bonus tracking,
-            cross-service requests, and clear administrative oversight.
+            Built for fast manual transaction processing, referral bonus
+            tracking, cross-service requests, and clear administrative
+            oversight.
           </p>
 
           <div className="mt-11 grid grid-cols-2 gap-x-10 gap-y-10">
             {mobileFooterGroups.map((group) => (
               <div key={group.title}>
-                <h2 className="text-sm font-semibold uppercase tracking-[0.16em] text-emerald-200">
+                <h2 className="text-sm mt-3 font-semibold uppercase tracking-[0.16em] text-emerald-200">
                   {group.title}
                 </h2>
-                <div className="mt-5 grid gap-3.5">
+                <div className="mt-2 grid gap-3.5">
                   {group.links.map((item) => (
                     <Link
                       key={`${group.title}-${item.label}`}
@@ -182,13 +190,21 @@ export function PublicShell({ children }: PublicShellProps) {
           <div className="mt-12 border-y border-white/10 py-8">
             <div className="flex items-center gap-3 text-sm text-slate-300/85">
               <Icon name="mail" className="h-4 w-4 shrink-0 text-emerald-200" />
-              <Link href="mailto:hello@Ofenetwork.ng" className="transition hover:text-white">
+              <Link
+                href="mailto:hello@Ofenetwork.ng"
+                className="transition hover:text-white"
+              >
                 hello@Ofenetwork.ng
               </Link>
             </div>
             <div className="mt-5 flex items-start gap-3 text-sm leading-6 text-slate-300/85">
-              <Icon name="pin" className="mt-1 h-4 w-4 shrink-0 text-emerald-200" />
-              <span>Secure transactions. Transparent rates. Reliable support.</span>
+              <Icon
+                name="pin"
+                className="mt-1 h-4 w-4 shrink-0 text-emerald-200"
+              />
+              <span>
+                Secure transactions. Transparent rates. Reliable support.
+              </span>
             </div>
           </div>
 
@@ -227,8 +243,9 @@ export function PublicShell({ children }: PublicShellProps) {
               </div>
             </div>
             <p className="mt-5 max-w-md text-sm leading-7 text-slate-400">
-              Built for fast manual transaction processing, referral bonus tracking,
-              cross-service requests, and clear administrative oversight.
+              Built for fast manual transaction processing, referral bonus
+              tracking, cross-service requests, and clear administrative
+              oversight.
             </p>
           </div>
           <div>
@@ -237,7 +254,11 @@ export function PublicShell({ children }: PublicShellProps) {
             </h2>
             <div className="mt-4 grid gap-3 text-sm text-slate-300">
               {publicNavigation.map((item) => (
-                <Link key={item.href} href={item.href} className="transition hover:text-white">
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="transition hover:text-white"
+                >
                   {item.label}
                 </Link>
               ))}

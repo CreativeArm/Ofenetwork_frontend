@@ -132,20 +132,6 @@ function statusTone(status: BackendBuy4MeOrder["status"]) {
   return "bg-amber-50 text-amber-700";
 }
 
-function stageNumber(status: BackendBuy4MeOrder["status"]) {
-  if (status === "AWAITING_PAYMENT") {
-    return 3;
-  }
-  if (status === "SHIPPED") {
-    return 4;
-  }
-  if (status === "COMPLETED") {
-    return 5;
-  }
-
-  return 2;
-}
-
 function stageLabel(status?: BackendBuy4MeOrder["status"]) {
   if (!status) {
     return null;
@@ -403,12 +389,9 @@ export function Buy4MeWorkspace() {
 
         <StaggerItem>
           <div className="rounded-[28px] border border-[#e6ece8] bg-white p-5 shadow-[0_12px_30px_rgba(15,23,32,0.04)] transition-all duration-300 hover:shadow-[0_18px_40px_rgba(15,23,32,0.06)]">
-            <div className="flex items-center gap-3">
-              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#0f7b36] text-sm font-semibold text-white">1</span>
-              <div>
-                <h2 className="text-2xl font-semibold">Submit Your Product Link(s)</h2>
-                <p className="text-sm text-slate-500">Paste the link(s) of the product(s) you want us to buy for you.</p>
-              </div>
+            <div>
+              <h2 className="text-2xl font-semibold">Submit Your Product Link(s)</h2>
+              <p className="mt-1 text-sm text-slate-500">Paste the link(s) of the product(s) you want us to buy for you.</p>
             </div>
             <div className="mt-5 rounded-[22px] border border-[#e5ebe7] p-4">
               <textarea
@@ -450,10 +433,7 @@ export function Buy4MeWorkspace() {
           <StaggerItem className="hidden">
             <div className="rounded-[28px] border border-[#e6ece8] bg-white p-5 shadow-[0_12px_30px_rgba(15,23,32,0.04)] transition-all duration-300 hover:shadow-[0_18px_40px_rgba(15,23,32,0.06)]">
               <div className="mb-4 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#0f7b36] text-sm font-semibold text-white">2</span>
-                  <h2 className="text-2xl font-semibold">Order & Pricing</h2>
-                </div>
+                <h2 className="text-2xl font-semibold">Order & Pricing</h2>
                 <span className={`rounded-full px-3 py-1 text-xs font-semibold ${statusTone(activeOrder.status)}`}>
                   {formatStatus(activeOrder.status)}
                 </span>
@@ -556,12 +536,9 @@ export function Buy4MeWorkspace() {
         {showPayment ? (
           <StaggerItem className="hidden">
             <div className="rounded-[28px] border border-[#e6ece8] bg-white p-5 shadow-[0_12px_30px_rgba(15,23,32,0.04)] transition-all duration-300 hover:shadow-[0_18px_40px_rgba(15,23,32,0.06)]">
-              <div className="flex items-center gap-3">
-                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#0f7b36] text-sm font-semibold text-white">3</span>
-                <div>
-                  <h2 className="text-2xl font-semibold">Make Payment</h2>
-                  <p className="text-sm text-slate-500">Submit payment details once you have paid the quoted total.</p>
-                </div>
+              <div>
+                <h2 className="text-2xl font-semibold">Make Payment</h2>
+                <p className="mt-1 text-sm text-slate-500">Submit payment details once you have paid the quoted total.</p>
               </div>
               <div className="mt-5 grid gap-3 md:grid-cols-[0.9fr_1.1fr]">
                 <div className="rounded-[22px] bg-[#f6faf7] p-5">

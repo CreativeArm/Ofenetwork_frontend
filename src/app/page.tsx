@@ -78,7 +78,7 @@ export default async function HomePage() {
                   Explore Services
                 </Link>
               </div>
-              <div className="mx-auto mt-8 flex max-w-[520px] flex-wrap items-center justify-center gap-x-4 gap-y-3 text-xs text-[#787878] sm:mt-10 sm:flex-nowrap sm:gap-5 sm:text-base lg:mx-0 lg:max-w-none lg:justify-start lg:gap-8 lg:text-sm lg:text-slate-600">
+              <div className="mx-auto mt-8 flex max-w-[520px] flex-wrap items-center justify-center gap-x-4 gap-y-3 text-xs text-[#787878] sm:mt-10 sm:flex-nowrap md:pb-20 sm:gap-5 sm:text-base lg:mx-0 lg:max-w-none lg:justify-start lg:gap-8 lg:text-sm lg:text-slate-600">
                 {[
                   "Secure & Reliable",
                   "Instant Transactions",
@@ -126,7 +126,7 @@ export default async function HomePage() {
               <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[#0f7b36]">
                 What we offer
               </p>
-              <h2 className="mt-3 max-w-xl text-4xl font-semibold leading-tight text-slate-900 md:text-5xl">
+              <h2 className="mt-3 max-w-xl text-2xl font-semibold leading-tight text-slate-900 md:text-5xl">
                 Start with one service. Expand into a complete digital finance
                 flow.
               </h2>
@@ -156,7 +156,7 @@ export default async function HomePage() {
                       Core access
                     </p>
                   </div>
-                  <h3 className="mt-6 max-w-xs text-3xl font-semibold leading-tight text-slate-900">
+                  <h3 className="mt-6 max-w-xs text-2xl font-semibold leading-tight text-slate-900">
                     Every tool you need, ready when you are.
                   </h3>
                   <p className="mt-4 max-w-sm text-sm leading-7 text-slate-500">
@@ -167,23 +167,6 @@ export default async function HomePage() {
                 </div>
 
                 <div className="border-t border-[#e8ede9] bg-[#eef3ef] p-4 sm:p-5">
-                  <div className="flex flex-nowrap gap-1.5 overflow-hidden sm:gap-2">
-                    {["All", "Wallet", "Payouts", "Assisted Buy"].map(
-                      (item, index) => (
-                        <span
-                          key={item}
-                          className={`shrink-0 whitespace-nowrap rounded-2xl px-2.5 py-2 text-[10px] font-semibold uppercase tracking-[0.08em] sm:px-4 sm:text-xs sm:tracking-[0.18em] ${
-                            index === 0
-                              ? "bg-[#111111] text-white"
-                              : "bg-white text-slate-400"
-                          }`}
-                        >
-                          {item}
-                        </span>
-                      ),
-                    )}
-                  </div>
-
                   <Stagger className="mt-5 grid grid-cols-2 gap-3">
                     {homeOffers.slice(0, 4).map((offer) => (
                       <StaggerItem key={offer.title}>
@@ -225,7 +208,7 @@ export default async function HomePage() {
                       <p className="text-sm font-semibold uppercase tracking-[0.24em] text-emerald-200/80">
                         Connected workflow
                       </p>
-                      <h3 className="mt-4 max-w-lg text-4xl font-semibold leading-tight">
+                      <h3 className="mt-4 max-w-lg text-2xl md:4xl font-semibold leading-tight">
                         One dashboard for deposits, withdrawals, swaps, and
                         assisted orders.
                       </h3>
@@ -272,7 +255,7 @@ export default async function HomePage() {
                               <p className="text-xs uppercase tracking-[0.18em] text-slate-300">
                                 Deposit
                               </p>
-                              <p className="mt-3 text-lg font-semibold">
+                              <p className="mt-3 text-sm md:text-lg font-semibold">
                                 Fast funding
                               </p>
                             </div>
@@ -280,7 +263,7 @@ export default async function HomePage() {
                               <p className="text-xs uppercase tracking-[0.18em] text-slate-300">
                                 Withdrawal
                               </p>
-                              <p className="mt-3 text-lg font-semibold">
+                              <p className="mt-3 text-sm md:text-lg font-semibold">
                                 Quick payout
                               </p>
                             </div>
@@ -302,7 +285,7 @@ export default async function HomePage() {
                       Human support
                     </p>
                   </div>
-                  <h3 className="mt-6 text-3xl font-semibold leading-tight">
+                  <h3 className="mt-6 text-2xl md:text-3xl font-semibold leading-tight">
                     One trusted place for guided transactions.
                   </h3>
                   <p className="mt-4 text-sm leading-7 text-rose-50/80">
@@ -345,7 +328,7 @@ export default async function HomePage() {
                         Buy 4 Me
                       </p>
                     </div>
-                    <h3 className="mt-6 text-3xl font-semibold leading-tight">
+                    <h3 className="mt-6 text-2xl md:text-3xl font-semibold leading-tight">
                       We shop, pay, and deliver when you can&apos;t do it
                       yourself.
                     </h3>
@@ -357,7 +340,7 @@ export default async function HomePage() {
 
                     <Link
                       href="/buy4me"
-                      className="mt-auto inline-flex w-fit rounded-full border-2 border-pink-300 px-5 py-3 text-lg font-medium tracking-[0.08em] text-white transition hover:bg-white/10"
+                      className="mt-10 inline-flex w-fit rounded-full border-2 border-pink-300 px-5 py-3 text-md  font-medium tracking-[0.08em] text-white transition hover:bg-white/10"
                     >
                       SHOP FOR ME
                     </Link>
