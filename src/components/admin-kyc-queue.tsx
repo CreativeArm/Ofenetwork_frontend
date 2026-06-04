@@ -226,16 +226,26 @@ export function AdminKycQueue({ items }: AdminKycQueueProps) {
                     Uploaded identity document
                   </p>
                   <p className="mt-1 text-xs text-slate-500">
-                    Download the file for a closer review of the submitted document.
+                    View the submitted document quickly or download it for closer review.
                   </p>
                 </div>
-                <a
-                  href={activeRecord.proofHref}
-                  download={activeRecord.proofName}
-                  className="rounded-xl border border-[#cfe2d5] px-3 py-2 text-xs font-semibold text-[#0f7b36] transition hover:bg-[#eef8f1]"
-                >
-                  Download
-                </a>
+                <div className="flex shrink-0 items-center gap-2">
+                  <a
+                    href={activeRecord.proofHref}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="rounded-xl border border-[#cfe2d5] px-3 py-2 text-xs font-semibold text-[#0f7b36] transition hover:bg-[#eef8f1]"
+                  >
+                    View
+                  </a>
+                  <a
+                    href={activeRecord.proofHref}
+                    download={activeRecord.proofName}
+                    className="rounded-xl border border-[#cfe2d5] px-3 py-2 text-xs font-semibold text-[#0f7b36] transition hover:bg-[#eef8f1]"
+                  >
+                    Download
+                  </a>
+                </div>
               </div>
 
               <div className="mt-4 overflow-hidden rounded-[18px] border border-[#e5ebe7] bg-white">

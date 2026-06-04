@@ -356,13 +356,23 @@ export function AdminBuy4MeQueue({ items }: AdminBuy4MeQueueProps) {
                   </p>
                 </div>
                 {activeOrder.proofOfPaymentUrl ? (
-                  <a
-                    href={activeOrder.proofOfPaymentUrl}
-                    download={`${activeOrder.id}-payment-proof`}
-                    className="inline-flex items-center justify-center rounded-2xl border border-[#dbe5df] px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-white"
-                  >
-                    Download
-                  </a>
+                  <div className="flex shrink-0 items-center gap-2">
+                    <a
+                      href={activeOrder.proofOfPaymentUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center justify-center rounded-2xl border border-[#dbe5df] px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-white"
+                    >
+                      View
+                    </a>
+                    <a
+                      href={activeOrder.proofOfPaymentUrl}
+                      download={`${activeOrder.id}-payment-proof`}
+                      className="inline-flex items-center justify-center rounded-2xl border border-[#dbe5df] px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-white"
+                    >
+                      Download
+                    </a>
+                  </div>
                 ) : null}
               </div>
               {activeOrder.proofOfPaymentUrl ? (

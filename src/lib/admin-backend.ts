@@ -53,6 +53,7 @@ export interface BackendUser {
   email: string;
   role: string;
   status: string;
+  profileImageUrl?: string;
   kycStatus?: BackendKycStatus;
   kycDocumentType?: string;
   kycDocumentUrl?: string;
@@ -229,6 +230,19 @@ export async function fetchAdminUsers() {
 
 export async function fetchUserProfile(userId: string) {
   return fetchApi<BackendUser>(`/users/${encodeURIComponent(userId)}`);
+}
+
+export async function updateUserProfilePicture(
+  userId: string,
+  profileImageUrl: string | null,
+) {
+  return mutateApi<BackendUser>(
+    `/users/${encodeURIComponent(userId)}/profile-picture`,
+    {
+      method: "PATCH",
+      body: JSON.stringify({ profileImageUrl }),
+    },
+  );
 }
 
 export async function submitKyc(payload: {

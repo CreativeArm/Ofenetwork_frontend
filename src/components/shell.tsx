@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState, type ChangeEvent, type ReactNode } from "react";
+import { fetchUserProfile, updateUserProfilePicture } from "../lib/admin-backend";
 import { adminNavigation, userNavigation } from "../lib/mock-data";
 import { useBodyScrollLock } from "../lib/use-body-scroll-lock";
 import { BonusBalanceAmount } from "./bonus-balance";
@@ -28,7 +29,17 @@ interface ShellNotification {
 interface StoredShellUser {
   id?: string;
   fullName?: string;
+  profileImageUrl?: string;
   role?: string;
+}
+
+function readImageAsDataUrl(file: File) {
+  return new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result));
+    reader.onerror = () => reject(new Error("Unable to read the selected image."));
+    reader.readAsDataURL(file);
+  });
 }
 
 const adminNotifications: ShellNotification[] = [
@@ -85,6 +96,8 @@ export function AppShell({ children, activeSlug, title, subtitle, admin = false 
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [profileImage, setProfileImage] = useState<string | null>(null);
+  const [profileFeedback, setProfileFeedback] = useState<string | null>(null);
+  const [isProfileImageSaving, setIsProfileImageSaving] = useState(false);
   const [activeNotification, setActiveNotification] = useState<ShellNotification | null>(null);
   const pathname = usePathname();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -131,6 +144,7 @@ export function AppShell({ children, activeSlug, title, subtitle, admin = false 
       if (parsedUser.id) {
         setStoredUserId(parsedUser.id);
       }
+      setProfileImage(parsedUser.profileImageUrl ?? null);
 
       const fullName = parsedUser.fullName?.trim();
       if (!fullName) {
@@ -151,6 +165,33 @@ export function AppShell({ children, activeSlug, title, subtitle, admin = false 
       router.replace(admin ? `/login?admin=1&next=${next}` : `/login?next=${next}`);
     }
   }, [admin, pathname, router]);
+
+  useEffect(() => {
+    if (!storedUserId) {
+      return;
+    }
+
+    fetchUserProfile(storedUserId)
+      .then((profile) => {
+        setProfileImage(profile.profileImageUrl ?? null);
+        const fullName = profile.fullName?.trim();
+        if (fullName) {
+          setStoredUserName(fullName.split(/\s+/)[0] ?? fullName);
+        }
+
+        const rawUser = window.localStorage.getItem("ofe_user");
+        const stored = rawUser ? (JSON.parse(rawUser) as StoredShellUser) : {};
+        const profileForStorage = { ...profile };
+        delete profileForStorage.profileImageUrl;
+        window.localStorage.setItem(
+          "ofe_user",
+          JSON.stringify({ ...stored, ...profileForStorage }),
+        );
+      })
+      .catch(() => {
+        // Keep the locally stored profile data if the backend is temporarily unavailable.
+      });
+  }, [storedUserId]);
 
   useEffect(() => {
     if (!storedUserId) {
@@ -222,13 +263,80 @@ export function AppShell({ children, activeSlug, title, subtitle, admin = false 
     );
   }
 
-  const handleProfileImageChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const removeStoredProfileImage = () => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const rawUser = window.localStorage.getItem("ofe_user");
+    const stored = rawUser ? (JSON.parse(rawUser) as StoredShellUser) : {};
+    delete stored.profileImageUrl;
+    window.localStorage.setItem("ofe_user", JSON.stringify(stored));
+  };
+
+  const handleProfileImageChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) {
       return;
     }
 
-    setProfileImage(URL.createObjectURL(file));
+    if (!storedUserId) {
+      setProfileFeedback("Please log in again before changing your picture.");
+      return;
+    }
+
+    if (!file.type.startsWith("image/")) {
+      setProfileFeedback("Please choose a PNG, JPG, WebP, or GIF image.");
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      setProfileFeedback("Please choose an image below 5MB.");
+      return;
+    }
+
+    try {
+      setIsProfileImageSaving(true);
+      setProfileFeedback(null);
+      const dataUrl = await readImageAsDataUrl(file);
+      const updatedUser = await updateUserProfilePicture(storedUserId, dataUrl);
+      setProfileImage(updatedUser.profileImageUrl ?? null);
+      removeStoredProfileImage();
+      setProfileFeedback("Profile picture saved.");
+    } catch (error) {
+      setProfileFeedback(
+        error instanceof Error
+          ? error.message
+          : "Unable to save your profile picture right now.",
+      );
+    } finally {
+      setIsProfileImageSaving(false);
+      event.target.value = "";
+    }
+  };
+
+  const removeProfileImage = async () => {
+    if (!storedUserId) {
+      setProfileFeedback("Please log in again before changing your picture.");
+      return;
+    }
+
+    try {
+      setIsProfileImageSaving(true);
+      setProfileFeedback(null);
+      await updateUserProfilePicture(storedUserId, null);
+      setProfileImage(null);
+      removeStoredProfileImage();
+      setProfileFeedback("Profile picture removed.");
+    } catch (error) {
+      setProfileFeedback(
+        error instanceof Error
+          ? error.message
+          : "Unable to remove your profile picture right now.",
+      );
+    } finally {
+      setIsProfileImageSaving(false);
+    }
   };
 
   const openNotification = (notification: ShellNotification) => {
@@ -560,6 +668,12 @@ export function AppShell({ children, activeSlug, title, subtitle, admin = false 
                         </div>
                       </div>
 
+                      {profileFeedback ? (
+                        <p className="mt-3 rounded-2xl bg-[#f6faf7] px-4 py-3 text-xs leading-5 text-slate-600">
+                          {profileFeedback}
+                        </p>
+                      ) : null}
+
                       <input
                         ref={fileInputRef}
                         type="file"
@@ -571,17 +685,19 @@ export function AppShell({ children, activeSlug, title, subtitle, admin = false 
                       <div className="mt-4 flex items-center gap-3">
                         <button
                           type="button"
+                          disabled={isProfileImageSaving}
                           onClick={() => fileInputRef.current?.click()}
-                          className="inline-flex items-center gap-2 rounded-2xl bg-[#0f7b36] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#116f34]"
+                          className="inline-flex items-center gap-2 rounded-2xl bg-[#0f7b36] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#116f34] disabled:cursor-not-allowed disabled:opacity-70"
                         >
                           <Icon name="upload" className="h-4 w-4" />
-                          Change picture
+                          {isProfileImageSaving ? "Saving..." : "Change picture"}
                         </button>
                         {profileImage ? (
                           <button
                             type="button"
-                            onClick={() => setProfileImage(null)}
-                            className="rounded-2xl border border-[#dbe5df] px-4 py-3 text-sm font-semibold text-slate-600 transition hover:bg-[#f8fbf8]"
+                            disabled={isProfileImageSaving}
+                            onClick={() => void removeProfileImage()}
+                            className="rounded-2xl border border-[#dbe5df] px-4 py-3 text-sm font-semibold text-slate-600 transition hover:bg-[#f8fbf8] disabled:cursor-not-allowed disabled:opacity-70"
                           >
                             Remove
                           </button>

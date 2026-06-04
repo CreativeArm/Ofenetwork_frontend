@@ -285,23 +285,33 @@ export function AdminTransactionsQueue({ items }: AdminTransactionsQueueProps) {
                     Attached receipt / proof
                   </p>
                   <p className="mt-1 text-xs text-slate-500">
-                    Download the uploaded file to inspect the screenshot in full.
+                    View the screenshot quickly or download it for full inspection.
                   </p>
                 </div>
-                <a
-                  href={activeTransaction.proofHref}
-                  download={activeTransaction.proofName}
-                  className="rounded-xl border border-[#cfe2d5] px-3 py-2 text-xs font-semibold text-[#0f7b36] transition hover:bg-[#eef8f1]"
-                >
-                  Download
-                </a>
+                <div className="flex shrink-0 items-center gap-2">
+                  <a
+                    href={activeTransaction.proofHref}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="rounded-xl border border-[#cfe2d5] px-3 py-2 text-xs font-semibold text-[#0f7b36] transition hover:bg-[#eef8f1]"
+                  >
+                    View
+                  </a>
+                  <a
+                    href={activeTransaction.proofHref}
+                    download={activeTransaction.proofName}
+                    className="rounded-xl border border-[#cfe2d5] px-3 py-2 text-xs font-semibold text-[#0f7b36] transition hover:bg-[#eef8f1]"
+                  >
+                    Download
+                  </a>
+                </div>
               </div>
 
               <div className="mt-4 overflow-hidden rounded-[18px] border border-[#e5ebe7] bg-white">
                 <img
                   src={activeTransaction.proofHref}
                   alt={`${activeTransaction.id} uploaded proof`}
-                  className="h-40 w-full object-cover"
+                  className="h-40 w-full object-contain"
                 />
               </div>
             </div>
