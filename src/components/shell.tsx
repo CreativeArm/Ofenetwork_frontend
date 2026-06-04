@@ -440,50 +440,50 @@ export function AppShell({ children, activeSlug, title, subtitle, admin = false 
                         onClick={() => setIsNotificationOpen(false)}
                         className="fixed inset-0 z-30 cursor-default bg-transparent"
                       />
-                      <div className="absolute right-0 top-[calc(100%+12px)] z-40 w-[min(320px,calc(100vw-2rem))] rounded-[24px] border border-[#e5ebe7] bg-white p-4 shadow-[0_20px_60px_rgba(15,23,32,0.12)]">
-                      <div className="flex items-start justify-between gap-4">
-                        <div>
-                          <p className="text-sm font-semibold text-slate-900">Notifications</p>
-                          <p className="mt-1 text-xs text-slate-500">
-                            {admin ? "Admin activity and queue updates." : "Latest account and order updates."}
-                          </p>
-                        </div>
-                        <button
-                          type="button"
-                          onClick={() => setIsNotificationOpen(false)}
-                          className="rounded-full border border-[#dbe5df] px-2.5 py-1 text-xs font-semibold text-slate-500 transition hover:bg-[#f8fbf8]"
-                        >
-                          Close
-                        </button>
-                      </div>
-
-                      <div className="mt-4 space-y-3">
-                        {notifications.length > 0 ? notifications.map((item) => (
-                          <button
-                            key={item.id}
-                            type="button"
-                            onClick={() => openNotification(item)}
-                            className="block w-full rounded-[18px] border border-[#edf1ee] bg-[#fbfdfb] p-3 text-left transition hover:border-[#dce8e0] hover:bg-white"
-                          >
-                            <div className="flex items-start justify-between gap-3">
-                              <div>
-                                <p className="text-sm font-semibold text-slate-900">{item.title}</p>
-                                <p className="mt-1 text-xs leading-5 text-slate-500">{item.detail}</p>
-                              </div>
-                              {item.unread ? (
-                                <span className="mt-1 h-2.5 w-2.5 shrink-0 rounded-full bg-emerald-500" />
-                              ) : null}
-                            </div>
-                            <p className="mt-3 text-[11px] font-medium uppercase tracking-[0.16em] text-slate-400">
-                              {item.time}
+                      <div className="fixed left-3 right-3 top-[76px] z-40 max-h-[calc(100dvh-92px)] overflow-y-auto overscroll-contain rounded-[24px] border border-[#e5ebe7] bg-white p-4 shadow-[0_20px_60px_rgba(15,23,32,0.12)] sm:absolute sm:left-auto sm:right-0 sm:top-[calc(100%+12px)] sm:w-[min(320px,calc(100vw-2rem))]">
+                        <div className="flex items-start justify-between gap-4">
+                          <div>
+                            <p className="text-sm font-semibold text-slate-900">Notifications</p>
+                            <p className="mt-1 text-xs text-slate-500">
+                              {admin ? "Admin activity and queue updates." : "Latest account and order updates."}
                             </p>
-                          </button>
-                        )) : (
-                          <div className="rounded-[18px] border border-[#edf1ee] bg-[#fbfdfb] p-4 text-sm text-slate-500">
-                            No new notifications.
                           </div>
-                        )}
-                      </div>
+                          <button
+                            type="button"
+                            onClick={() => setIsNotificationOpen(false)}
+                            className="rounded-full border border-[#dbe5df] px-2.5 py-1 text-xs font-semibold text-slate-500 transition hover:bg-[#f8fbf8]"
+                          >
+                            Close
+                          </button>
+                        </div>
+
+                        <div className="mt-4 space-y-3">
+                          {notifications.length > 0 ? notifications.map((item) => (
+                            <button
+                              key={item.id}
+                              type="button"
+                              onClick={() => openNotification(item)}
+                              className="block w-full rounded-[18px] border border-[#edf1ee] bg-[#fbfdfb] p-3 text-left transition hover:border-[#dce8e0] hover:bg-white"
+                            >
+                              <div className="flex items-start justify-between gap-3">
+                                <div>
+                                  <p className="text-sm font-semibold text-slate-900">{item.title}</p>
+                                  <p className="mt-1 text-xs leading-5 text-slate-500">{item.detail}</p>
+                                </div>
+                                {item.unread ? (
+                                  <span className="mt-1 h-2.5 w-2.5 shrink-0 rounded-full bg-emerald-500" />
+                                ) : null}
+                              </div>
+                              <p className="mt-3 text-[11px] font-medium uppercase tracking-[0.16em] text-slate-400">
+                                {item.time}
+                              </p>
+                            </button>
+                          )) : (
+                            <div className="rounded-[18px] border border-[#edf1ee] bg-[#fbfdfb] p-4 text-sm text-slate-500">
+                              No new notifications.
+                            </div>
+                          )}
+                        </div>
                       </div>
                     </>
                   ) : null}
@@ -597,11 +597,11 @@ export function AppShell({ children, activeSlug, title, subtitle, admin = false 
 
           {activeNotification ? (
             <div
-              className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/18 px-4 backdrop-blur-[2px]"
+              className="fixed inset-0 z-50 flex items-end justify-center overflow-y-auto bg-slate-950/18 px-3 py-3 backdrop-blur-[2px] sm:items-center sm:px-4"
               onClick={() => setActiveNotification(null)}
             >
               <div
-                className="w-full max-w-[360px] rounded-[26px] border border-[#e5ebe7] bg-white p-5 shadow-[0_24px_70px_rgba(15,23,32,0.16)]"
+                className="max-h-[calc(100dvh-1.5rem)] w-full max-w-[360px] overflow-y-auto overscroll-contain rounded-[24px] border border-[#e5ebe7] bg-white p-4 shadow-[0_24px_70px_rgba(15,23,32,0.16)] sm:rounded-[26px] sm:p-5"
                 onClick={(event) => event.stopPropagation()}
               >
                 <div className="flex items-start justify-between gap-4">
