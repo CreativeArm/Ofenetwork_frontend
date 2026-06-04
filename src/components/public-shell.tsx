@@ -10,6 +10,47 @@ interface PublicShellProps {
   children: ReactNode;
 }
 
+const mobileFooterGroups = [
+  {
+    title: "Services",
+    links: [
+      { label: "Deriv Funding", href: "/services/deriv" },
+      { label: "Crypto Transactions", href: "/services/crypto" },
+      { label: "PayPal", href: "/services/paypal" },
+      { label: "Skrill", href: "/services/skrill" },
+      { label: "Buy4Me Orders", href: "/buy4me" },
+    ],
+  },
+  {
+    title: "Resources",
+    links: [
+      { label: "Dashboard", href: "/dashboard" },
+      { label: "All Services", href: "/services" },
+      { label: "Support Center", href: "/support" },
+      { label: "Create Account", href: "/register" },
+      { label: "Customer Login", href: "/login" },
+    ],
+  },
+  {
+    title: "Partners",
+    links: [
+      { label: "Referral Program", href: "/register" },
+      { label: "Payment Support", href: "/support" },
+      { label: "Business Requests", href: "/support" },
+      { label: "Service Partners", href: "/services" },
+    ],
+  },
+  {
+    title: "Company",
+    links: [
+      { label: "About Us", href: "/" },
+      { label: "Our Services", href: "/services" },
+      { label: "Buy 4 Me", href: "/buy4me" },
+      { label: "Contact", href: "/support" },
+    ],
+  },
+];
+
 export function PublicShell({ children }: PublicShellProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -103,7 +144,99 @@ export function PublicShell({ children }: PublicShellProps) {
       </header>
       <main className="mx-auto max-w-7xl px-4 pb-8 pt-[104px] md:px-8 md:pb-10 md:pt-[112px]">{children}</main>
       <footer className="border-t border-[#e7eee9] bg-[#0f1720] text-white">
-        <div className="mx-auto grid max-w-7xl gap-10 px-4 py-12 md:grid-cols-[1.15fr_0.85fr_0.85fr] md:px-8">
+        <div className="md:hidden bg-[#14254a] px-4 py-9 text-slate-300">
+          <div className="flex items-center gap-3">
+            <span className="flex h-11 w-11 items-center justify-center rounded-full bg-emerald-400/10 text-emerald-300">
+              <Icon name="logo" className="h-7 w-7" />
+            </span>
+            <div>
+              <p className="text-xl font-semibold tracking-tight text-white">
+                OfeNetworks.ng
+              </p>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-emerald-200/70">
+                Digital finance hub
+              </p>
+            </div>
+          </div>
+
+          <p className="mt-4 max-w-[320px] text-sm leading-6 text-slate-300/85">
+            OFENetworks helps customers manage deposits, withdrawals, digital
+            payments, and Buy4Me requests with clear support from start to finish.
+          </p>
+
+          <div className="mt-5 flex items-center gap-3">
+            <Link
+              href="#"
+              aria-label="OFENetworks on X"
+              className="text-lg font-semibold text-white/90 transition hover:text-emerald-200"
+            >
+              X
+            </Link>
+            <Link
+              href="#"
+              aria-label="OFENetworks on LinkedIn"
+              className="flex h-5 w-5 items-center justify-center rounded-sm border border-white/70 text-[11px] font-bold text-white/90 transition hover:border-emerald-200 hover:text-emerald-200"
+            >
+              in
+            </Link>
+          </div>
+
+          <div className="mt-9 grid grid-cols-2 gap-x-8 gap-y-8">
+            {mobileFooterGroups.map((group) => (
+              <div key={group.title}>
+                <h2 className="text-base font-semibold text-white">
+                  {group.title}
+                </h2>
+                <div className="mt-3 grid gap-2.5">
+                  {group.links.map((item) => (
+                    <Link
+                      key={`${group.title}-${item.label}`}
+                      href={item.href}
+                      className="text-sm font-semibold leading-5 text-slate-300/80 transition hover:text-white"
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-9 border-y border-white/20 py-5">
+            <div className="flex items-center justify-center gap-2 text-sm text-slate-300/85">
+              <Icon name="mail" className="h-4 w-4 text-white" />
+              <Link href="mailto:hello@Ofenetwork.ng" className="transition hover:text-white">
+                hello@Ofenetwork.ng
+              </Link>
+            </div>
+            <div className="mt-3 flex items-center justify-center gap-2 text-center text-sm text-slate-300/85">
+              <Icon name="pin" className="h-4 w-4 shrink-0 text-white" />
+              <span>Lagos, Nigeria. Remote digital transaction support.</span>
+            </div>
+          </div>
+
+          <div className="pt-5 text-center">
+            <p className="text-xs text-slate-400">
+              &copy; 2026 OfeNetworks.ng. All rights reserved.
+            </p>
+            <div className="mt-5 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs text-slate-400">
+              <Link href="#" className="transition hover:text-white">
+                Terms
+              </Link>
+              <Link href="#" className="transition hover:text-white">
+                Privacy
+              </Link>
+              <Link href="#" className="transition hover:text-white">
+                Cookies
+              </Link>
+              <Link href="/services" className="transition hover:text-white">
+                Sitemap
+              </Link>
+            </div>
+          </div>
+        </div>
+
+        <div className="mx-auto hidden max-w-7xl gap-10 px-4 py-12 md:grid md:grid-cols-[1.15fr_0.85fr_0.85fr] md:px-8">
           <div>
             <div className="flex items-center gap-3">
               <span className="flex h-11 w-11 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-300">
@@ -149,7 +282,7 @@ export function PublicShell({ children }: PublicShellProps) {
             </div>
           </div>
         </div>
-        <div className="border-t border-white/10">
+        <div className="hidden border-t border-white/10 md:block">
           <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-5 text-sm text-slate-400 md:flex-row md:items-center md:justify-between md:px-8">
             <p>&copy; 2026 OfeNetworks.ng. All rights reserved.</p>
             <p>Secure transactions. Transparent rates. Reliable support.</p>
