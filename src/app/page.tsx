@@ -54,7 +54,8 @@ export default async function HomePage() {
                 <span className="hidden lg:inline">+</span>
               </div>
               <h1 className="mx-auto mt-7 max-w-[560px] text-[2.65rem] font-bold leading-[1.02] tracking-[-0.075em] text-[#2f2f31] min-[390px]:text-[2.9rem] sm:text-[4.25rem] lg:mx-0 lg:mt-6 lg:max-w-xl lg:text-7xl lg:font-extrabold lg:leading-[1.02] lg:tracking-[-0.05em] lg:text-slate-900 xl:text-8xl">
-                Your Trusted Hub For{" "}
+                <span className="block lg:inline">Your Trusted</span>{" "}
+                <span className="block lg:inline">Hub For</span>{" "}
                 <span className="block text-[#0f7b36] lg:inline">
                   Digital Finance
                 </span>
@@ -99,7 +100,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="relative left-1/2 right-1/2 mt-10 w-screen max-w-none -translate-x-1/2 overflow-hidden bg-[#f2f6f2] py-10 shadow-[inset_0_1px_0_rgba(255,255,255,0.7),inset_0_-1px_0_rgba(15,23,32,0.03)] md:py-14">
+      <section className="relative left-1/2 right-1/2 mt-10 w-screen max-w-none -translate-x-1/2 overflow-hidden border-y border-[#eef2ef] bg-white py-10 md:py-14">
         <Reveal className="mx-auto max-w-3xl px-4 text-center md:px-8">
           <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[#0f7b36]">
             Live Exchange Rates

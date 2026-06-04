@@ -14,7 +14,7 @@ export function PublicShell({ children }: PublicShellProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-[#f7faf8]">
+    <div className="min-h-screen bg-white">
       <header className="fixed left-0 right-0 top-0 z-30 border-b border-[#e7eee9] bg-white/90 backdrop-blur-md">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-5 md:px-8">
           <Link href="/" className="flex items-center gap-3 text-[#0f1720]">
