@@ -5,10 +5,22 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Reveal } from "./homepage-motion";
 
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") ??
+  "http://127.0.0.1:4000/api";
+
 interface OAuthUser {
   role?: string;
   fullName?: string;
   email?: string;
+}
+
+interface OAuthSessionResponse {
+  accessToken?: string;
+  token?: string;
+  refreshToken?: string;
+  user?: OAuthUser;
+  next?: string;
 }
 
 function isSafeNextPath(value: string | null) {
@@ -21,41 +33,88 @@ export function OAuthCallback() {
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
-    const accessToken = searchParams.get("accessToken") ?? searchParams.get("token");
-    const refreshToken = searchParams.get("refreshToken");
-    const userPayload = searchParams.get("user");
-    const oauthError = searchParams.get("oauthError") ?? searchParams.get("error");
+    let isCancelled = false;
 
-    if (oauthError) {
-      setErrorMessage(oauthError);
-      return;
+    async function completeSocialLogin() {
+      const oauthError =
+        searchParams.get("oauthError") ?? searchParams.get("error");
+
+      if (oauthError) {
+        setErrorMessage(oauthError);
+        return;
+      }
+
+      try {
+        let accessToken =
+          searchParams.get("accessToken") ?? searchParams.get("token");
+        let refreshToken = searchParams.get("refreshToken");
+        let nextPath = searchParams.get("next");
+        let user: OAuthUser | null = null;
+        const oauthCode = searchParams.get("oauthCode");
+        const userPayload = searchParams.get("user");
+
+        if (oauthCode) {
+          const response = await fetch(`${API_BASE_URL}/auth/social/session`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ code: oauthCode }),
+          });
+
+          if (!response.ok) {
+            const message = await response.text();
+            throw new Error(
+              message || "Social login session could not be confirmed.",
+            );
+          }
+
+          const session = (await response.json()) as OAuthSessionResponse;
+          accessToken = session.accessToken ?? session.token ?? null;
+          refreshToken = session.refreshToken ?? null;
+          user = session.user ?? null;
+          nextPath = session.next ?? nextPath;
+        } else if (userPayload) {
+          user = JSON.parse(userPayload) as OAuthUser;
+        }
+
+        if (!accessToken || !refreshToken || !user) {
+          throw new Error("Social login could not complete. Please try again.");
+        }
+
+        if (isCancelled) {
+          return;
+        }
+
+        window.localStorage.setItem("ofe_access_token", accessToken);
+        window.localStorage.setItem("ofe_refresh_token", refreshToken);
+        window.localStorage.setItem("ofe_user", JSON.stringify(user));
+
+        const destination = isSafeNextPath(nextPath)
+          ? nextPath
+          : user.role === "ADMIN"
+            ? "/admin"
+            : "/dashboard";
+
+        window.setTimeout(() => {
+          router.replace(destination ?? "/dashboard");
+        }, 350);
+      } catch (error) {
+        if (!isCancelled) {
+          setErrorMessage(
+            error instanceof Error
+              ? error.message
+              : "Social login returned invalid session details.",
+          );
+        }
+      }
     }
 
-    if (!accessToken || !refreshToken || !userPayload) {
-      setErrorMessage("Social login could not complete. Please try again.");
-      return;
-    }
+    completeSocialLogin();
 
-    try {
-      const user = JSON.parse(userPayload) as OAuthUser;
-
-      window.localStorage.setItem("ofe_access_token", accessToken);
-      window.localStorage.setItem("ofe_refresh_token", refreshToken);
-      window.localStorage.setItem("ofe_user", JSON.stringify(user));
-
-      const nextPath = searchParams.get("next");
-      const destination = isSafeNextPath(nextPath)
-        ? nextPath
-        : user.role === "ADMIN"
-          ? "/admin"
-          : "/dashboard";
-
-      window.setTimeout(() => {
-        router.replace(destination ?? "/dashboard");
-      }, 350);
-    } catch {
-      setErrorMessage("Social login returned invalid session details.");
-    }
+    return () => {
+      isCancelled = true;
+    };
   }, [router, searchParams]);
 
   return (
