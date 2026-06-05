@@ -5,44 +5,10 @@ import { Icon } from "../../components/icons";
 import { ServiceIcon, getRateServiceIconName } from "../../components/service-icon";
 import { BonusBalanceAmount } from "../../components/bonus-balance";
 import { BonusCashoutPanel } from "../../components/bonus-cashout-panel";
+import { DashboardQuickStats } from "../../components/dashboard-quick-stats";
 import { UserTransactionHistory } from "../../components/user-transaction-history";
 import { homeRates, serviceConfigs } from "../../lib/mock-data";
 import { fetchRates, mapBackendRatesToBoard } from "../../lib/admin-backend";
-
-const quickStats = [
-  {
-    label: "Active Services",
-    value: "7",
-    note: "Deriv, Crypto, Skrill, PayPal, Venmo, Payoneer, Buy4Me",
-    icon: "grid" as const,
-    accent: "from-emerald-500/20 via-emerald-400/8 to-transparent",
-    badge: "All modules live",
-  },
-  {
-    label: "Pending Requests",
-    value: "4",
-    note: "Track deposits, withdrawals, and Buy4Me updates",
-    icon: "bell" as const,
-    accent: "from-amber-500/20 via-amber-400/8 to-transparent",
-    badge: "Needs attention",
-  },
-  {
-    label: "Bonus Rate",
-    value: "5% - 12%",
-    note: "Assigned by referral source and transaction tier",
-    icon: "wallet" as const,
-    accent: "from-sky-500/20 via-sky-400/8 to-transparent",
-    badge: "Referral based",
-  },
-  {
-    label: "Minimum Qualifier",
-    value: "N50,000+",
-    note: "Bonuses apply after the required transaction threshold",
-    icon: "chart" as const,
-    accent: "from-violet-500/20 via-violet-400/8 to-transparent",
-    badge: "Threshold check",
-  },
-];
 
 const onboardingSteps = [
   {
@@ -61,7 +27,7 @@ const onboardingSteps = [
 
 const supportHighlights = [
   "Admin-reviewed transactions for added control",
-  "Multi-service access with referral and transaction-based rewards",
+  "Manual referral and threshold bonuses after qualified transactions",
   "Transparent rates and clear proof-upload flow",
   "Buy4Me ordering for products outside Nigeria",
 ];
@@ -100,36 +66,7 @@ export default async function DashboardPage() {
           </div>
           </StaggerItem>
 
-          <Stagger className="grid grid-cols-2 gap-3 sm:gap-4">
-            {quickStats.map((item) => (
-              <StaggerItem
-                key={item.label}
-                className="group relative overflow-hidden rounded-[22px] border border-[#e6ece8] bg-[linear-gradient(180deg,#ffffff_0%,#fbfdfb_100%)] p-3 shadow-[0_12px_30px_rgba(15,23,32,0.04)] transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,32,0.06)] sm:rounded-[28px] sm:p-5"
-              >
-                <div className={`absolute inset-x-0 top-0 h-1 bg-gradient-to-r ${item.accent}`} />
-                <div className="absolute -right-10 -top-10 h-24 w-24 rounded-full bg-[radial-gradient(circle,rgba(15,123,54,0.08),transparent_68%)] sm:-right-12 sm:-top-12 sm:h-28 sm:w-28" />
-
-                <div className="relative flex items-start justify-between gap-4">
-                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#f3faf5] text-[#0f7b36] shadow-[inset_0_0_0_1px_rgba(15,123,54,0.08)] sm:h-11 sm:w-11">
-                    <Icon name={item.icon} className="h-4 w-4 sm:h-5 sm:w-5" />
-                  </span>
-                  <span className="hidden rounded-full border border-[#e3efe6] bg-[#f7fbf8] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.1em] text-slate-500 sm:inline-flex sm:px-3 sm:text-[11px] sm:tracking-[0.12em]">
-                    {item.badge}
-                  </span>
-                </div>
-
-                <p className="mt-4 break-words text-[11px] font-semibold uppercase tracking-[0.1em] text-slate-400 sm:mt-5 sm:text-[13px] sm:tracking-[0.18em]">
-                  {item.label}
-                </p>
-                <p className="mt-2.5 break-words text-[1.7rem] font-semibold leading-none text-slate-900 sm:mt-3 sm:text-[2.25rem]">
-                  {item.value}
-                </p>
-                <p className="mt-3 max-w-full break-words text-[12px] leading-6 text-slate-500 sm:mt-4 sm:max-w-[28ch] sm:text-sm">
-                  {item.note}
-                </p>
-              </StaggerItem>
-            ))}
-          </Stagger>
+          <DashboardQuickStats />
         </Stagger>
 
         <Stagger className="grid gap-4 sm:gap-6 xl:grid-cols-[1.15fr_0.85fr]">

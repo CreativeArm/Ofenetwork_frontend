@@ -773,7 +773,9 @@ export function AppShell({ children, activeSlug, title, subtitle, admin = false 
                       </p>
                       <Icon name="eye" className="h-4 w-4 text-slate-400" />
                     </div>
-                    <p className="mt-2 text-sm text-slate-500">Based on referral percentages and minimum qualifying transactions.</p>
+                    <p className="mt-2 text-sm text-slate-500">
+                      Referral and threshold bonuses are added manually after qualifying transactions.
+                    </p>
                   </div>
                 </div>
               ) : null}

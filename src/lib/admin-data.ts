@@ -77,9 +77,9 @@ export const adminSectionMeta: Record<
   },
   bonuses: {
     title: "Bonuses",
-    subtitle: "Manage referral percentages and qualification thresholds.",
+    subtitle: "Manage manual referral and threshold bonus assignments.",
     eyebrow: "Rewards",
-    description: "Control how customer bonuses are assigned based on referral source, transaction minimums, and percentage bands.",
+    description: "Control manual bonus assignments after referrals, transaction minimums, and admin checks are confirmed.",
   },
   rates: {
     title: "Exchange Rates",
@@ -225,16 +225,16 @@ export const adminBuy4MeOrders = [
 ];
 
 export const adminUsersData = [
-  { name: "John Doe", email: "john@example.com", referrals: 8, volume: "N1.2M", bonus: "8%", status: "Verified" },
-  { name: "Mary A.", email: "mary@example.com", referrals: 3, volume: "N650k", bonus: "5%", status: "Verified" },
-  { name: "Kelvin O.", email: "kelvin@example.com", referrals: 12, volume: "N2.8M", bonus: "12%", status: "VIP" },
-  { name: "Sarah J.", email: "sarah@example.com", referrals: 0, volume: "N80k", bonus: "0%", status: "Review" },
+  { name: "John Doe", email: "john@example.com", referrals: 8, volume: "N1.2M", bonus: "Manual", status: "Verified" },
+  { name: "Mary A.", email: "mary@example.com", referrals: 3, volume: "N650k", bonus: "Manual", status: "Verified" },
+  { name: "Kelvin O.", email: "kelvin@example.com", referrals: 12, volume: "N2.8M", bonus: "Manual", status: "VIP" },
+  { name: "Sarah J.", email: "sarah@example.com", referrals: 0, volume: "N80k", bonus: "Review", status: "Review" },
 ];
 
 export const adminBonusRules = [
-  { tier: "Starter Referral", minimum: "N50,000", rate: "5%", appliesTo: "Verified referred users" },
-  { tier: "Growth Referral", minimum: "N250,000", rate: "8%", appliesTo: "Users with repeat qualified transactions" },
-  { tier: "Partner Referral", minimum: "N1,000,000", rate: "12%", appliesTo: "High-volume referred customers" },
+  { tier: "Referral Bonus", minimum: "$30+ transaction", rate: "Manual", appliesTo: "Referred person must complete a transaction worth at least $30 before admin adds the bonus." },
+  { tier: "Bonus Withdrawal", minimum: "N2,000 balance", rate: "Minimum payout", appliesTo: "Users can request a bonus withdrawal once their available bonus balance reaches N2,000." },
+  { tier: "Threshold Bonus", minimum: "Admin verified", rate: "Manual", appliesTo: "Admin adds threshold bonuses manually after confirming the qualifying transaction." },
 ];
 
 export const adminServiceHealth = [

@@ -7,6 +7,10 @@ import {
   fetchUserWallet,
   formatCurrency,
 } from "../lib/admin-backend";
+import {
+  BONUS_BALANCE_UPDATED_EVENT,
+  notifyBonusBalanceUpdated,
+} from "../lib/bonus-events";
 import { KycVerificationGate } from "./kyc-verification-gate";
 
 type StoredUser = {
@@ -23,7 +27,10 @@ export function BonusCashoutPanel() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [feedback, setFeedback] = useState<string | null>(null);
 
-  const loadWallet = (nextUserId: string) => {
+  const loadWallet = (
+    nextUserId: string,
+    { showError = true }: { showError?: boolean } = {},
+  ) => {
     fetchUserWallet(nextUserId)
       .then((wallet) => {
         const balance = calculateBonusBalance(wallet);
@@ -31,24 +38,62 @@ export function BonusCashoutPanel() {
         setAmount((current) => current || (balance > 0 ? String(balance) : ""));
       })
       .catch(() => {
-        setFeedback("Unable to load your bonus balance right now.");
+        if (showError) {
+          setFeedback("Unable to load your bonus balance right now.");
+        }
       });
   };
 
   useEffect(() => {
-    try {
-      const rawUser = window.localStorage.getItem("ofe_user");
-      const parsed = rawUser ? (JSON.parse(rawUser) as StoredUser) : null;
-      if (!parsed?.id) {
-        setFeedback("Sign in again to cash your bonus.");
-        return;
-      }
+    let currentUserId: string | null = null;
 
-      setUserId(parsed.id);
-      loadWallet(parsed.id);
-    } catch {
-      setFeedback("Unable to load your bonus details right now.");
-    }
+    const loadCurrentUserWallet = ({
+      showError = true,
+    }: { showError?: boolean } = {}) => {
+      try {
+        const rawUser = window.localStorage.getItem("ofe_user");
+        const parsed = rawUser ? (JSON.parse(rawUser) as StoredUser) : null;
+        if (!parsed?.id) {
+          if (showError) {
+            setFeedback("Sign in again to cash your bonus.");
+          }
+          return;
+        }
+
+        currentUserId = parsed.id;
+        setUserId(parsed.id);
+        loadWallet(parsed.id, { showError });
+      } catch {
+        if (showError) {
+          setFeedback("Unable to load your bonus details right now.");
+        }
+      }
+    };
+
+    const handleBonusUpdate = (event: Event) => {
+      const updatedUserId = (event as CustomEvent<{ userId?: string }>).detail
+        ?.userId;
+
+      if (!updatedUserId || updatedUserId === currentUserId) {
+        loadCurrentUserWallet({ showError: false });
+      }
+    };
+
+    const handleFocus = () => loadCurrentUserWallet({ showError: false });
+
+    loadCurrentUserWallet();
+    const interval = window.setInterval(
+      () => loadCurrentUserWallet({ showError: false }),
+      10000,
+    );
+    window.addEventListener("focus", handleFocus);
+    window.addEventListener(BONUS_BALANCE_UPDATED_EVENT, handleBonusUpdate);
+
+    return () => {
+      window.clearInterval(interval);
+      window.removeEventListener("focus", handleFocus);
+      window.removeEventListener(BONUS_BALANCE_UPDATED_EVENT, handleBonusUpdate);
+    };
   }, []);
 
   const submitCashout = async () => {
@@ -90,6 +135,7 @@ export function BonusCashoutPanel() {
       setAccountNumber("");
       setAmount("");
       loadWallet(userId);
+      notifyBonusBalanceUpdated(userId);
       setFeedback("Bonus cashout submitted. Admin will review it shortly.");
     } catch (error) {
       setFeedback(

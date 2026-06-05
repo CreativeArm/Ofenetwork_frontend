@@ -7,6 +7,7 @@ import {
   removeUserBonus,
   type BackendAdminUser,
 } from "../lib/admin-backend";
+import { notifyBonusBalanceUpdated } from "../lib/bonus-events";
 import { useBodyScrollLock } from "../lib/use-body-scroll-lock";
 import { AdminStatusBadge } from "./admin-ui";
 
@@ -119,6 +120,7 @@ export function AdminUsersBonusManager({ users }: AdminUsersBonusManagerProps) {
         type: bonusType,
       });
       updateWallet(activeUser.id, wallet);
+      notifyBonusBalanceUpdated(activeUser.id);
       setFeedback("Bonus added successfully.");
     } catch (error) {
       setFeedback(error instanceof Error ? error.message : "Unable to add bonus.");
@@ -137,6 +139,7 @@ export function AdminUsersBonusManager({ users }: AdminUsersBonusManagerProps) {
         creditId,
       });
       updateWallet(userId, wallet);
+      notifyBonusBalanceUpdated(userId);
       setFeedback("Bonus removed successfully.");
     } catch (error) {
       setFeedback(error instanceof Error ? error.message : "Unable to remove bonus.");

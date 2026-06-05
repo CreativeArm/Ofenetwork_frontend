@@ -257,7 +257,7 @@ async function renderSection(section: AdminSectionSlug) {
                     <p className="font-semibold text-slate-900">{rule.tier}</p>
                     <span className="text-lg font-semibold text-[#0f7b36]">{rule.rate}</span>
                   </div>
-                  <p className="mt-2 text-sm text-slate-500">Minimum transaction: {rule.minimum}</p>
+                  <p className="mt-2 text-sm text-slate-500">Requirement: {rule.minimum}</p>
                   <p className="mt-1 text-sm text-slate-500">{rule.appliesTo}</p>
                 </div>
               ))}
@@ -266,8 +266,8 @@ async function renderSection(section: AdminSectionSlug) {
           <AdminCard>
             <h3 className="text-xl font-semibold">How assignment works</h3>
             <div className="mt-4 space-y-4 text-sm leading-7 text-slate-600">
-              <p>Bonuses are only assigned after the customer meets the minimum transaction amount for their referral tier.</p>
-              <p>Referral source, repeat activity, and admin overrides can affect the final percentage shown to the customer.</p>
+              <p>Referral bonuses are added manually after the referred person completes a transaction worth at least $30.</p>
+              <p>Users can request a bonus withdrawal once their available bonus balance reaches N2,000.</p>
               <p>This section is ready for future API-backed rule editing once the backend logic is connected.</p>
             </div>
           </AdminCard>
