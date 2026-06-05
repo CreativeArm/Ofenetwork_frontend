@@ -18,9 +18,9 @@ export default function Buy4MePublicPage() {
   return (
     <PublicShell>
       <section className="space-y-8">
-        <Stagger className="mx-auto px-4 py-8">
+        <Stagger className="-mx-4 -mt-1 md:mx-auto md:px-4 md:py-8">
           <StaggerItem>
-            <div className="relative overflow-hidden rounded-[36px] bg-[#072817] text-white shadow-[0_28px_80px_rgba(6,40,23,0.26)]">
+            <div className="relative overflow-hidden bg-[#072817] text-white shadow-[0_28px_80px_rgba(6,40,23,0.26)] md:rounded-[36px]">
               <Image
                 src={buy4MeHero}
                 alt="Cargo being loaded beside an aircraft for Buy4Me deliveries"
@@ -32,7 +32,7 @@ export default function Buy4MePublicPage() {
               <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,39,22,0.96)_0%,rgba(5,39,22,0.92)_34%,rgba(7,47,28,0.78)_52%,rgba(7,47,28,0.42)_68%,rgba(7,47,28,0.16)_100%)]" />
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(75,245,188,0.14),transparent_34%)]" />
 
-              <div className="relative grid min-h-[560px] items-center px-6 py-12 md:px-10 md:py-14 lg:min-h-[640px] lg:px-14 xl:px-16">
+              <div className="relative grid min-h-[calc(100svh-104px)] items-center px-6 py-8 md:min-h-[560px] md:px-10 md:py-14 lg:min-h-[640px] lg:px-14 xl:px-16">
                 <div className="max-w-2xl">
                   <span className="inline-flex rounded-full bg-[#083a23]/85 px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-[#31d89b] shadow-[0_10px_30px_rgba(0,0,0,0.12)]">
                     Buy4Me Guest Access
