@@ -116,7 +116,11 @@ function formatCurrency(amount?: number) {
     return null;
   }
 
-  return `$${amount.toFixed(2)}`;
+  return new Intl.NumberFormat("en-NG", {
+    style: "currency",
+    currency: "NGN",
+    maximumFractionDigits: 2,
+  }).format(amount);
 }
 
 function statusTone(status: BackendBuy4MeOrder["status"]) {
@@ -166,7 +170,6 @@ export function Buy4MeWorkspace() {
   const [isSubmittingRequest, setIsSubmittingRequest] = useState(false);
   const [isSubmittingPayment, setIsSubmittingPayment] = useState(false);
   const [isCancellingOrder, setIsCancellingOrder] = useState(false);
-  const [acceptedQuoteIds, setAcceptedQuoteIds] = useState<string[]>([]);
   const [feedback, setFeedback] = useState<string | null>(null);
   const [submittedPopup, setSubmittedPopup] =
     useState<TransactionSubmittedPopupContent | null>(null);
@@ -195,13 +198,33 @@ export function Buy4MeWorkspace() {
       return;
     }
 
-    fetchUserBuy4MeOrders(userId)
-      .then((items) => {
-        setOrders(items);
-      })
-      .catch(() => {
-        setFeedback("Unable to load your Buy4Me orders right now.");
-      });
+    let isMounted = true;
+
+    const loadOrders = (showError = true) => {
+      fetchUserBuy4MeOrders(userId)
+        .then((items) => {
+          if (isMounted) {
+            setOrders(items);
+          }
+        })
+        .catch(() => {
+          if (isMounted && showError) {
+            setFeedback("Unable to load your Buy4Me orders right now.");
+          }
+        });
+    };
+
+    const handleFocus = () => loadOrders(false);
+
+    loadOrders();
+    const interval = window.setInterval(() => loadOrders(false), 10000);
+    window.addEventListener("focus", handleFocus);
+
+    return () => {
+      isMounted = false;
+      window.clearInterval(interval);
+      window.removeEventListener("focus", handleFocus);
+    };
   }, [userId]);
 
   const activeOrder = useMemo(() => {
@@ -222,8 +245,7 @@ export function Buy4MeWorkspace() {
     activeOrder &&
     activeOrder.status !== "CANCELLED" &&
     activeOrder.totalCost != null &&
-    activeOrder.status === "AWAITING_PAYMENT" &&
-    acceptedQuoteIds.includes(activeOrder.id);
+    activeOrder.status === "AWAITING_PAYMENT";
   const showCancelledOrder = activeOrder?.status === "CANCELLED";
 
   useBodyScrollLock(Boolean(activeOrder));
@@ -306,17 +328,6 @@ export function Buy4MeWorkspace() {
     }
   };
 
-  const proceedToPayment = () => {
-    if (!activeOrder) {
-      return;
-    }
-
-    setAcceptedQuoteIds((current) =>
-      current.includes(activeOrder.id) ? current : [...current, activeOrder.id],
-    );
-    setFeedback("Quote accepted. You can now choose a payment method and upload your proof.");
-  };
-
   const cancelOrder = async () => {
     if (!activeOrder) {
       return;
@@ -332,7 +343,6 @@ export function Buy4MeWorkspace() {
       setOrders((current) =>
         current.map((order) => (order.id === updated.id ? updated : order)),
       );
-      setAcceptedQuoteIds((current) => current.filter((id) => id !== updated.id));
       setSelectedProof(null);
       setFeedback("This Buy4Me request has been cancelled.");
     } catch (error) {
@@ -444,9 +454,9 @@ export function Buy4MeWorkspace() {
               {activeOrder.totalCost != null ? (
                 <div className="mt-5 space-y-4 rounded-[22px] border border-[#edf1ee] p-5">
                   {[
-                    ["Product Cost", formatCurrency(activeOrder.productCost) ?? "$0.00"],
-                    ["Shipping Cost", formatCurrency(activeOrder.shippingCost) ?? "$0.00"],
-                    ["Service Charge", formatCurrency(activeOrder.serviceCharge) ?? "$0.00"],
+                    ["Product Cost", formatCurrency(activeOrder.productCost) ?? formatCurrency(0)],
+                    ["Shipping Cost", formatCurrency(activeOrder.shippingCost) ?? formatCurrency(0)],
+                    ["Service Charge", formatCurrency(activeOrder.serviceCharge) ?? formatCurrency(0)],
                   ].map(([label, value]) => (
                     <div key={label} className="flex items-center justify-between text-sm">
                       <span className="text-slate-600">{label}</span>
@@ -460,22 +470,18 @@ export function Buy4MeWorkspace() {
                     </span>
                   </div>
                   {activeOrder.status === "AWAITING_PAYMENT" ? (
-                    <div className="grid gap-3 border-t border-[#edf1ee] pt-4 sm:grid-cols-2">
+                    <div className="border-t border-[#edf1ee] pt-3">
                       <button
                         type="button"
                         disabled={isCancellingOrder}
                         onClick={cancelOrder}
-                        className="rounded-2xl border border-rose-200 bg-white px-5 py-3 text-sm font-semibold text-rose-600 transition hover:bg-rose-50 disabled:cursor-not-allowed disabled:opacity-60"
+                        className="w-full rounded-2xl border border-rose-200 bg-white px-4 py-2.5 text-sm font-semibold text-rose-600 transition hover:bg-rose-50 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
                       >
                         {isCancellingOrder ? "Cancelling..." : "Cancel Transaction"}
                       </button>
-                      <button
-                        type="button"
-                        onClick={proceedToPayment}
-                        className="rounded-2xl bg-[#0f7b36] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#116f34]"
-                      >
-                        Proceed to Payment
-                      </button>
+                      <p className="mt-2 hidden text-xs font-semibold text-[#0f7b36] sm:block">
+                        Payment details and proof upload are available here.
+                      </p>
                     </div>
                   ) : null}
                 </div>
@@ -544,7 +550,7 @@ export function Buy4MeWorkspace() {
                 <div className="rounded-[22px] bg-[#f6faf7] p-5">
                   <p className="text-sm text-slate-500">Total Amount to Pay</p>
                   <p className="mt-2 text-4xl font-semibold text-[#0f7b36]">
-                    {formatCurrency(activeOrder.totalCost) ?? "$0.00"}
+                    {formatCurrency(activeOrder.totalCost) ?? formatCurrency(0)}
                   </p>
                 </div>
                 <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
@@ -825,11 +831,11 @@ export function Buy4MeWorkspace() {
           role="dialog"
           aria-modal="true"
           aria-labelledby="buy4me-order-details-title"
-          className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-slate-950/20 px-4 py-6 backdrop-blur-[3px] sm:items-center"
+          className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-slate-950/20 px-3 py-4 backdrop-blur-[3px] sm:px-5 sm:py-6 lg:items-center"
           onClick={() => setActiveOrderId(null)}
         >
           <div
-            className="w-full max-w-[760px] rounded-[30px] border border-[#e5ebe7] bg-white p-5 shadow-[0_28px_90px_rgba(15,23,32,0.2)]"
+            className="max-h-[calc(100vh-2rem)] w-full max-w-[980px] overflow-y-auto rounded-[26px] border border-[#e5ebe7] bg-white p-4 shadow-[0_28px_90px_rgba(15,23,32,0.2)] sm:max-h-[calc(100vh-3rem)] sm:p-5 lg:p-6"
             onClick={(event) => event.stopPropagation()}
           >
             <div className="flex items-start justify-between gap-4">
@@ -851,7 +857,7 @@ export function Buy4MeWorkspace() {
               </button>
             </div>
 
-            <div className="mt-5 flex flex-wrap gap-2">
+            <div className="mt-4 flex flex-wrap gap-2">
               {[
                 ["Processing", "bg-amber-500"],
                 ["Awaiting Payment", "bg-blue-500"],
@@ -863,7 +869,7 @@ export function Buy4MeWorkspace() {
                 return (
                   <span
                     key={label}
-                    className={`inline-flex items-center gap-2 rounded-full border px-3 py-2 text-xs font-semibold ${
+                    className={`inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-semibold ${
                       isActive
                         ? "border-[#0f7b36] bg-[#0f7b36] text-white"
                         : "border-[#e5ebe7] bg-[#fbfdfb] text-slate-600"
@@ -882,7 +888,7 @@ export function Buy4MeWorkspace() {
               ) : null}
             </div>
 
-            <div className="mt-5 rounded-[22px] bg-[#f8fbf8] p-4">
+            <div className="mt-4 rounded-[22px] bg-[#f8fbf8] p-4">
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">
@@ -905,7 +911,7 @@ export function Buy4MeWorkspace() {
                   </p>
                 </div>
               </div>
-              <p className={`mt-4 rounded-[18px] px-4 py-3 text-sm leading-6 ${
+              <p className={`mt-3 rounded-[18px] px-4 py-2.5 text-sm leading-6 ${
                 activeOrder.status === "CANCELLED"
                   ? "bg-rose-50 text-rose-700"
                   : "bg-white text-slate-600"
@@ -916,8 +922,16 @@ export function Buy4MeWorkspace() {
               </p>
             </div>
 
+            <div
+              className={
+                showPayment
+                  ? "mt-4 grid gap-4 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:items-start"
+                  : ""
+              }
+            >
+            <div>
             {showQuote ? (
-              <div className="mt-5 rounded-[22px] border border-[#edf1ee] p-5">
+              <div className={`${showPayment ? "" : "mt-5"} rounded-[22px] border border-[#edf1ee] p-4`}>
                 <div className="flex items-center justify-between gap-4">
                   <h3 className="text-lg font-semibold text-slate-950">Order & Pricing</h3>
                   <span className={`rounded-full px-3 py-1 text-xs font-semibold ${statusTone(activeOrder.status)}`}>
@@ -926,41 +940,37 @@ export function Buy4MeWorkspace() {
                 </div>
 
                 {activeOrder.totalCost != null ? (
-                  <div className="mt-4 space-y-4">
+                  <div className="mt-4 space-y-3">
                     {[
-                      ["Product Cost", formatCurrency(activeOrder.productCost) ?? "$0.00"],
-                      ["Shipping Cost", formatCurrency(activeOrder.shippingCost) ?? "$0.00"],
-                      ["Service Charge", formatCurrency(activeOrder.serviceCharge) ?? "$0.00"],
+                      ["Product Cost", formatCurrency(activeOrder.productCost) ?? formatCurrency(0)],
+                      ["Shipping Cost", formatCurrency(activeOrder.shippingCost) ?? formatCurrency(0)],
+                      ["Service Charge", formatCurrency(activeOrder.serviceCharge) ?? formatCurrency(0)],
                     ].map(([label, value]) => (
                       <div key={label} className="flex items-center justify-between gap-4 text-sm">
                         <span className="text-slate-600">{label}</span>
                         <span className="font-semibold text-slate-900">{value}</span>
                       </div>
                     ))}
-                    <div className="flex items-center justify-between gap-4 border-t border-[#edf1ee] pt-4">
-                      <span className="text-lg font-semibold text-slate-900">Total Amount</span>
-                      <span className="text-2xl font-semibold text-[#0f7b36]">
+                    <div className="flex items-center justify-between gap-4 border-t border-[#edf1ee] pt-3">
+                      <span className="text-base font-semibold text-slate-900 sm:text-lg">Total Amount</span>
+                      <span className="text-xl font-semibold text-[#0f7b36] sm:text-2xl">
                         {formatCurrency(activeOrder.totalCost)}
                       </span>
                     </div>
 
                     {activeOrder.status === "AWAITING_PAYMENT" ? (
-                      <div className="grid gap-3 border-t border-[#edf1ee] pt-4 sm:grid-cols-2">
+                      <div className="border-t border-[#edf1ee] pt-3">
                         <button
                           type="button"
                           disabled={isCancellingOrder}
                           onClick={cancelOrder}
-                          className="rounded-2xl border border-rose-200 bg-white px-5 py-3 text-sm font-semibold text-rose-600 transition hover:bg-rose-50 disabled:cursor-not-allowed disabled:opacity-60"
+                          className="w-full rounded-2xl border border-rose-200 bg-white px-4 py-2.5 text-sm font-semibold text-rose-600 transition hover:bg-rose-50 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
                         >
                           {isCancellingOrder ? "Cancelling..." : "Cancel Transaction"}
                         </button>
-                        <button
-                          type="button"
-                          onClick={proceedToPayment}
-                          className="rounded-2xl bg-[#0f7b36] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#116f34]"
-                        >
-                          Proceed to Payment
-                        </button>
+                        <p className="mt-2 hidden text-xs font-semibold text-[#0f7b36] sm:block">
+                          Payment details and proof upload are available here.
+                        </p>
                       </div>
                     ) : null}
                   </div>
@@ -973,32 +983,33 @@ export function Buy4MeWorkspace() {
             ) : null}
 
             {!showQuote && activeOrder.status !== "CANCELLED" ? (
-              <div className="mt-5 rounded-[22px] border border-[#edf1ee] bg-[#fbfcfb] p-5 text-sm leading-6 text-slate-500">
+              <div className={`${showPayment ? "" : "mt-5"} rounded-[22px] border border-[#edf1ee] bg-[#fbfcfb] p-5 text-sm leading-6 text-slate-500`}>
                 Admin is reviewing your submitted product link. Quote and payment details will appear once ready.
               </div>
             ) : null}
+            </div>
 
             {showPayment ? (
-              <div className="mt-5 rounded-[22px] border border-[#edf1ee] p-5">
-                <div className="flex items-center justify-between gap-4">
+              <div className="rounded-[22px] border border-[#edf1ee] p-4">
+                <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
                   <div>
                     <h3 className="text-lg font-semibold text-slate-950">Make Payment</h3>
                     <p className="mt-1 text-sm text-slate-500">
                       Submit payment details once you have paid the quoted total.
                     </p>
                   </div>
-                  <p className="text-xl font-semibold text-[#0f7b36]">
-                    {formatCurrency(activeOrder.totalCost) ?? "$0.00"}
+                  <p className="shrink-0 text-lg font-semibold text-[#0f7b36] sm:text-xl">
+                    {formatCurrency(activeOrder.totalCost) ?? formatCurrency(0)}
                   </p>
                 </div>
 
-                <div className="mt-4 grid grid-cols-2 gap-3 lg:grid-cols-4">
+                <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-4">
                   {paymentMethods.map((item) => (
                     <button
                       key={item.label}
                       type="button"
                       onClick={() => setSelectedPaymentMethod(item)}
-                      className={`rounded-[18px] border p-3 text-left transition-all duration-300 hover:border-[#c8ddd0] hover:bg-[#fbfdfb] ${
+                      className={`rounded-[16px] border p-2.5 text-left transition-all duration-300 hover:border-[#c8ddd0] hover:bg-[#fbfdfb] ${
                         selectedPaymentMethod.label === item.label
                           ? "border-[#9bc8aa] bg-[#f8fbf8] shadow-[0_12px_24px_rgba(15,123,54,0.08)]"
                           : "border-[#e5ebe7] bg-white"
@@ -1007,13 +1018,13 @@ export function Buy4MeWorkspace() {
                       <span className={`inline-flex rounded-xl px-2.5 py-1 text-xs font-semibold ${item.accent}`}>
                         {item.short}
                       </span>
-                      <p className="mt-3 text-sm font-semibold leading-6 text-slate-800">{item.label}</p>
+                      <p className="mt-2 text-xs font-semibold leading-5 text-slate-800 sm:text-sm">{item.label}</p>
                     </button>
                   ))}
                 </div>
 
-                <div className="mt-4 rounded-[20px] border border-[#dfeae3] bg-[#f8fbf8] p-4">
-                  <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+                <div className="mt-3 rounded-[20px] border border-[#dfeae3] bg-[#f8fbf8] p-3">
+                  <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
                     <div>
                       <p className="text-sm font-semibold text-slate-900">{selectedPaymentMethod.detailsTitle}</p>
                       <p className="mt-1 text-sm text-slate-500">
@@ -1024,20 +1035,20 @@ export function Buy4MeWorkspace() {
                       {selectedPaymentMethod.short}
                     </span>
                   </div>
-                  <div className="mt-4 grid gap-3 md:grid-cols-2">
+                  <div className="mt-3 grid gap-2 md:grid-cols-2">
                     {selectedPaymentMethod.details.map(([label, value]) => (
-                      <div key={label} className="rounded-[18px] border border-[#e5ebe7] bg-white p-4">
+                      <div key={label} className="rounded-[16px] border border-[#e5ebe7] bg-white p-3">
                         <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">{label}</p>
                         <p className="mt-2 break-words text-sm font-semibold text-slate-900">{value}</p>
                       </div>
                     ))}
                   </div>
-                  <p className="mt-4 text-sm text-slate-500">{selectedPaymentMethod.note}</p>
+                  <p className="mt-3 text-sm text-slate-500">{selectedPaymentMethod.note}</p>
                 </div>
 
-                <div className="mt-4 rounded-[20px] border border-dashed border-[#d7e2db] bg-[#fcfdfc] px-4 py-8 text-center">
-                  <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">
-                    <Icon name="upload" className="h-6 w-6" />
+                <div className="mt-3 rounded-[20px] border border-dashed border-[#d7e2db] bg-[#fcfdfc] px-4 py-5 text-center">
+                  <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">
+                    <Icon name="upload" className="h-5 w-5" />
                   </div>
                   <label className="mt-3 block cursor-pointer text-sm font-medium text-slate-700">
                     Click to choose your payment screenshot
@@ -1055,7 +1066,7 @@ export function Buy4MeWorkspace() {
                     <img
                       src={selectedProof.dataUrl}
                       alt={`${selectedProof.name} preview`}
-                      className="mx-auto mt-4 max-h-36 rounded-2xl border border-[#e5ebe7] object-contain"
+                      className="mx-auto mt-3 max-h-28 rounded-2xl border border-[#e5ebe7] object-contain"
                     />
                   ) : null}
                 </div>
@@ -1064,12 +1075,13 @@ export function Buy4MeWorkspace() {
                   type="button"
                   disabled={isSubmittingPayment}
                   onClick={submitPayment}
-                  className="mt-4 w-full rounded-2xl bg-[#0f7b36] px-5 py-3 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-60"
+                  className="mt-3 w-full rounded-2xl bg-[#0f7b36] px-5 py-3 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   {isSubmittingPayment ? "Submitting Payment..." : "Upload & Submit Payment"}
                 </button>
               </div>
             ) : null}
+            </div>
 
             {feedback ? (
               <p className="mt-5 rounded-2xl bg-[#f6faf7] px-4 py-3 text-sm text-slate-700">

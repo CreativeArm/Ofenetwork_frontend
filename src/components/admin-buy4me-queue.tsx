@@ -95,6 +95,18 @@ function toneForStatus(status: string) {
   return "neutral" as const;
 }
 
+function formatCurrency(amount?: number) {
+  if (amount == null) {
+    return null;
+  }
+
+  return new Intl.NumberFormat("en-NG", {
+    style: "currency",
+    currency: "NGN",
+    maximumFractionDigits: 2,
+  }).format(amount);
+}
+
 export function AdminBuy4MeQueue({ items }: AdminBuy4MeQueueProps) {
   const [orders, setOrders] = useState(items);
   const [selectedFilter, setSelectedFilter] =
@@ -187,18 +199,50 @@ export function AdminBuy4MeQueue({ items }: AdminBuy4MeQueueProps) {
       setIsSaving(true);
       setFeedback(null);
 
+      const pricingValues = [productCost, shippingCost, serviceCharge];
+      const hasAnyPricingField = pricingValues.some((value) => value.trim());
+      const hasAllPricingFields = pricingValues.every((value) => value.trim());
+
+      if (
+        (draftStatus === "AWAITING_PAYMENT" || hasAnyPricingField) &&
+        !hasAllPricingFields
+      ) {
+        setFeedback(
+          "Enter product cost, shipping cost, and service charge before requesting payment.",
+        );
+        return;
+      }
+
+      const parsedProductCost = Number(productCost);
+      const parsedShippingCost = Number(shippingCost);
+      const parsedServiceCharge = Number(serviceCharge);
+
+      if (
+        hasAllPricingFields &&
+        (!Number.isFinite(parsedProductCost) ||
+          !Number.isFinite(parsedShippingCost) ||
+          !Number.isFinite(parsedServiceCharge) ||
+          parsedProductCost < 0 ||
+          parsedShippingCost < 0 ||
+          parsedServiceCharge < 0)
+      ) {
+        setFeedback("Enter valid Naira amounts for all quote fields.");
+        return;
+      }
+
       const needsPricing =
-        activeOrder.totalCost == null &&
-        productCost.trim() &&
-        shippingCost.trim() &&
-        serviceCharge.trim();
+        hasAllPricingFields &&
+        (activeOrder.productCost !== parsedProductCost ||
+          activeOrder.shippingCost !== parsedShippingCost ||
+          activeOrder.serviceCharge !== parsedServiceCharge ||
+          activeOrder.totalCost == null);
 
       if (needsPricing) {
         const priced = await priceBuy4MeOrder(activeOrder.id, {
           actorId,
-          productCost: Number(productCost),
-          shippingCost: Number(shippingCost),
-          serviceCharge: Number(serviceCharge),
+          productCost: parsedProductCost,
+          shippingCost: parsedShippingCost,
+          serviceCharge: parsedServiceCharge,
         });
         replaceOrder(priced);
       }
@@ -206,7 +250,11 @@ export function AdminBuy4MeQueue({ items }: AdminBuy4MeQueueProps) {
       const updated = await updateBuy4MeStatus(activeOrder.id, {
         actorId,
         status: draftStatus,
-        timelineUpdate: draftEta.trim(),
+        timelineUpdate:
+          draftEta.trim() ||
+          (draftStatus === "AWAITING_PAYMENT"
+            ? "Quote ready. Awaiting customer payment."
+            : undefined),
         adminNote: draftNote.trim(),
       });
 
@@ -261,7 +309,7 @@ export function AdminBuy4MeQueue({ items }: AdminBuy4MeQueueProps) {
             </div>
             <div className="min-w-0">
               <p className="text-sm font-semibold text-slate-900">
-                {order.totalCost != null ? `$${order.totalCost.toFixed(2)}` : "Quote pending"}
+                {formatCurrency(order.totalCost) ?? "Quote pending"}
               </p>
               <p className="text-sm text-slate-500">{order.paymentMethod ?? "No payment yet"}</p>
               <p className="mt-1 text-xs font-semibold text-slate-400">
@@ -398,7 +446,7 @@ export function AdminBuy4MeQueue({ items }: AdminBuy4MeQueueProps) {
             <div className="mt-4 grid gap-4 sm:grid-cols-3">
               <label className="block">
                 <span className="mb-2 block text-sm font-medium text-slate-700">
-                  Product Cost
+                  Product Cost (NGN)
                 </span>
                 <input
                   type="number"
@@ -413,7 +461,7 @@ export function AdminBuy4MeQueue({ items }: AdminBuy4MeQueueProps) {
               </label>
               <label className="block">
                 <span className="mb-2 block text-sm font-medium text-slate-700">
-                  Shipping Cost
+                  Shipping Cost (NGN)
                 </span>
                 <input
                   type="number"
@@ -428,7 +476,7 @@ export function AdminBuy4MeQueue({ items }: AdminBuy4MeQueueProps) {
               </label>
               <label className="block">
                 <span className="mb-2 block text-sm font-medium text-slate-700">
-                  Service Charge
+                  Service Charge (NGN)
                 </span>
                 <input
                   type="number"

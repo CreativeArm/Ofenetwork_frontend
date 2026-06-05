@@ -13,7 +13,21 @@ export interface BackendDashboardMetrics {
   totalDeposits: number;
   totalWithdrawals: number;
   totalTransactions: number;
+  totalBuy4MeOrders?: number;
   pendingRequests: number;
+  monthlyOverview?: Array<{
+    key: string;
+    label: string;
+    deposits: number;
+    withdrawals: number;
+    buy4me: number;
+  }>;
+  buy4meStatusBreakdown?: Array<{
+    label: string;
+    value: number;
+    color: string;
+    chartColor: string;
+  }>;
   recentActivities: Array<{
     id: string;
     actorId: string;
