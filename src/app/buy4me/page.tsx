@@ -38,14 +38,12 @@ export default function Buy4MePublicPage() {
                     Buy4Me Guest Access
                   </span>
                   <h1 className="mt-8 max-w-xl text-4xl font-bold leading-[1.02] tracking-[-0.04em] text-white sm:text-5xl lg:text-[4.45rem]">
-                    Submit product requests{" "}
-                    <span className="text-[#4ce5b5]">before</span> creating an
-                    account.
+                    Shop global products with clear{" "}
+                    <span className="text-[#4ce5b5]">Buy4Me</span> quotes.
                   </h1>
                   <p className="mt-6 max-w-2xl text-lg leading-[1.7] text-emerald-50/88 md:text-[1.75rem] md:leading-[1.55] md:tracking-[-0.03em]">
-                    Share your product links, preview the end-to-end process,
-                    and get transparent pricing breakdowns before you ever sign
-                    in.
+                    Share your product links, preview the guided process, and
+                    receive transparent pricing breakdowns before payment.
                   </p>
 
                   <div className="mt-10 flex flex-wrap items-center gap-4">
