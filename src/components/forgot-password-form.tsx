@@ -48,17 +48,32 @@ export function ForgotPasswordForm() {
       });
 
       const data = (await response.json().catch(() => null)) as
-        | { message?: string; resetLink?: string }
+        | {
+            message?: string;
+            resetLink?: string;
+            emailDeliveryConfigured?: boolean;
+            emailSent?: boolean;
+          }
         | null;
 
       if (!response.ok) {
         throw new Error(data?.message ?? "Unable to start password reset.");
       }
 
-      setSuccessMessage(
-        data?.message ??
-          "If an account exists for this email, password reset instructions are ready.",
-      );
+      if (data?.emailDeliveryConfigured === false) {
+        setSuccessMessage(
+          "Password reset is ready, but email delivery is not configured yet. Please contact support if no reset link is shown below.",
+        );
+      } else if (data?.emailSent === false) {
+        setErrorMessage(
+          "We could not send the reset email right now. Please try again shortly or contact support.",
+        );
+      } else {
+        setSuccessMessage(
+          data?.message ??
+            "If an account exists for this email, password reset instructions will be sent shortly.",
+        );
+      }
 
       if (data?.resetLink) {
         setResetLink(data.resetLink);
@@ -81,7 +96,7 @@ export function ForgotPasswordForm() {
         </h2>
         <p className="mt-1 text-sm leading-6 text-slate-500">
           Enter the email connected to your OFENetworks account and we will
-          prepare a secure reset link.
+          send a secure reset link.
         </p>
 
         <form className="mt-7 space-y-4" onSubmit={handleSubmit}>

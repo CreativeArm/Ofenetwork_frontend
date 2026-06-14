@@ -2,9 +2,10 @@
 
 import { useMemo, useState } from "react";
 import { useBodyScrollLock } from "../lib/use-body-scroll-lock";
+import { updateSupportTicket, type BackendSupportTicketStatus } from "../lib/admin-backend";
 import { AdminStatusBadge } from "./admin-ui";
 
-type TicketStatus = "Open" | "Pending User" | "Resolved";
+export type TicketStatus = "Open" | "Pending User" | "Resolved";
 
 interface TicketMessage {
   sender: string;
@@ -12,7 +13,7 @@ interface TicketMessage {
   text: string;
 }
 
-interface TicketRecord {
+export interface TicketRecord {
   id: string;
   subject: string;
   user: string;
@@ -27,6 +28,7 @@ interface TicketRecord {
 
 interface AdminSupportQueueProps {
   items: readonly TicketRecord[];
+  liveMode?: boolean;
 }
 
 function toneForStatus(status: string) {
@@ -49,10 +51,21 @@ function toneForStatus(status: string) {
 const filters = ["All", "Open", "Pending User", "Resolved"] as const;
 const owners = ["Tosin", "Shola", "Mide", "Unassigned"] as const;
 
-export function AdminSupportQueue({ items }: AdminSupportQueueProps) {
+function statusToBackend(status: TicketStatus): BackendSupportTicketStatus {
+  if (status === "Pending User") {
+    return "PENDING_USER";
+  }
+  if (status === "Resolved") {
+    return "RESOLVED";
+  }
+  return "OPEN";
+}
+
+export function AdminSupportQueue({ items, liveMode = false }: AdminSupportQueueProps) {
   const [selectedFilter, setSelectedFilter] = useState<(typeof filters)[number]>("Open");
   const [tickets, setTickets] = useState(items);
   const [activeTicketId, setActiveTicketId] = useState<string | null>(null);
+  const [actionError, setActionError] = useState("");
 
   const activeTicket = tickets.find((ticket) => ticket.id === activeTicketId) ?? null;
 
@@ -70,9 +83,23 @@ export function AdminSupportQueue({ items }: AdminSupportQueueProps) {
     id: string,
     changes: Partial<Pick<TicketRecord, "status" | "owner">>,
   ) => {
+    const previousTickets = tickets;
+    setActionError("");
     setTickets((current) =>
       current.map((ticket) => (ticket.id === id ? { ...ticket, ...changes } : ticket)),
     );
+
+    if (!liveMode) {
+      return;
+    }
+
+    updateSupportTicket(id, {
+      owner: changes.owner,
+      status: changes.status ? statusToBackend(changes.status) : undefined,
+    }).catch(() => {
+      setTickets(previousTickets);
+      setActionError("Unable to update this ticket. Please try again.");
+    });
   };
 
   return (
@@ -103,6 +130,12 @@ export function AdminSupportQueue({ items }: AdminSupportQueueProps) {
       </div>
 
       <div className="space-y-3">
+        {actionError ? (
+          <p className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
+            {actionError}
+          </p>
+        ) : null}
+
         {filteredTickets.map((ticket) => (
           <div
             key={ticket.id}
@@ -134,6 +167,12 @@ export function AdminSupportQueue({ items }: AdminSupportQueueProps) {
             </button>
           </div>
         ))}
+
+        {filteredTickets.length === 0 ? (
+          <div className="rounded-[22px] border border-dashed border-[#dbe5df] bg-[#f8fbf8] p-6 text-sm text-slate-500">
+            No support tickets in this view yet.
+          </div>
+        ) : null}
       </div>
 
       {activeTicket ? (

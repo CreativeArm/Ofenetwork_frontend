@@ -149,6 +149,31 @@ export interface BackendTestimonial {
   updatedAt: string;
 }
 
+export type BackendSupportTicketStatus = "OPEN" | "PENDING_USER" | "RESOLVED";
+export type BackendSupportTicketPriority = "LOW" | "MEDIUM" | "HIGH";
+
+export interface BackendSupportTicket {
+  id: string;
+  userId?: string | null;
+  name: string;
+  email: string;
+  subject: string;
+  topic: string;
+  message: string;
+  status: BackendSupportTicketStatus;
+  priority: BackendSupportTicketPriority;
+  owner: string;
+  channel: string;
+  createdAt: string;
+  updatedAt: string;
+  resolvedAt?: string | null;
+  conversation: Array<{
+    sender: string;
+    time: string;
+    text: string;
+  }>;
+}
+
 async function fetchApi<T>(path: string): Promise<T> {
   const response = await fetch(`${API_BASE_URL}${path}`, {
     cache: "no-store",
@@ -421,6 +446,25 @@ export async function fetchRates() {
 export async function fetchTestimonials(status?: BackendTestimonial["status"]) {
   const suffix = status ? `?status=${encodeURIComponent(status)}` : "";
   return fetchApi<BackendTestimonial[]>(`/testimonials${suffix}`);
+}
+
+export async function fetchSupportTickets(status?: BackendSupportTicketStatus) {
+  const suffix = status ? `?status=${encodeURIComponent(status)}` : "";
+  return fetchApi<BackendSupportTicket[]>(`/support/tickets${suffix}`);
+}
+
+export async function updateSupportTicket(
+  id: string,
+  payload: {
+    status?: BackendSupportTicketStatus;
+    owner?: string;
+    priority?: BackendSupportTicketPriority;
+  },
+) {
+  return mutateApi<BackendSupportTicket>(`/support/tickets/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify(payload),
+  });
 }
 
 export async function updateTestimonialStatus(

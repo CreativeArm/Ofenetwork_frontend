@@ -8,7 +8,10 @@ import { AdminKycQueue, type KycRecord } from "../../../components/admin-kyc-que
 import { AdminNotificationCenter } from "../../../components/admin-notification-center";
 import { AdminPaymentMethodsManager } from "../../../components/admin-payment-methods-manager";
 import { AdminRatesEditor } from "../../../components/admin-rates-editor";
-import { AdminSupportQueue } from "../../../components/admin-support-queue";
+import {
+  AdminSupportQueue,
+  type TicketRecord,
+} from "../../../components/admin-support-queue";
 import {
   AdminTestimonialsQueue,
   type TestimonialRecord,
@@ -27,6 +30,7 @@ import {
   fetchAdminTransactions,
   fetchAdminUsers,
   fetchRates,
+  fetchSupportTickets,
   fetchTestimonials,
   formatCurrency,
   formatRelativeTime,
@@ -335,9 +339,42 @@ async function renderSection(section: AdminSectionSlug) {
         </AdminCard>
       );
     case "tickets":
+      const supportTickets = await fetchSupportTickets().catch(() => []);
+      const supportTicketItems: readonly TicketRecord[] =
+        supportTickets.length > 0
+          ? supportTickets.map((ticket) => ({
+              id: ticket.id,
+              subject: ticket.subject,
+              user: `${ticket.name} • ${ticket.email}`,
+              priority:
+                ticket.priority === "HIGH"
+                  ? "High"
+                  : ticket.priority === "LOW"
+                    ? "Low"
+                    : "Medium",
+              owner: ticket.owner,
+              status:
+                ticket.status === "PENDING_USER"
+                  ? "Pending User"
+                  : ticket.status === "RESOLVED"
+                    ? "Resolved"
+                    : "Open",
+              channel: ticket.channel,
+              updatedAt: formatRelativeTime(ticket.updatedAt),
+              summary: ticket.message,
+              conversation: ticket.conversation.map((message) => ({
+                ...message,
+                time: formatRelativeTime(message.time),
+              })),
+            }))
+          : adminTicketsData;
+
       return (
         <AdminCard>
-          <AdminSupportQueue items={adminTicketsData} />
+          <AdminSupportQueue
+            items={supportTicketItems}
+            liveMode={supportTickets.length > 0}
+          />
         </AdminCard>
       );
     case "notifications":

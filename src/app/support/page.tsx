@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Reveal, Stagger, StaggerItem } from "../../components/homepage-motion";
 import { PublicShell } from "../../components/public-shell";
 import { Icon } from "../../components/icons";
+import { SupportRequestForm } from "../../components/support-request-form";
 
 export default function SupportPage() {
   return (
@@ -83,85 +84,7 @@ export default function SupportPage() {
               Send your details and message, and our team will follow up with the right support path.
             </p>
 
-            <form className="mt-6 space-y-4 sm:mt-8 sm:space-y-5">
-              <div>
-                <label
-                  htmlFor="support-name"
-                  className="mb-2 block text-sm font-medium text-slate-600"
-                >
-                  Name
-                </label>
-                <input
-                  id="support-name"
-                  type="text"
-                  placeholder="Jane Smith"
-                  className="w-full rounded-2xl border border-[#e7eee9] bg-[#f8fbf8] px-4 py-3 text-sm text-slate-800 outline-none"
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="support-email"
-                  className="mb-2 block text-sm font-medium text-slate-600"
-                >
-                  Email
-                </label>
-                <input
-                  id="support-email"
-                  type="email"
-                  placeholder="jane@ofenetworks.ng"
-                  className="w-full rounded-2xl border border-[#e7eee9] bg-[#f8fbf8] px-4 py-3 text-sm text-slate-800 outline-none"
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="support-topic"
-                  className="mb-2 block text-sm font-medium text-slate-600"
-                >
-                  Support topic
-                </label>
-                <select
-                  id="support-topic"
-                  className="w-full rounded-2xl border border-[#e7eee9] bg-[#f8fbf8] px-4 py-3 pr-12 text-sm text-slate-700 outline-none"
-                  defaultValue=""
-                >
-                  <option value="" disabled>
-                    Select...
-                  </option>
-                  <option>Deposit issue</option>
-                  <option>Withdrawal delay</option>
-                  <option>Buy4Me request</option>
-                  <option>Rate question</option>
-                  <option>General support</option>
-                </select>
-              </div>
-
-              <div>
-                <label
-                  htmlFor="support-message"
-                  className="mb-2 block text-sm font-medium text-slate-600"
-                >
-                  Message
-                </label>
-                <textarea
-                  id="support-message"
-                  rows={6}
-                  placeholder="Type your message"
-                  className="w-full resize-none rounded-2xl border border-[#e7eee9] bg-[#f8fbf8] px-4 py-3 text-sm text-slate-800 outline-none"
-                />
-              </div>
-
-              <button
-                type="submit"
-                className="inline-flex w-full items-center justify-center gap-3 rounded-full bg-[#0f7b36] px-5 py-3 text-sm font-semibold text-white shadow-[0_12px_24px_rgba(15,123,54,0.2)] sm:w-auto"
-              >
-                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-[#0f7b36]">
-                  <Icon name="arrow" className="h-4 w-4" />
-                </span>
-                Contact us
-              </button>
-            </form>
+            <SupportRequestForm />
           </div>
         </Reveal>
       </section>
