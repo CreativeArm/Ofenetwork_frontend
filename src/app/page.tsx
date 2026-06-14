@@ -5,6 +5,7 @@ import { Icon } from "../components/icons";
 import { PublicShell } from "../components/public-shell";
 import { ServiceIcon, type ServiceIconName } from "../components/service-icon";
 import { RatesBoard } from "../components/rates-board";
+import { TestimonialsCarousel } from "../components/testimonials-carousel";
 import { homeOffers, homeRates, testimonials } from "../lib/mock-data";
 import {
   fetchRates,
@@ -361,28 +362,7 @@ export default async function HomePage() {
             Real reviews from real people who trust our services.
           </p>
         </Reveal>
-        <Stagger className="mt-8 grid gap-5 md:grid-cols-3">
-          {testimonialItems.map((item) => (
-            <StaggerItem key={item.name}>
-              <article className="rounded-[26px] border border-[#edf1ee] bg-[#fcfdfc] p-6">
-                <div className="flex items-center gap-3">
-                  <div className="flex h-14 w-14 items-center justify-center rounded-full bg-emerald-100 text-lg font-semibold text-emerald-700">
-                    {item.name.charAt(0)}
-                  </div>
-                  <div>
-                    <p className="font-semibold text-slate-900">{item.name}</p>
-                    <p className="text-xs font-medium text-[#0f7b36]">
-                      {item.badge}
-                    </p>
-                  </div>
-                </div>
-                <p className="mt-5 text-sm leading-7 text-slate-600">
-                  {item.quote}
-                </p>
-              </article>
-            </StaggerItem>
-          ))}
-        </Stagger>
+        <TestimonialsCarousel items={testimonialItems} />
         <Stagger className="mt-8 grid gap-4 border-t border-[#eef2ef] pt-6 md:grid-cols-3">
           {[
             "Bank-Level Security",
