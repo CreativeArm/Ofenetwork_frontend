@@ -98,8 +98,8 @@ export function DashboardQuickStats() {
   const stats: QuickStat[] = [
     {
       label: "Active Services",
-      value: "7",
-      note: "Deriv, Crypto, Skrill, PayPal, Venmo, Payoneer, Buy4Me",
+      value: "8",
+      note: "Deriv, Crypto, Skrill, PayPal, Zelle, Payoneer, Buy4Me",
       icon: "grid",
       accent: "from-emerald-500/20 via-emerald-400/8 to-transparent",
       badge: "All modules live",

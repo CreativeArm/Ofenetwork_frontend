@@ -51,8 +51,6 @@ export function ForgotPasswordForm() {
         | {
             message?: string;
             resetLink?: string;
-            emailDeliveryConfigured?: boolean;
-            emailSent?: boolean;
           }
         | null;
 
@@ -60,20 +58,10 @@ export function ForgotPasswordForm() {
         throw new Error(data?.message ?? "Unable to start password reset.");
       }
 
-      if (data?.emailDeliveryConfigured === false) {
-        setSuccessMessage(
-          "Password reset is ready, but email delivery is not configured yet. Please contact support if no reset link is shown below.",
-        );
-      } else if (data?.emailSent === false) {
-        setErrorMessage(
-          "We could not send the reset email right now. Please try again shortly or contact support.",
-        );
-      } else {
-        setSuccessMessage(
-          data?.message ??
-            "If an account exists for this email, password reset instructions will be sent shortly.",
-        );
-      }
+      setSuccessMessage(
+        data?.message ??
+          "If an account exists for this email, password reset instructions will be sent shortly.",
+      );
 
       if (data?.resetLink) {
         setResetLink(data.resetLink);
@@ -107,6 +95,7 @@ export function ForgotPasswordForm() {
               </label>
               <input
                 type="email"
+                autoComplete="email"
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
                 placeholder="you@example.com"

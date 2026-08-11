@@ -22,7 +22,7 @@ export function referenceLabelForService(service: string, fallback = "Reference"
   const normalized = service.toLowerCase();
 
   if (normalized.includes("deriv")) {
-    return "Deriv CR Number";
+    return "Client Nickname";
   }
   if (normalized.includes("crypto")) {
     return "Crypto Address";
@@ -33,11 +33,11 @@ export function referenceLabelForService(service: string, fallback = "Reference"
   if (normalized.includes("skrill")) {
     return "Skrill Email Address";
   }
-  if (normalized.includes("venmo")) {
-    return "Venmo Username";
-  }
   if (normalized.includes("payoneer")) {
     return "Payoneer Email Address";
+  }
+  if (normalized.includes("zelle")) {
+    return "Zelle Phone or Email";
   }
 
   return fallback;

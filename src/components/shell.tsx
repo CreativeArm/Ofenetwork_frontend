@@ -356,14 +356,9 @@ export function AppShell({ children, activeSlug, title, subtitle, admin = false 
   };
 
   const brandBlock = (
-    <div className="mt-6 flex items-center gap-3 px-3">
-      <span className={`flex h-10 w-10 items-center justify-center rounded-full ${admin ? "bg-emerald-900/50 text-emerald-300" : "bg-emerald-50 text-emerald-600"}`}>
-        <Icon name="logo" className="h-7 w-7" />
-      </span>
-      <div>
-        <p className="text-lg font-semibold">OfeNetworks.ng</p>
-        <p className={`text-xs ${admin ? "text-emerald-300/70" : "text-slate-500"}`}>{admin ? "Admin Panel" : "Bonus Tracker"}</p>
-      </div>
+    <div className="mt-6 flex flex-col gap-2 px-3">
+      <Icon name="logo" className="h-8 w-auto" />
+      <p className={`text-xs px-1 ${admin ? "text-emerald-300/70" : "text-slate-500"}`}>{admin ? "Admin Panel" : "Bonus Tracker"}</p>
     </div>
   );
 

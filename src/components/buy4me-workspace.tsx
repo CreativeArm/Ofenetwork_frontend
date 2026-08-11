@@ -52,9 +52,10 @@ const paymentMethods: PaymentMethod[] = [
     accent: "bg-emerald-50 text-emerald-700",
     detailsTitle: "Bank Account Details",
     details: [
-      ["Bank Name", "Access Bank PLC"],
-      ["Account Name", "Ofenetworks Global Solutions"],
-      ["Account Number", "0761234567"],
+      ["Bank Name", "Kuda Microfinance Bank"],
+      ["Account Name", "Ofenetworks Solutions NG LTD"],
+      ["Account Number", "3003193472"],
+      ["Narration", "payment for chicken feeds"],
     ],
     note: "Use your order ID as the payment reference where possible.",
   },
@@ -65,7 +66,7 @@ const paymentMethods: PaymentMethod[] = [
     detailsTitle: "USDT Wallet Details",
     details: [
       ["Network", "TRC20 (Tron)"],
-      ["Wallet Address", "TX9u4r0q8mN3pL7sK2vD6cR1yF5hJ8zQ"],
+      ["Wallet Address", "TJLZtrdyxUuE96zwj687S63Z2zVes8in73"],
     ],
     note: "Send only USDT on the TRC20 network to avoid failed delivery.",
   },
@@ -76,9 +77,20 @@ const paymentMethods: PaymentMethod[] = [
     detailsTitle: "PayPal Payment Details",
     details: [
       ["PayPal Email", "payments@ofenetworks.ng"],
-      ["Account Name", "Ofenetworks Global Solutions"],
+      ["Account Name", "Ofenetworks Solutions"],
     ],
     note: "Choose Friends and Family only if instructed by support.",
+  },
+  {
+    label: "Zelle",
+    short: "ZL",
+    accent: "bg-violet-50 text-violet-700",
+    detailsTitle: "Zelle Payment Details",
+    details: [
+      ["Account Number / Phone", "+12673998390"],
+      ["Name on Account", "Olaoluwa Oladele"],
+    ],
+    note: "Confirm the recipient details carefully before sending your payment.",
   },
   {
     label: "Skrill",
@@ -87,7 +99,7 @@ const paymentMethods: PaymentMethod[] = [
     detailsTitle: "Skrill Payment Details",
     details: [
       ["Skrill Email", "payments@ofenetworks.ng"],
-      ["Receiver Name", "Ofenetworks Global Solutions"],
+      ["Receiver Name", "Ofenetworks Solutions"],
     ],
     note: "Confirm the receiver details carefully before sending funds.",
   },

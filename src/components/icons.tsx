@@ -46,12 +46,14 @@ export function Icon({ name, className, ...props }: IconProps) {
 
   switch (name) {
     case "logo":
+      // eslint-disable-next-line @next/next/no-img-element
       return (
-        <svg viewBox="0 0 24 24" className={className} {...props}>
-          <circle cx="12" cy="12" r="10" className="fill-emerald-100 text-emerald-600" />
-          <circle cx="12" cy="12" r="6.5" fill="none" stroke="currentColor" strokeWidth="2" />
-          <circle cx="12" cy="12" r="2.5" fill="currentColor" />
-        </svg>
+        <img
+          src="/logo.png"
+          alt="Ofenetworks logo"
+          className={className}
+          style={{ objectFit: "contain" }}
+        />
       );
     case "grid":
       return (

@@ -41,7 +41,7 @@ export const userNavigation = [
   { href: "/services/crypto", label: "Crypto", icon: "coin", slug: "crypto" },
   { href: "/services/skrill", label: "Skrill", icon: "wallet", slug: "skrill" },
   { href: "/services/paypal", label: "PayPal", icon: "paypal", slug: "paypal" },
-  { href: "/services/venmo", label: "Venmo", icon: "venmo", slug: "venmo" },
+  { href: "/services/venmo", label: "Zelle", icon: "venmo", slug: "venmo" },
   { href: "/services/payoneer", label: "Payoneer", icon: "ring", slug: "payoneer" },
   { href: "/dashboard/buy4me", label: "Buy4Me", icon: "bag", slug: "buy4me" },
 ];
@@ -72,6 +72,8 @@ export const publicNavigation = [
 
 export const bonusBalance = "N24,560.50";
 
+const ofeBankDepositDetails = "Kuda Microfinance Bank | Ofenetworks Solutions NG LTD | 3003193472";
+
 export const serviceConfigs: ServiceConfig[] = [
   {
     slug: "deriv",
@@ -81,16 +83,16 @@ export const serviceConfigs: ServiceConfig[] = [
     description: "Trade synthetic indices and fund your Deriv account with confidence.",
     depositTitle: "Make a Deposit",
     depositSubtitle: "Fund your account via bank transfer.",
-    depositMethodLabel: "Our Bank Details",
-    depositMethodValue: "Access Bank PLC | Ofenetworks Global Solutions | 0761234567",
+    depositMethodLabel: "Ofenetworks Bank Account to Pay To",
+    depositMethodValue: ofeBankDepositDetails,
     depositFields: [
       { label: "Amount (USD)", placeholder: "Enter amount in USD", suffix: "$" },
-      { label: "CR Number", placeholder: "Enter CR Number" },
+      { label: "Client Nickname", placeholder: "Enter client nickname" },
     ],
     withdrawalTitle: "Make a Withdrawal",
     withdrawalSubtitle: "Withdraw funds to your bank account.",
     withdrawalMethodLabel: "Withdraw to",
-    withdrawalMethodValue: "Ofenetworks Global Solutions",
+    withdrawalMethodValue: "Ofenetworks Solutions NG LTD",
     withdrawalFields: [
       { label: "Bank Name", placeholder: "Select your bank" },
       { label: "Account Name", placeholder: "Enter account name" },
@@ -105,8 +107,8 @@ export const serviceConfigs: ServiceConfig[] = [
     description: "Buy, sell, and manage your cryptocurrency transactions.",
     depositTitle: "Make a Deposit",
     depositSubtitle: "Deposit USDT (TRC20) to fund your account.",
-    depositMethodLabel: "Deposit Method",
-    depositMethodValue: "USDT (TRC20)",
+    depositMethodLabel: "USDT (TRC20) Wallet Details",
+    depositMethodValue: "Network: Tron (TRC20) | Wallet: TJLZtrdyxUuE96zwj687S63Z2zVes8in73",
     depositFields: [
       { label: "Amount (USD/USDT)", placeholder: "Enter amount in USD or USDT", suffix: "$" },
       { label: "Crypto Address", placeholder: "Enter your crypto wallet address" },
@@ -114,7 +116,7 @@ export const serviceConfigs: ServiceConfig[] = [
     withdrawalTitle: "Make a Withdrawal",
     withdrawalSubtitle: "Make a withdrawal to your bank account.",
     withdrawalMethodLabel: "Withdrawal to USDT (TRC20) Wallet Address",
-    withdrawalMethodValue: "Network: Tron (TRC20) | Wallet: gjsjsjskjsjsjnjsjsnxxhxsjsjssj",
+    withdrawalMethodValue: "Network: Tron (TRC20) | Wallet: TJLZtrdyxUuE96zwj687S63Z2zVes8in73",
     withdrawalFields: [
       { label: "Bank Name", placeholder: "Select your bank" },
       { label: "Account Name", placeholder: "Enter account name" },
@@ -130,7 +132,7 @@ export const serviceConfigs: ServiceConfig[] = [
     depositTitle: "Make a Deposit",
     depositSubtitle: "Fund your account via Skrill.",
     depositMethodLabel: "Ofenetworks Bank Account to Pay To",
-    depositMethodValue: "Access Bank PLC | Ofenetworks Global Solutions | 0761234567",
+    depositMethodValue: ofeBankDepositDetails,
     depositFields: [
       { label: "Amount (USD)", placeholder: "Enter amount in USD", suffix: "$" },
       { label: "Email Address", placeholder: "Enter your Skrill email address" },
@@ -154,7 +156,7 @@ export const serviceConfigs: ServiceConfig[] = [
     depositTitle: "Make a Deposit",
     depositSubtitle: "Fund your account via PayPal.",
     depositMethodLabel: "Ofenetworks Bank Account to Pay To",
-    depositMethodValue: "Access Bank PLC | Ofenetworks Global Solutions | 0761234567",
+    depositMethodValue: ofeBankDepositDetails,
     depositFields: [
       { label: "Amount (USD)", placeholder: "Enter amount in USD", suffix: "$" },
       { label: "PayPal Email", placeholder: "Enter your PayPal email address" },
@@ -171,26 +173,25 @@ export const serviceConfigs: ServiceConfig[] = [
   },
   {
     slug: "venmo",
-    name: "Venmo",
+    name: "Zelle",
     icon: "venmo",
     accent: "bg-cyan-50 text-cyan-700 border-cyan-100",
-    description: "Request and settle Venmo transactions with quick manual review.",
+    description: "Send and receive Zelle payments with clear manual review.",
     depositTitle: "Make a Deposit",
-    depositSubtitle: "Fund your account via Venmo.",
-    depositMethodLabel: "Receiver Details",
-    depositMethodValue: "Venmo Tag: @ofenetworks | Account Name: Ofenetworks Global Solutions",
+    depositSubtitle: "Fund your account via bank transfer.",
+    depositMethodLabel: "Ofenetworks Bank Account to Pay To",
+    depositMethodValue: ofeBankDepositDetails,
     depositFields: [
       { label: "Amount (USD)", placeholder: "Enter amount in USD", suffix: "$" },
-      { label: "Your Venmo Username", placeholder: "Enter your Venmo username" },
+      { label: "Your Zelle Phone or Email", placeholder: "Enter your Zelle phone number or email" },
     ],
     withdrawalTitle: "Make a Withdrawal",
-    withdrawalSubtitle: "Withdraw funds to your local bank account.",
-    withdrawalMethodLabel: "Send your Venmo amount to",
-    withdrawalMethodValue: "Venmo Tag: @ofenetworks",
+    withdrawalSubtitle: "Receive funds through your Zelle account.",
+    withdrawalMethodLabel: "Withdrawal to Zelle",
+    withdrawalMethodValue: "Provide your Zelle phone number or email address.",
     withdrawalFields: [
-      { label: "Bank Name", placeholder: "Select your bank" },
-      { label: "Account Name", placeholder: "Enter account name" },
-      { label: "Account Number", placeholder: "Enter account number" },
+      { label: "Zelle Phone or Email", placeholder: "Enter your Zelle phone number or email" },
+      { label: "Account Name", placeholder: "Enter the account holder name" },
     ],
   },
   {
@@ -234,7 +235,7 @@ export const homeRates = [
   { name: "Crypto (USDT TRC20)", deposit: "N1,580.00 / $1", withdrawal: "N1,680.00 / $1" },
   { name: "Skrill", deposit: "N1,640.00 / $1", withdrawal: "N1,700.00 / $1" },
   { name: "PayPal", deposit: "N1,650.00 / $1", withdrawal: "N1,720.00 / $1" },
-  { name: "Venmo", deposit: "N1,640.00 / $1", withdrawal: "N1,700.00 / $1" },
+  { name: "Zelle", deposit: "N1,640.00 / $1", withdrawal: "N1,700.00 / $1" },
   { name: "Payoneer", deposit: "N1,645.00 / $1", withdrawal: "N1,710.00 / $1" },
   { name: "Buy 4 Me", deposit: "Custom Quote", withdrawal: "Custom Quote" },
 ];

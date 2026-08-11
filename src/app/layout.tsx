@@ -9,7 +9,7 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
-  title: "OFENETWORKS",
+  title: "Ofenetworks Solutions",
   description: "Multi-service transaction processing platform",
 };
 

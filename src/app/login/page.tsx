@@ -35,7 +35,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
                 <p className="mt-4 text-sm leading-7 text-emerald-100/70">
                   {isAdminLogin
                     ? "Use your admin email and password to open the OFENetworks control panel securely."
-                    : "Continue with your email and password, or use Google/Facebook to open your OFENetworks workspace faster."}
+                    : "Continue with your email and password, or use Google to open your OFENetworks workspace faster."}
                 </p>
               </div>
 

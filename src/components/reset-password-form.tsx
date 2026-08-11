@@ -114,7 +114,8 @@ export function ResetPasswordForm() {
               <input
                 type="email"
                 value={email}
-                onChange={(event) => setEmail(event.target.value)}
+                readOnly
+                autoComplete="email"
                 placeholder="you@example.com"
                 className="w-full rounded-2xl border border-[#dde6e0] bg-slate-50/50 px-4 py-3 text-sm text-slate-900 outline-none transition-all duration-300 placeholder:text-slate-400 focus:border-emerald-400 focus:bg-white focus:ring-3 focus:ring-emerald-100"
               />
@@ -128,6 +129,8 @@ export function ResetPasswordForm() {
                 type="password"
                 value={password}
                 onChange={(event) => setPassword(event.target.value)}
+                autoComplete="new-password"
+                minLength={8}
                 placeholder="At least 8 characters"
                 className="w-full rounded-2xl border border-[#dde6e0] bg-slate-50/50 px-4 py-3 text-sm text-slate-900 outline-none transition-all duration-300 placeholder:text-slate-400 focus:border-emerald-400 focus:bg-white focus:ring-3 focus:ring-emerald-100"
               />
@@ -141,6 +144,8 @@ export function ResetPasswordForm() {
                 type="password"
                 value={confirmPassword}
                 onChange={(event) => setConfirmPassword(event.target.value)}
+                autoComplete="new-password"
+                minLength={8}
                 placeholder="Repeat new password"
                 className="w-full rounded-2xl border border-[#dde6e0] bg-slate-50/50 px-4 py-3 text-sm text-slate-900 outline-none transition-all duration-300 placeholder:text-slate-400 focus:border-emerald-400 focus:bg-white focus:ring-3 focus:ring-emerald-100"
               />

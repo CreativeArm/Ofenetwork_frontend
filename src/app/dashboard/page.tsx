@@ -13,7 +13,7 @@ import { fetchRates, mapBackendRatesToBoard } from "../../lib/admin-backend";
 const onboardingSteps = [
   {
     title: "Choose a service",
-    text: "Open Deriv, Crypto, Skrill, PayPal, Venmo, Payoneer, or Buy4Me from your sidebar.",
+    text: "Open Deriv, Crypto, Skrill, PayPal, Zelle, Payoneer, or Buy4Me from your sidebar.",
   },
   {
     title: "Submit proof or details",

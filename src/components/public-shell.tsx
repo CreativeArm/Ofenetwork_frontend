@@ -52,11 +52,8 @@ export function PublicShell({ children }: PublicShellProps) {
     <div className="min-h-screen bg-white">
       <header className="fixed left-0 right-0 top-0 z-30 border-b border-[#e7eee9] bg-white/90 backdrop-blur-md">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-5 md:px-8">
-          <Link href="/" className="flex items-center gap-3 text-[#0f1720]">
-            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">
-              <Icon name="logo" className="h-7 w-7" />
-            </span>
-            <span className="text-xl font-semibold">OfeNetworks.ng</span>
+          <Link href="/" className="flex items-center">
+            <Icon name="logo" className="h-8 w-auto md:h-10" />
           </Link>
           <nav className="hidden items-center gap-7 text-sm font-medium text-slate-600 md:flex">
             {publicNavigation.map((item) => (
@@ -147,17 +144,7 @@ export function PublicShell({ children }: PublicShellProps) {
       <footer className="border-t border-[#e7eee9] bg-[#0f1720] text-white">
         <div className="md:hidden bg-[#0f1720] px-6 py-12 text-slate-300">
           <div className="flex items-start gap-4">
-            <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-emerald-400/10 text-emerald-300">
-              <Icon name="logo" className="h-7 w-7" />
-            </span>
-            <div>
-              <p className="text-[1.35rem] font-semibold leading-tight tracking-tight text-white">
-                OfeNetworks.ng
-              </p>
-              <p className="mt-2 max-w-[230px] text-sm leading-6 text-slate-400">
-                Digital finance, payments, and Buy4Me services.
-              </p>
-            </div>
+            <Icon name="logo" className="h-8 w-auto" />
           </div>
 
           <p className="mt-8 max-w-[360px] text-sm leading-7 text-slate-400">
@@ -210,13 +197,13 @@ export function PublicShell({ children }: PublicShellProps) {
 
           <div className="pt-8 text-center">
             <p className="text-xs text-slate-400">
-              &copy; 2026 OfeNetworks.ng. All rights reserved.
+              &copy; 2026 Ofenetworks Solutions. All rights reserved.
             </p>
             <div className="mt-6 flex flex-wrap items-center justify-center gap-x-5 gap-y-3 text-xs text-slate-400">
               <Link href="#" className="transition hover:text-white">
                 Terms
               </Link>
-              <Link href="#" className="transition hover:text-white">
+              <Link href="/privacy-policy" className="transition hover:text-white">
                 Privacy
               </Link>
               <Link href="#" className="transition hover:text-white">
@@ -232,15 +219,7 @@ export function PublicShell({ children }: PublicShellProps) {
         <div className="mx-auto hidden max-w-7xl gap-10 px-4 py-12 md:grid md:grid-cols-[1.15fr_0.85fr_0.85fr] md:px-8">
           <div>
             <div className="flex items-center gap-3">
-              <span className="flex h-11 w-11 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-300">
-                <Icon name="logo" className="h-7 w-7" />
-              </span>
-              <div>
-                <p className="text-xl font-semibold">OfeNetworks.ng</p>
-                <p className="text-sm text-slate-400">
-                  Digital finance, payments, and Buy4Me services.
-                </p>
-              </div>
+              <Icon name="logo" className="h-10 w-auto" />
             </div>
             <p className="mt-5 max-w-md text-sm leading-7 text-slate-400">
               Built for fast manual transaction processing, referral bonus
@@ -275,14 +254,14 @@ export function PublicShell({ children }: PublicShellProps) {
               <span>Deriv Funding</span>
               <span>Crypto Transactions</span>
               <span>Skrill and PayPal</span>
-              <span>Venmo and Payoneer</span>
+              <span>Zelle and Payoneer</span>
               <span>Buy4Me Orders</span>
             </div>
           </div>
         </div>
         <div className="hidden border-t border-white/10 md:block">
           <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-5 text-sm text-slate-400 md:flex-row md:items-center md:justify-between md:px-8">
-            <p>&copy; 2026 OfeNetworks.ng. All rights reserved.</p>
+            <p>&copy; 2026 Ofenetworks Solutions. All rights reserved.</p>
             <p>Secure transactions. Transparent rates. Reliable support.</p>
           </div>
         </div>

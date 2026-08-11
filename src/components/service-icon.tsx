@@ -47,11 +47,11 @@ export function getRateServiceIconName(label: string): ServiceIconName | null {
   if (label.startsWith("PayPal")) {
     return "paypal";
   }
-  if (label.startsWith("Venmo")) {
-    return "venmo";
-  }
   if (label.startsWith("Payoneer")) {
     return "payoneer";
+  }
+  if (label.startsWith("Zelle")) {
+    return "venmo";
   }
   if (label.startsWith("Buy 4 Me")) {
     return "buy4me";

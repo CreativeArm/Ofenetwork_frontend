@@ -51,7 +51,7 @@ export default async function HomePage() {
           <Reveal mode="load">
             <div className="relative z-10 mx-auto max-w-[620px] text-center lg:mx-0 lg:max-w-2xl lg:text-left">
               <div className="inline-flex w-full max-w-[320px] items-center justify-center rounded-full  px-5 py-2 text-sm font-medium text-[#007a61] sm:max-w-[420px] sm:text-lg lg:w-auto lg:max-w-none lg:justify-start  lg:px-4 lg:text-sm lg:text-emerald-700">
-                Welcome to OfeNetworks.ng
+                Welcome to Ofenetworks Solutions
                 <span className="hidden lg:inline">+</span>
               </div>
               <h1 className="mx-auto mt-7 max-w-[560px] text-[2.65rem] font-bold leading-[1.02] tracking-[-0.075em] text-[#2f2f31] min-[390px]:text-[2.9rem] sm:text-[4.25rem] lg:mx-0 lg:mt-6 lg:max-w-xl lg:text-7xl lg:font-extrabold lg:leading-[1.02] lg:tracking-[-0.05em] lg:text-slate-900 xl:text-8xl">

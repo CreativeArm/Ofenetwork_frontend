@@ -4,12 +4,13 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState, type FormEvent } from "react";
 import { Reveal, Stagger, StaggerItem } from "./homepage-motion";
+import { Icon } from "./icons";
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") ??
   "http://127.0.0.1:4000/api";
 
-type SocialProvider = "google" | "facebook";
+type SocialProvider = "google";
 
 function getErrorMessage(error: unknown) {
   if (error instanceof Error) {
@@ -24,6 +25,7 @@ export function LoginForm() {
   const searchParams = useSearchParams();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [socialProvider, setSocialProvider] = useState<SocialProvider | null>(null);
   const [errorMessage, setErrorMessage] = useState("");
@@ -195,13 +197,25 @@ export function LoginForm() {
                   Forgot password?
                 </Link>
               </div>
-              <input
-                type="password"
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
-                placeholder="********"
-                className="w-full rounded-2xl border border-[#dde6e0] bg-slate-50/50 px-4 py-3 text-sm text-slate-900 outline-none transition-all duration-300 placeholder:text-slate-400 focus:border-emerald-400 focus:bg-white focus:ring-3 focus:ring-emerald-100"
-              />
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(event) => setPassword(event.target.value)}
+                  placeholder="********"
+                  autoComplete="current-password"
+                  className="w-full rounded-2xl border border-[#dde6e0] bg-slate-50/50 px-4 py-3 pr-12 text-sm text-slate-900 outline-none transition-all duration-300 placeholder:text-slate-400 focus:border-emerald-400 focus:bg-white focus:ring-3 focus:ring-emerald-100"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((visible) => !visible)}
+                  className="absolute inset-y-0 right-0 flex w-12 items-center justify-center text-slate-400 transition-colors hover:text-emerald-700"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                  aria-pressed={showPassword}
+                >
+                  <Icon name="eye" className="h-5 w-5" />
+                </button>
+              </div>
             </StaggerItem>
 
             {errorMessage ? (
@@ -267,22 +281,6 @@ export function LoginForm() {
                     : "Continue with Google"}
                 </button>
               </StaggerItem>
-
-              <StaggerItem>
-                <button
-                  type="button"
-                  disabled={Boolean(socialProvider)}
-                  onClick={() => startSocialLogin("facebook")}
-                  className="flex w-full items-center justify-center gap-2.5 rounded-2xl border border-[#dde6e0] bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition-all duration-300 hover:-translate-y-0.5 hover:bg-slate-50 hover:shadow-[0_10px_20px_rgba(15,23,32,0.06)] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-70 disabled:hover:translate-y-0"
-                >
-                  <svg className="h-4 w-4" fill="#1877F2" viewBox="0 0 24 24">
-                    <path d="M24 12.073C24 5.404 18.627 0 12 0S0 5.404 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.513c-1.491 0-1.956.93-1.956 1.886v2.268h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z" />
-                  </svg>
-                  {socialProvider === "facebook"
-                    ? "Opening Facebook..."
-                    : "Continue with Facebook"}
-                </button>
-              </StaggerItem>
             </Stagger>
           </>
         ) : null}
@@ -300,17 +298,6 @@ export function LoginForm() {
             {isAdminLogin ? "Use regular login" : "Create one"}
           </Link>
         </p>
-        {!isAdminLogin ? (
-          <p className="mt-2 text-center text-xs text-slate-500">
-            Admin?{" "}
-            <Link
-              href={`/login?admin=1${nextPath ? `&next=${encodeURIComponent(nextPath)}` : ""}`}
-              className="font-semibold text-emerald-600 transition-colors duration-300 hover:text-emerald-700 hover:underline"
-            >
-              Log in here
-            </Link>
-          </p>
-        ) : null}
       </div>
     </Reveal>
   );

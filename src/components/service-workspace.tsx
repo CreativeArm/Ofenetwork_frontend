@@ -84,6 +84,18 @@ function matchesServiceRate(serviceName: string, rateService: string) {
   return service === rate || rate.includes(service) || service.includes(rate);
 }
 
+function getBankDetailRows(value: string) {
+  if (!value.includes("Kuda Microfinance Bank")) {
+    return null;
+  }
+
+  return [
+    ["Bank", "Kuda Microfinance Bank"],
+    ["Account name", "Ofenetworks Solutions NG LTD"],
+    ["Account number", "3003193472"],
+  ] as const;
+}
+
 export function ServiceWorkspace({ activeSlug, title, subtitle }: ServiceWorkspaceProps) {
   const service = getService(activeSlug);
   const [mode, setMode] = useState<"deposit" | "withdraw">("deposit");
@@ -98,6 +110,14 @@ export function ServiceWorkspace({ activeSlug, title, subtitle }: ServiceWorkspa
   const [submittedPopup, setSubmittedPopup] =
     useState<TransactionSubmittedPopupContent | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [copiedBankDetail, setCopiedBankDetail] = useState<string | null>(null);
+  const bankDetailRows = getBankDetailRows(service.depositMethodValue);
+
+  const copyBankDetail = async (label: string, value: string) => {
+    await navigator.clipboard.writeText(value);
+    setCopiedBankDetail(label);
+    window.setTimeout(() => setCopiedBankDetail(null), 1800);
+  };
 
   useEffect(() => {
     try {
@@ -368,14 +388,45 @@ export function ServiceWorkspace({ activeSlug, title, subtitle }: ServiceWorkspa
               <h3 className="text-2xl font-semibold">{service.depositTitle}</h3>
               <p className="text-sm text-slate-500">{service.depositSubtitle}</p>
             </div>
-            <div className="rounded-2xl bg-[#f5faf6] p-4">
+            <div className="rounded-2xl border border-emerald-100 bg-[#f5faf6] p-4 shadow-sm">
               <div className="flex items-start gap-3">
                 <span className="rounded-xl bg-white p-2 text-[#0f7b36]">
                   <ServiceIcon name={service.slug} className="h-5 w-5 object-contain" />
                 </span>
-                <div>
+                <div className="min-w-0 flex-1">
                   <p className="text-sm font-semibold text-slate-900">{service.depositMethodLabel}</p>
-                  <p className="mt-2 text-sm leading-6 text-slate-600">{service.depositMethodValue}</p>
+                  {bankDetailRows ? (
+                    <div className="mt-3 grid gap-2 sm:grid-cols-2">
+                      {bankDetailRows.map(([label, value]) => (
+                        <div
+                          key={label}
+                          className={`rounded-xl border px-3 py-2.5 ${
+                            label === "Account number"
+                              ? "border-emerald-200 bg-white sm:col-span-2"
+                              : "border-white/80 bg-white/70"
+                          }`}
+                        >
+                          <div className="flex items-center justify-between gap-2">
+                            <p className="text-[11px] font-semibold uppercase tracking-[0.13em] text-slate-500">{label}</p>
+                            {label === "Account number" ? (
+                              <button
+                                type="button"
+                                onClick={() => void copyBankDetail(label, value)}
+                                className="text-xs font-semibold text-emerald-700 hover:text-emerald-900"
+                              >
+                                {copiedBankDetail === label ? "Copied" : "Copy"}
+                              </button>
+                            ) : null}
+                          </div>
+                          <p className={`mt-1 break-words font-semibold ${label === "Account number" ? "text-xl tracking-wide text-emerald-800" : "text-sm text-slate-800"}`}>
+                            {value}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="mt-2 text-sm leading-6 text-slate-600">{service.depositMethodValue}</p>
+                  )}
                 </div>
               </div>
             </div>

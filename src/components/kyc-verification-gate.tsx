@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, type ChangeEvent, type ReactNode } from "react";
+import { useLayoutEffect, useState, type ChangeEvent, type ReactNode } from "react";
 import {
   fetchUserProfile,
   submitKyc,
@@ -75,11 +75,13 @@ export function KycVerificationGate({
   const [feedback, setFeedback] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [cachedKycStatus, setCachedKycStatus] = useState<BackendKycStatus | undefined>();
 
   const refreshUser = (nextUserId: string) => {
     fetchUserProfile(nextUserId)
       .then((profile) => {
         setUser(profile);
+        setCachedKycStatus(profile.kycStatus);
         try {
           const rawUser = window.localStorage.getItem("ofe_user");
           const stored = rawUser ? JSON.parse(rawUser) : {};
@@ -97,7 +99,7 @@ export function KycVerificationGate({
       .finally(() => setIsLoading(false));
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     try {
       const rawUser = window.localStorage.getItem("ofe_user");
       const parsed = rawUser ? (JSON.parse(rawUser) as StoredUser) : null;
@@ -108,6 +110,13 @@ export function KycVerificationGate({
       }
 
       setUserId(parsed.id);
+      setCachedKycStatus(parsed.kycStatus);
+
+      if (parsed.kycStatus === "APPROVED") {
+        setIsLoading(false);
+        return;
+      }
+
       refreshUser(parsed.id);
     } catch {
       setFeedback("Unable to load your KYC status right now.");
@@ -115,7 +124,7 @@ export function KycVerificationGate({
     }
   }, []);
 
-  if (user?.kycStatus === "APPROVED") {
+  if (cachedKycStatus === "APPROVED" || user?.kycStatus === "APPROVED") {
     return <>{children}</>;
   }
 
@@ -183,6 +192,7 @@ export function KycVerificationGate({
         notes: notes.trim() || undefined,
       });
       setUser(updated);
+      setCachedKycStatus(updated.kycStatus);
       setUpload(null);
       setNotes("");
       window.localStorage.setItem("ofe_user", JSON.stringify(updated));

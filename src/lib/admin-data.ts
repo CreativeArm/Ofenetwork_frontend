@@ -242,7 +242,7 @@ export const adminServiceHealth = [
   { service: "Crypto", uptime: "99.7%", volume: "High", status: "Live" },
   { service: "Skrill", uptime: "97.8%", volume: "Medium", status: "Watch" },
   { service: "PayPal", uptime: "98.9%", volume: "High", status: "Live" },
-  { service: "Venmo", uptime: "96.6%", volume: "Medium", status: "Watch" },
+  { service: "Zelle", uptime: "96.6%", volume: "Medium", status: "Watch" },
   { service: "Payoneer", uptime: "98.1%", volume: "Medium", status: "Live" },
   { service: "Buy 4 Me", uptime: "100%", volume: "Growing", status: "Live" },
 ];
@@ -399,10 +399,10 @@ export const adminSettingsData = [
 ];
 
 export const adminPaymentData = [
-  { channel: "Bank Transfer", details: "Access Bank PLC | 0761234567", usage: "Deriv, Skrill, PayPal", status: "Primary" },
-  { channel: "USDT TRC20", details: "Tron wallet ending ...sjssj", usage: "Crypto", status: "Active" },
+  { channel: "Bank Transfer", details: "Kuda Microfinance Bank | Ofenetworks Solutions NG LTD | 3003193472 | Narration: payment for chicken feeds", usage: "All deposits", status: "Primary" },
+  { channel: "USDT TRC20", details: "Tron wallet: TJLZtrdyxUuE96zwj687S63Z2zVes8in73", usage: "Crypto", status: "Active" },
   { channel: "PayPal", details: "oreofeoluwatise@yahoo.com", usage: "PayPal withdrawals", status: "Active" },
-  { channel: "Venmo", details: "@ofenetworks", usage: "Venmo", status: "Active" },
+  { channel: "Zelle", details: "+12673998390 | Olaoluwa Oladele", usage: "Zelle payments", status: "Active" },
 ];
 
 export const adminSecurityEvents = [
