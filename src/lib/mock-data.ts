@@ -267,33 +267,34 @@ export const testimonials = [
   },
 ];
 
-export const dashboardTransactions = [
-  { id: "DEP-1201", service: "Deposit from John Doe", meta: "Crypto (USDT TRC20)", amount: "N50,000.00", status: "Completed" },
-  { id: "WDR-2230", service: "Withdrawal to Mary A.", meta: "PayPal", amount: "N75,000.00", status: "Completed" },
-  { id: "DEP-1092", service: "Deposit from Daniel E.", meta: "Skrill", amount: "N30,000.00", status: "Completed" },
-  { id: "B4M-1021", service: "Buy 4 Me Order #B4M-1021", meta: "Customer Kelvin O.", amount: "N120,450.00", status: "In Progress" },
-];
+export const dashboardTransactions: Array<{
+  id: string;
+  service: string;
+  meta: string;
+  amount: string;
+  status: string;
+}> = [];
 
 export const adminMetrics = [
-  { label: "Total Users", value: "12,458", trend: "+18.6% from last month", tint: "emerald" },
-  { label: "Total Transactions", value: "N245,680,500", trend: "+24.3% from last month", tint: "violet" },
-  { label: "Total Deposits", value: "N123,560,400", trend: "+20.1% from last month", tint: "sky" },
-  { label: "Total Withdrawals", value: "N112,120,100", trend: "+22.7% from last month", tint: "amber" },
-  { label: "Buy 4 Me Orders", value: "1,245", trend: "+15.4% from last month", tint: "pink" },
+  { label: "Total Users", value: "0", trend: "Live platform count", tint: "emerald" },
+  { label: "Total Transactions", value: "N0.00", trend: "Live transaction total", tint: "violet" },
+  { label: "Total Deposits", value: "N0.00", trend: "Confirmed deposits volume", tint: "sky" },
+  { label: "Total Withdrawals", value: "N0.00", trend: "Confirmed withdrawals volume", tint: "amber" },
+  { label: "Buy 4 Me Orders", value: "0", trend: "Orders created on platform", tint: "pink" },
 ];
 
 export const orderStatus = [
-  { label: "Pending", value: 312, color: "bg-orange-500" },
-  { label: "In Progress", value: 542, color: "bg-blue-600" },
-  { label: "Completed", value: 391, color: "bg-emerald-600" },
+  { label: "Pending", value: 0, color: "bg-orange-500" },
+  { label: "In Progress", value: 0, color: "bg-blue-600" },
+  { label: "Completed", value: 0, color: "bg-emerald-600" },
 ];
 
 export const systemSummary = [
-  { label: "Pending Deposits", value: 23 },
-  { label: "Pending Withdrawals", value: 17 },
-  { label: "Open Support Tickets", value: 35 },
-  { label: "Unverified Users", value: 47 },
-  { label: "Bonus Qualification Alerts", value: 12 },
+  { label: "Pending Deposits", value: 0 },
+  { label: "Pending Withdrawals", value: 0 },
+  { label: "Open Support Tickets", value: 0 },
+  { label: "Unverified Users", value: 0 },
+  { label: "Bonus Qualification Alerts", value: 0 },
 ];
 
 export const quickActions = [
@@ -305,12 +306,12 @@ export const quickActions = [
   { label: "System Settings", href: "/admin/settings" },
 ];
 
-export const recentUsers = [
-  { name: "John Doe", email: "john@example.com", status: "Verified", time: "2 mins ago" },
-  { name: "Jane Smith", email: "jane.smith@gmail.com", status: "Verified", time: "15 mins ago" },
-  { name: "Michael Brown", email: "michael@brown.com", status: "Unverified", time: "45 mins ago" },
-  { name: "Sarah Johnson", email: "sarah.j@example.com", status: "Verified", time: "1 hour ago" },
-];
+export const recentUsers: Array<{
+  name: string;
+  email: string;
+  status: string;
+  time: string;
+}> = [];
 
 export const buy4MeSteps = [
   {

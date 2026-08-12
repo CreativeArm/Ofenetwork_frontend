@@ -482,34 +482,38 @@ export default async function AdminPage() {
                 <Link href="/admin/transactions" className="text-sm font-semibold text-[#0f7b36]">View All</Link>
               </div>
               <div className="space-y-4">
-                {recentTransactions.map((item) => (
-                  <div key={item.id} className="flex items-start justify-between gap-3">
-                    <div className="flex gap-3">
-                      <span className="rounded-full bg-emerald-50 p-2 text-emerald-600">
-                        <Icon name="arrow" className="h-4 w-4" />
-                      </span>
-                      <div>
-                        <p className="text-sm font-semibold text-slate-800">{item.service}</p>
-                        <p className="text-xs text-slate-500">{item.meta}</p>
+                {recentTransactions.length > 0 ? (
+                  recentTransactions.map((item) => (
+                    <div key={item.id} className="flex items-start justify-between gap-3">
+                      <div className="flex gap-3">
+                        <span className="rounded-full bg-emerald-50 p-2 text-emerald-600">
+                          <Icon name="arrow" className="h-4 w-4" />
+                        </span>
+                        <div>
+                          <p className="text-sm font-semibold text-slate-800">{item.service}</p>
+                          <p className="text-xs text-slate-500">{item.meta}</p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-sm font-semibold">{item.amount}</p>
+                        <div className="mt-1">
+                          <AdminStatusBadge
+                            label={item.status}
+                            tone={
+                              item.status === "Completed"
+                                ? "success"
+                                : item.status === "Rejected"
+                                  ? "danger"
+                                  : "warning"
+                            }
+                          />
+                        </div>
                       </div>
                     </div>
-                    <div className="text-right">
-                      <p className="text-sm font-semibold">{item.amount}</p>
-                      <div className="mt-1">
-                        <AdminStatusBadge
-                          label={item.status}
-                          tone={
-                            item.status === "Completed"
-                              ? "success"
-                              : item.status === "Rejected"
-                                ? "danger"
-                                : "warning"
-                          }
-                        />
-                      </div>
-                    </div>
-                  </div>
-                ))}
+                  ))
+                ) : (
+                  <p className="py-4 text-center text-sm text-slate-500">No transactions recorded yet.</p>
+                )}
               </div>
             </AdminCard>
 
@@ -571,25 +575,29 @@ export default async function AdminPage() {
                 <Link href="/admin/users" className="text-sm font-semibold text-[#0f7b36]">View All</Link>
               </div>
               <div className="space-y-4">
-                {recentUsersData.map((user) => (
-                  <div key={user.email} className="flex items-center justify-between gap-3">
-                    <div className="flex items-center gap-3">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 text-sm font-semibold text-slate-700">
-                        {user.name.charAt(0)}
+                {recentUsersData.length > 0 ? (
+                  recentUsersData.map((user) => (
+                    <div key={user.email} className="flex items-center justify-between gap-3">
+                      <div className="flex items-center gap-3">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 text-sm font-semibold text-slate-700">
+                          {user.name.charAt(0)}
+                        </div>
+                        <div>
+                          <p className="text-sm font-semibold">{user.name}</p>
+                          <p className="text-xs text-slate-500">{user.email}</p>
+                        </div>
                       </div>
-                      <div>
-                        <p className="text-sm font-semibold">{user.name}</p>
-                        <p className="text-xs text-slate-500">{user.email}</p>
+                      <div className="text-right">
+                        <p className={`text-xs font-semibold ${user.status === "Verified" ? "text-[#0f7b36]" : "text-amber-600"}`}>
+                          {user.status}
+                        </p>
+                        <p className="text-xs text-slate-400">{user.time}</p>
                       </div>
                     </div>
-                    <div className="text-right">
-                      <p className={`text-xs font-semibold ${user.status === "Verified" ? "text-[#0f7b36]" : "text-amber-600"}`}>
-                        {user.status}
-                      </p>
-                      <p className="text-xs text-slate-400">{user.time}</p>
-                    </div>
-                  </div>
-                ))}
+                  ))
+                ) : (
+                  <p className="py-4 text-center text-sm text-slate-500">No registered users yet.</p>
+                )}
               </div>
             </AdminCard>
           </div>
