@@ -9,6 +9,7 @@ import { useBodyScrollLock } from "../lib/use-body-scroll-lock";
 import { BonusBalanceAmount } from "./bonus-balance";
 import { SearchProvider, useGlobalSearch } from "../lib/search-context";
 import { ServiceIcon, type ServiceIconName } from "./service-icon";
+import { Icon } from "./icons";
 
 interface AppShellProps {
   children: ReactNode;
@@ -85,6 +86,8 @@ const userNotifications: ShellNotification[] = [
     id: "user-3",
     title: "Buy4Me quote ready",
     detail: "Your product request now has a pricing breakdown.",
+    time: "1 hour ago",
+    unread: false,
   },
 ];
 

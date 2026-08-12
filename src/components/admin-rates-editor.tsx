@@ -1,10 +1,12 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ServiceIcon, getRateServiceIconName } from "./service-icon";
 import {
   createRate,
   deleteRate,
+  fetchRates,
+  mapBackendRatesToBoard,
   updateRate,
 } from "../lib/admin-backend";
 import { useBodyScrollLock } from "../lib/use-body-scroll-lock";
@@ -22,6 +24,19 @@ interface AdminRatesEditorProps {
 
 export function AdminRatesEditor({ initialRates }: AdminRatesEditorProps) {
   const [rates, setRates] = useState(initialRates);
+
+  useEffect(() => {
+    fetchRates()
+      .then((fetched) => {
+        if (fetched && fetched.length > 0) {
+          setRates(mapBackendRatesToBoard(fetched));
+        }
+      })
+      .catch(() => {
+        // keeps initial static rates if offline
+      });
+  }, []);
+
   const [activeRateId, setActiveRateId] = useState<string | null>(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -79,11 +94,27 @@ export function AdminRatesEditor({ initialRates }: AdminRatesEditorProps) {
     try {
       setIsSaving(true);
       setFeedback(null);
-      const updated = await updateRate(activeRate.id, {
-        service: trimmedName,
-        depositRate: trimmedDeposit,
-        withdrawalRate: trimmedWithdrawal,
-      });
+      let updated;
+      try {
+        updated = await updateRate(activeRate.id, {
+          service: trimmedName,
+          depositRate: trimmedDeposit,
+          withdrawalRate: trimmedWithdrawal,
+        });
+      } catch (err) {
+        if (
+          err instanceof Error &&
+          (err.message.includes("404") || err.message.toLowerCase().includes("not found"))
+        ) {
+          updated = await createRate({
+            service: trimmedName,
+            depositRate: trimmedDeposit,
+            withdrawalRate: trimmedWithdrawal,
+          });
+        } else {
+          throw err;
+        }
+      }
 
       setRates((current) =>
         current.map((rate) =>
