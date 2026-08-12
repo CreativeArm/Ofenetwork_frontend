@@ -9,6 +9,12 @@ interface ServicePageProps {
   }>;
 }
 
+export function generateStaticParams() {
+  return serviceConfigs.map((service) => ({
+    slug: service.slug,
+  }));
+}
+
 export default async function ServicePage({ params }: ServicePageProps) {
   const { slug } = await params;
   const service = serviceConfigs.find((item) => item.slug === slug);

@@ -53,7 +53,7 @@ export function PublicShell({ children }: PublicShellProps) {
       <header className="fixed left-0 right-0 top-0 z-30 border-b border-[#e7eee9] bg-white/90 backdrop-blur-md">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-5 md:px-8">
           <Link href="/" className="flex items-center">
-            <Icon name="logo" className="h-8 w-auto md:h-10" />
+            <Icon name="logo" className="h-6 w-auto" />
           </Link>
           <nav className="hidden items-center gap-7 text-sm font-medium text-slate-600 md:flex">
             {publicNavigation.map((item) => (
@@ -144,7 +144,7 @@ export function PublicShell({ children }: PublicShellProps) {
       <footer className="border-t border-[#e7eee9] bg-[#0f1720] text-white">
         <div className="md:hidden bg-[#0f1720] px-6 py-12 text-slate-300">
           <div className="flex items-start gap-4">
-            <Icon name="logo" className="h-8 w-auto" />
+            <Icon name="logo" className="h-6 w-auto" />
           </div>
 
           <p className="mt-8 max-w-[360px] text-sm leading-7 text-slate-400">
@@ -219,7 +219,7 @@ export function PublicShell({ children }: PublicShellProps) {
         <div className="mx-auto hidden max-w-7xl gap-10 px-4 py-12 md:grid md:grid-cols-[1.15fr_0.85fr_0.85fr] md:px-8">
           <div>
             <div className="flex items-center gap-3">
-              <Icon name="logo" className="h-10 w-auto" />
+              <Icon name="logo" className="h-6 w-auto" />
             </div>
             <p className="mt-5 max-w-md text-sm leading-7 text-slate-400">
               Built for fast manual transaction processing, referral bonus

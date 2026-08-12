@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { updateKycStatus, type BackendKycStatus } from "../lib/admin-backend";
 import { useBodyScrollLock } from "../lib/use-body-scroll-lock";
+import { useGlobalSearch } from "../lib/search-context";
 import { AdminStatusBadge } from "./admin-ui";
 
 type KycStatus = "Pending" | "Flagged" | "Approved";
@@ -41,6 +42,7 @@ function toneForStatus(status: string) {
 const filters = ["All", "Pending", "Flagged", "Approved"] as const;
 
 export function AdminKycQueue({ items }: AdminKycQueueProps) {
+  const { searchQuery } = useGlobalSearch();
   const [selectedFilter, setSelectedFilter] = useState<(typeof filters)[number]>("Pending");
   const [records, setRecords] = useState(items);
   const [activeRecordId, setActiveRecordId] = useState<string | null>(null);
@@ -54,12 +56,22 @@ export function AdminKycQueue({ items }: AdminKycQueueProps) {
   useBodyScrollLock(Boolean(activeRecord));
 
   const filteredRecords = useMemo(() => {
-    if (selectedFilter === "All") {
-      return records;
-    }
+    const query = searchQuery.trim().toLowerCase();
 
-    return records.filter((item) => item.status === selectedFilter);
-  }, [records, selectedFilter]);
+    return records.filter((item) => {
+      const matchesFilter = selectedFilter === "All" || item.status === selectedFilter;
+      if (!matchesFilter) return false;
+
+      if (!query) return true;
+
+      return (
+        item.id.toLowerCase().includes(query) ||
+        item.user.toLowerCase().includes(query) ||
+        item.document.toLowerCase().includes(query) ||
+        item.risk.toLowerCase().includes(query)
+      );
+    });
+  }, [records, selectedFilter, searchQuery]);
 
   const statusToBackend = (status: KycStatus): BackendKycStatus =>
     status === "Approved" ? "APPROVED" : status === "Flagged" ? "REJECTED" : "PENDING";

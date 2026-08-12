@@ -9,6 +9,7 @@ import {
 } from "../lib/admin-backend";
 import { notifyBonusBalanceUpdated } from "../lib/bonus-events";
 import { useBodyScrollLock } from "../lib/use-body-scroll-lock";
+import { useGlobalSearch } from "../lib/search-context";
 import { AdminStatusBadge } from "./admin-ui";
 
 type BonusType = "REFERRAL_BONUS" | "THRESHOLD_BONUS";
@@ -54,12 +55,26 @@ function getActorId() {
 }
 
 export function AdminUsersBonusManager({ users }: AdminUsersBonusManagerProps) {
+  const { searchQuery } = useGlobalSearch();
   const [items, setItems] = useState(users);
   const [activeUserId, setActiveUserId] = useState<string | null>(null);
   const [bonusType, setBonusType] = useState<BonusType>("REFERRAL_BONUS");
   const [amount, setAmount] = useState("2000");
   const [isSaving, setIsSaving] = useState(false);
   const [feedback, setFeedback] = useState<string | null>(null);
+
+  const filteredUsers = useMemo(() => {
+    const query = searchQuery.trim().toLowerCase();
+    if (!query) return items;
+
+    return items.filter(
+      (user) =>
+        user.fullName?.toLowerCase().includes(query) ||
+        user.email?.toLowerCase().includes(query) ||
+        user.id.toLowerCase().includes(query) ||
+        user.role?.toLowerCase().includes(query)
+    );
+  }, [items, searchQuery]);
 
   const activeUser = useMemo(
     () => items.find((user) => user.id === activeUserId) ?? null,
@@ -163,7 +178,7 @@ export function AdminUsersBonusManager({ users }: AdminUsersBonusManagerProps) {
       </div>
 
       <div className="space-y-2">
-        {items.map((user) => {
+        {filteredUsers.map((user) => {
           const totalVolume =
             user.transactions?.reduce(
               (sum, transaction) => sum + transaction.nairaEquivalent,

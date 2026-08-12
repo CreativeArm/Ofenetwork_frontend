@@ -1,18 +1,9 @@
 import { Suspense } from "react";
 import { Reveal, Stagger, StaggerItem } from "../../components/homepage-motion";
 import { PublicShell } from "../../components/public-shell";
-import { LoginForm } from "../../components/login-form";
+import { LoginForm, LoginIntroText } from "../../components/login-form";
 
-interface LoginPageProps {
-  searchParams?: Promise<{
-    admin?: string;
-  }>;
-}
-
-export default async function LoginPage({ searchParams }: LoginPageProps) {
-  const resolvedSearchParams = await searchParams;
-  const isAdminLogin = resolvedSearchParams?.admin === "1";
-
+export default async function LoginPage() {
   return (
     <PublicShell>
       <section className="mx-auto grid max-w-5xl gap-6 lg:grid-cols-[0.95fr_1.05fr]">
@@ -32,11 +23,9 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
                   Sign in to manage transactions, bonuses, and service requests.
                 </h1>
 
-                <p className="mt-4 text-sm leading-7 text-emerald-100/70">
-                  {isAdminLogin
-                    ? "Use your admin email and password to open the OFENetworks control panel securely."
-                    : "Continue with your email and password, or use Google to open your OFENetworks workspace faster."}
-                </p>
+                <Suspense fallback={<p className="mt-4 text-sm leading-7 text-emerald-100/70">Continue with your email and password, or use Google to open your OFENetworks workspace faster.</p>}>
+                  <LoginIntroText />
+                </Suspense>
               </div>
 
               <Stagger className="flex flex-wrap gap-2">

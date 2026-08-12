@@ -6,6 +6,7 @@ import {
   type BackendTestimonial,
 } from "../lib/admin-backend";
 import { useBodyScrollLock } from "../lib/use-body-scroll-lock";
+import { useGlobalSearch } from "../lib/search-context";
 import { AdminStatusBadge } from "./admin-ui";
 
 type TestimonialStatus = BackendTestimonial["status"];
@@ -17,6 +18,7 @@ export interface TestimonialRecord {
   text: string;
   status: TestimonialStatus;
   submittedAt: string;
+  rating?: number;
 }
 
 interface AdminTestimonialsQueueProps {
@@ -35,7 +37,7 @@ function statusLabel(status: TestimonialStatus) {
 
 function toneForStatus(status: string) {
   const lower = status.toLowerCase();
-  if (lower.includes("approved")) {
+  if (lower.includes("approve")) {
     return "success" as const;
   }
   if (lower.includes("pending")) {
@@ -48,6 +50,7 @@ function toneForStatus(status: string) {
 }
 
 export function AdminTestimonialsQueue({ items }: AdminTestimonialsQueueProps) {
+  const { searchQuery } = useGlobalSearch();
   const [selectedFilter, setSelectedFilter] =
     useState<(typeof filters)[number]>("PENDING_REVIEW");
   const [testimonials, setTestimonials] = useState(items);
@@ -61,12 +64,22 @@ export function AdminTestimonialsQueue({ items }: AdminTestimonialsQueueProps) {
   useBodyScrollLock(Boolean(activeTestimonial));
 
   const filteredTestimonials = useMemo(() => {
-    if (selectedFilter === "All") {
-      return testimonials;
-    }
+    const query = searchQuery.trim().toLowerCase();
 
-    return testimonials.filter((item) => item.status === selectedFilter);
-  }, [selectedFilter, testimonials]);
+    return testimonials.filter((item) => {
+      const matchesFilter = selectedFilter === "All" || item.status === selectedFilter;
+      if (!matchesFilter) return false;
+
+      if (!query) return true;
+
+      return (
+        item.id.toLowerCase().includes(query) ||
+        item.name.toLowerCase().includes(query) ||
+        item.service.toLowerCase().includes(query) ||
+        item.text.toLowerCase().includes(query)
+      );
+    });
+  }, [selectedFilter, testimonials, searchQuery]);
 
   const updateStatus = async (id: string, status: TestimonialStatus) => {
     try {

@@ -20,6 +20,19 @@ function getErrorMessage(error: unknown) {
   return "Something went wrong. Please try again.";
 }
 
+export function LoginIntroText() {
+  const searchParams = useSearchParams();
+  const isAdminLogin = searchParams.get("admin") === "1";
+
+  return (
+    <p className="mt-4 text-sm leading-7 text-emerald-100/70">
+      {isAdminLogin
+        ? "Use your admin email and password to open the OFENetworks control panel securely."
+        : "Continue with your email and password, or use Google to open your OFENetworks workspace faster."}
+    </p>
+  );
+}
+
 export function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();

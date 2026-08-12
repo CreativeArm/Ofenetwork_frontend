@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { useBodyScrollLock } from "../lib/use-body-scroll-lock";
+import { useGlobalSearch } from "../lib/search-context";
 import { AdminStatusBadge } from "./admin-ui";
 
 const API_BASE_URL =
@@ -85,6 +86,7 @@ function getSubmittedDetails(transaction: AdminTransactionRecord) {
 }
 
 export function AdminTransactionsQueue({ items }: AdminTransactionsQueueProps) {
+  const { searchQuery } = useGlobalSearch();
   const [selectedFilter, setSelectedFilter] = useState<(typeof filters)[number]>("Pending");
   const [transactions, setTransactions] = useState(items);
   const [activeTransactionId, setActiveTransactionId] = useState<string | null>(null);
@@ -99,12 +101,24 @@ export function AdminTransactionsQueue({ items }: AdminTransactionsQueueProps) {
   useBodyScrollLock(Boolean(activeTransaction));
 
   const filteredTransactions = useMemo(() => {
-    if (selectedFilter === "All") {
-      return transactions;
-    }
+    const query = searchQuery.trim().toLowerCase();
 
-    return transactions.filter((item) => item.status === selectedFilter);
-  }, [selectedFilter, transactions]);
+    return transactions.filter((item) => {
+      const matchesFilter = selectedFilter === "All" || item.status === selectedFilter;
+      if (!matchesFilter) return false;
+
+      if (!query) return true;
+
+      return (
+        item.id.toLowerCase().includes(query) ||
+        item.user.toLowerCase().includes(query) ||
+        item.service.toLowerCase().includes(query) ||
+        item.type.toLowerCase().includes(query) ||
+        item.amount.toLowerCase().includes(query) ||
+        item.paymentReference?.toLowerCase().includes(query)
+      );
+    });
+  }, [selectedFilter, transactions, searchQuery]);
 
   const updateStatus = async (id: string, status: TransactionStatus) => {
     const previousStatus =

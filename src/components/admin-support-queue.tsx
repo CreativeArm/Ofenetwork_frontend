@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { useBodyScrollLock } from "../lib/use-body-scroll-lock";
+import { useGlobalSearch } from "../lib/search-context";
 import { updateSupportTicket, type BackendSupportTicketStatus } from "../lib/admin-backend";
 import { AdminStatusBadge } from "./admin-ui";
 
@@ -62,6 +63,7 @@ function statusToBackend(status: TicketStatus): BackendSupportTicketStatus {
 }
 
 export function AdminSupportQueue({ items, liveMode = false }: AdminSupportQueueProps) {
+  const { searchQuery } = useGlobalSearch();
   const [selectedFilter, setSelectedFilter] = useState<(typeof filters)[number]>("Open");
   const [tickets, setTickets] = useState(items);
   const [activeTicketId, setActiveTicketId] = useState<string | null>(null);
@@ -72,12 +74,22 @@ export function AdminSupportQueue({ items, liveMode = false }: AdminSupportQueue
   useBodyScrollLock(Boolean(activeTicket));
 
   const filteredTickets = useMemo(() => {
-    if (selectedFilter === "All") {
-      return tickets;
-    }
+    const query = searchQuery.trim().toLowerCase();
 
-    return tickets.filter((ticket) => ticket.status === selectedFilter);
-  }, [selectedFilter, tickets]);
+    return tickets.filter((ticket) => {
+      const matchesFilter = selectedFilter === "All" || ticket.status === selectedFilter;
+      if (!matchesFilter) return false;
+
+      if (!query) return true;
+
+      return (
+        ticket.id.toLowerCase().includes(query) ||
+        ticket.subject.toLowerCase().includes(query) ||
+        ticket.user.toLowerCase().includes(query) ||
+        ticket.summary?.toLowerCase().includes(query)
+      );
+    });
+  }, [selectedFilter, tickets, searchQuery]);
 
   const updateTicket = (
     id: string,

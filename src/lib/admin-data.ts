@@ -137,99 +137,11 @@ export const adminSectionMeta: Record<
   },
 };
 
-export const adminTransactionsData = [
-  {
-    id: "DEP-3021",
-    user: "John Doe",
-    service: "Crypto (USDT TRC20)",
-    type: "Deposit",
-    amount: "N250,000",
-    status: "Pending",
-    time: "2 mins ago",
-    paymentReference: "TRX-992841",
-    proofName: "DEP-3021-proof.svg",
-    proofHref: createProofDataUrl("DEP-3021", "Crypto (USDT TRC20)", "N250,000"),
-  },
-  {
-    id: "WDR-1844",
-    user: "Mary A.",
-    service: "PayPal",
-    type: "Withdrawal",
-    amount: "N175,000",
-    status: "Confirmed",
-    time: "18 mins ago",
-    paymentReference: "PP-1844-889",
-    proofName: "WDR-1844-proof.svg",
-    proofHref: createProofDataUrl("WDR-1844", "PayPal", "N175,000"),
-  },
-  {
-    id: "DEP-3017",
-    user: "Daniel E.",
-    service: "Skrill",
-    type: "Deposit",
-    amount: "N96,000",
-    status: "Rejected",
-    time: "42 mins ago",
-    paymentReference: "SK-3017-223",
-    proofName: "DEP-3017-proof.svg",
-    proofHref: createProofDataUrl("DEP-3017", "Skrill", "N96,000"),
-  },
-  {
-    id: "WDR-1832",
-    user: "Kelvin O.",
-    service: "Deriv",
-    type: "Withdrawal",
-    amount: "N210,000",
-    status: "Pending",
-    time: "1 hour ago",
-    paymentReference: "DRV-1832-110",
-    proofName: "WDR-1832-proof.svg",
-    proofHref: createProofDataUrl("WDR-1832", "Deriv", "N210,000"),
-  },
-] as const;
+export const adminTransactionsData = [] as any[];
 
-export const adminBuy4MeOrders = [
-  {
-    id: "B4M-1201",
-    customer: "Ada N.",
-    item: "iPhone 15 Pro Max",
-    total: "N1,120,000",
-    status: "Awaiting Payment",
-    eta: "Quote sent 20 mins ago",
-    source: "Apple Store US",
-    paymentMethod: "Bank Transfer",
-    note: "Customer has received the quote and is expected to complete payment today.",
-  },
-  {
-    id: "B4M-1200",
-    customer: "Kehinde B.",
-    item: "Fashion bundle",
-    total: "N285,000",
-    status: "Processing",
-    eta: "Warehouse pickup tomorrow",
-    source: "ASOS UK",
-    paymentMethod: "USDT TRC20",
-    note: "Supplier confirmed item availability and the pickup request is already scheduled.",
-  },
-  {
-    id: "B4M-1198",
-    customer: "Yusuf T.",
-    item: "Auto parts set",
-    total: "N540,000",
-    status: "Completed",
-    eta: "Delivered yesterday",
-    source: "eBay Motors",
-    paymentMethod: "PayPal",
-    note: "Order fulfilled successfully and customer delivery confirmation has been received.",
-  },
-];
+export const adminBuy4MeOrders = [] as any[];
 
-export const adminUsersData = [
-  { name: "John Doe", email: "john@example.com", referrals: 8, volume: "N1.2M", bonus: "Manual", status: "Verified" },
-  { name: "Mary A.", email: "mary@example.com", referrals: 3, volume: "N650k", bonus: "Manual", status: "Verified" },
-  { name: "Kelvin O.", email: "kelvin@example.com", referrals: 12, volume: "N2.8M", bonus: "Manual", status: "VIP" },
-  { name: "Sarah J.", email: "sarah@example.com", referrals: 0, volume: "N80k", bonus: "Review", status: "Review" },
-];
+export const adminUsersData = [] as any[];
 
 export const adminBonusRules = [
   { tier: "Referral Bonus", minimum: "$30+ transaction", rate: "Manual", appliesTo: "Referred person must complete a transaction worth at least $30 before admin adds the bonus." },
@@ -247,149 +159,13 @@ export const adminServiceHealth = [
   { service: "Buy 4 Me", uptime: "100%", volume: "Growing", status: "Live" },
 ];
 
-export const adminTestimonialsQueue = [
-  {
-    id: "TES-101",
-    name: "Blessing U.",
-    service: "Crypto payout",
-    text: "Fast payout and super clear updates all through.",
-    status: "Pending Review",
-    submittedAt: "12 mins ago",
-  },
-  {
-    id: "TES-099",
-    name: "Michael F.",
-    service: "Buy4Me delivery",
-    text: "Buy4Me was easier than I expected, smooth delivery.",
-    status: "Approved",
-    submittedAt: "42 mins ago",
-  },
-  {
-    id: "TES-095",
-    name: "Rita K.",
-    service: "Deriv funding",
-    text: "Need quicker confirmation at night, but rates are good.",
-    status: "Rejected",
-    submittedAt: "1 hour ago",
-  },
-] as const;
+export const adminTestimonialsQueue = [] as any[];
 
-export const adminTicketsData = [
-  {
-    id: "SUP-201",
-    subject: "Delayed Skrill confirmation",
-    user: "Mary A.",
-    priority: "High",
-    owner: "Tosin",
-    status: "Open",
-    channel: "Dashboard chat",
-    updatedAt: "6 mins ago",
-    summary:
-      "Customer says the Skrill payment proof was uploaded 25 minutes ago, but the balance has not been updated.",
-    conversation: [
-      {
-        sender: "Mary A.",
-        time: "10:14 AM",
-        text: "Hi, I uploaded my Skrill receipt but I still have not received confirmation.",
-      },
-      {
-        sender: "Support Bot",
-        time: "10:15 AM",
-        text: "Your ticket has been queued for admin review.",
-      },
-    ],
-  },
-  {
-    id: "SUP-198",
-    subject: "Wrong bank account name",
-    user: "Daniel E.",
-    priority: "Medium",
-    owner: "Shola",
-    status: "Pending User",
-    channel: "Email",
-    updatedAt: "22 mins ago",
-    summary:
-      "Customer reported that the payout account name displayed in the withdrawal screen does not match their submitted details.",
-    conversation: [
-      {
-        sender: "Daniel E.",
-        time: "9:42 AM",
-        text: "The account name showing for my withdrawal is different from what I entered. Please check.",
-      },
-      {
-        sender: "Shola",
-        time: "9:50 AM",
-        text: "Please resend the correct account name exactly as it appears on your bank profile.",
-      },
-    ],
-  },
-  {
-    id: "SUP-194",
-    subject: "Buy4Me quote update",
-    user: "Ada N.",
-    priority: "Low",
-    owner: "Mide",
-    status: "Resolved",
-    channel: "WhatsApp handoff",
-    updatedAt: "1 hour ago",
-    summary:
-      "Customer needed confirmation that the updated Buy4Me quote already includes shipping and doorstep delivery.",
-    conversation: [
-      {
-        sender: "Ada N.",
-        time: "8:18 AM",
-        text: "Please confirm whether the latest quote includes shipping to Lagos.",
-      },
-      {
-        sender: "Mide",
-        time: "8:31 AM",
-        text: "Yes, the revised quote already includes shipping and local delivery. Marking this as resolved.",
-      },
-    ],
-  },
-] as const;
+export const adminTicketsData = [] as any[];
 
-export const adminNotificationsData = [
-  { title: "Rate update published", audience: "All users", channel: "Dashboard", status: "Sent", time: "10 mins ago" },
-  { title: "Bonus qualification reminder", audience: "Eligible users", channel: "Dashboard + Email", status: "Scheduled", time: "Today, 5:00 PM" },
-  { title: "KYC backlog alert", audience: "Admins", channel: "Realtime", status: "Live", time: "Now" },
-];
+export const adminNotificationsData = [] as any[];
 
-export const adminKycData = [
-  {
-    id: "KYC-1102",
-    user: "Favour A.",
-    document: "NIN Slip",
-    risk: "Low",
-    status: "Pending",
-    submittedAt: "12 mins ago",
-    proofName: "KYC-1102-nin-slip.svg",
-    proofHref: createKycDocumentDataUrl("Favour A.", "NIN Slip", "Pending"),
-    notes: "Clear capture, but name formatting should match the account exactly.",
-  },
-  {
-    id: "KYC-1098",
-    user: "Joseph P.",
-    document: "Passport",
-    risk: "Medium",
-    status: "Flagged",
-    submittedAt: "34 mins ago",
-    proofName: "KYC-1098-passport.svg",
-    proofHref: createKycDocumentDataUrl("Joseph P.", "Passport", "Flagged"),
-    notes: "Photo is visible, but expiry date needs a second look before approval.",
-  },
-  {
-    id: "KYC-1087",
-    user: "Linda M.",
-    document: "Driver's License",
-    risk: "Low",
-    status: "Approved",
-    submittedAt: "1 hour ago",
-    proofName: "KYC-1087-drivers-license.svg",
-    proofHref: createKycDocumentDataUrl("Linda M.", "Driver's License", "Approved"),
-    notes: "Document passed all manual review checks.",
-  },
-] as const;
+export const adminKycData = [] as any[];
 
 export const adminSettingsData = [
   { label: "Business Hours", value: "08:00 - 22:00 WAT" },

@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { useGlobalSearch } from "../lib/search-context";
 import {
   priceBuy4MeOrder,
   updateBuy4MeStatus,
@@ -108,6 +109,7 @@ function formatCurrency(amount?: number) {
 }
 
 export function AdminBuy4MeQueue({ items }: AdminBuy4MeQueueProps) {
+  const { searchQuery } = useGlobalSearch();
   const [orders, setOrders] = useState(items);
   const [selectedFilter, setSelectedFilter] =
     useState<(typeof filters)[number]>("All");
@@ -127,12 +129,22 @@ export function AdminBuy4MeQueue({ items }: AdminBuy4MeQueueProps) {
   );
 
   const filteredOrders = useMemo(() => {
-    if (selectedFilter === "All") {
-      return orders;
-    }
+    const query = searchQuery.trim().toLowerCase();
 
-    return orders.filter((item) => item.status === selectedFilter);
-  }, [orders, selectedFilter]);
+    return orders.filter((item) => {
+      const matchesFilter = selectedFilter === "All" || item.status === selectedFilter;
+      if (!matchesFilter) return false;
+
+      if (!query) return true;
+
+      return (
+        item.id.toLowerCase().includes(query) ||
+        item.customer.toLowerCase().includes(query) ||
+        item.productDetails?.toLowerCase().includes(query) ||
+        item.productLink?.toLowerCase().includes(query)
+      );
+    });
+  }, [orders, selectedFilter, searchQuery]);
 
   useBodyScrollLock(Boolean(activeOrder));
 

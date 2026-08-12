@@ -7,7 +7,7 @@ import { fetchUserProfile, updateUserProfilePicture } from "../lib/admin-backend
 import { adminNavigation, userNavigation } from "../lib/mock-data";
 import { useBodyScrollLock } from "../lib/use-body-scroll-lock";
 import { BonusBalanceAmount } from "./bonus-balance";
-import { Icon } from "./icons";
+import { SearchProvider, useGlobalSearch } from "../lib/search-context";
 import { ServiceIcon, type ServiceIconName } from "./service-icon";
 
 interface AppShellProps {
@@ -85,12 +85,27 @@ const userNotifications: ShellNotification[] = [
     id: "user-3",
     title: "Buy4Me quote ready",
     detail: "Your product request now has a pricing breakdown.",
-    time: "Today",
-    unread: true,
   },
 ];
 
-export function AppShell({ children, activeSlug, title, subtitle, admin = false }: AppShellProps) {
+function AdminSearchInput() {
+  const { searchQuery, setSearchQuery } = useGlobalSearch();
+
+  return (
+    <div className="hidden items-center gap-2 rounded-xl border border-[#e4ebe7] bg-white px-3 py-1.5 text-sm text-slate-600 focus-within:border-emerald-500 focus-within:ring-1 focus-within:ring-emerald-500 md:flex">
+      <Icon name="search" className="h-4 w-4 shrink-0 text-slate-400" />
+      <input
+        type="text"
+        placeholder="Search anything..."
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        className="w-40 border-none bg-transparent p-0 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-0 lg:w-56"
+      />
+    </div>
+  );
+}
+
+function AppShellInner({ children, activeSlug, title, subtitle, admin = false }: AppShellProps) {
   const router = useRouter();
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
@@ -357,7 +372,7 @@ export function AppShell({ children, activeSlug, title, subtitle, admin = false 
 
   const brandBlock = (
     <div className="mt-6 flex flex-col gap-2 px-3">
-      <Icon name="logo" className="h-8 w-auto" />
+      <Icon name="logo" className="h-6 w-auto" />
       <p className={`text-xs px-1 ${admin ? "text-emerald-300/70" : "text-slate-500"}`}>{admin ? "Admin Panel" : "Bonus Tracker"}</p>
     </div>
   );
@@ -512,12 +527,7 @@ export function AppShell({ children, activeSlug, title, subtitle, admin = false 
                 </div>
               </div>
               <div className="flex shrink-0 items-center gap-2 sm:gap-3">
-                {admin ? (
-                  <div className="hidden items-center gap-2 rounded-xl border border-[#e4ebe7] bg-white px-4 py-2 text-sm text-slate-400 md:flex">
-                    <Icon name="search" className="h-4 w-4" />
-                    Search anything...
-                  </div>
-                ) : null}
+                {admin ? <AdminSearchInput /> : null}
                 <div className="relative">
                   <button
                     type="button"
@@ -780,5 +790,13 @@ export function AppShell({ children, activeSlug, title, subtitle, admin = false 
         </div>
       </div>
     </div>
+  );
+}
+
+export function AppShell(props: AppShellProps) {
+  return (
+    <SearchProvider>
+      <AppShellInner {...props} />
+    </SearchProvider>
   );
 }

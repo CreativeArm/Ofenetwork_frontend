@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useBodyScrollLock } from "../lib/use-body-scroll-lock";
+import { useGlobalSearch } from "../lib/search-context";
 import { AdminStatusBadge } from "./admin-ui";
 
 type NotificationStatus = "Draft" | "Scheduled" | "Sent" | "Live";
@@ -46,6 +47,7 @@ const channels = [
 ] as const;
 
 export function AdminNotificationCenter({ items }: AdminNotificationCenterProps) {
+  const { searchQuery } = useGlobalSearch();
   const [notifications, setNotifications] = useState(items);
   const [isComposeOpen, setIsComposeOpen] = useState(false);
   const [draftTitle, setDraftTitle] = useState("");
@@ -54,6 +56,19 @@ export function AdminNotificationCenter({ items }: AdminNotificationCenterProps)
   const [draftStatus, setDraftStatus] = useState<(typeof statuses)[number]>("Draft");
 
   useBodyScrollLock(isComposeOpen);
+
+  const filteredNotifications = useMemo(() => {
+    const query = searchQuery.trim().toLowerCase();
+    if (!query) return notifications;
+
+    return notifications.filter(
+      (item) =>
+        item.title.toLowerCase().includes(query) ||
+        item.audience.toLowerCase().includes(query) ||
+        item.channel.toLowerCase().includes(query) ||
+        item.status.toLowerCase().includes(query)
+    );
+  }, [notifications, searchQuery]);
 
   const closeCompose = () => {
     setIsComposeOpen(false);
@@ -101,7 +116,7 @@ export function AdminNotificationCenter({ items }: AdminNotificationCenterProps)
       </div>
 
       <div className="space-y-3">
-        {notifications.map((item) => (
+        {filteredNotifications.map((item) => (
           <div key={item.title + item.time} className="rounded-[22px] border border-[#edf1ee] p-4">
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
               <div>

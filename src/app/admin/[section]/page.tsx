@@ -74,6 +74,12 @@ function toneForStatus(status: string) {
   return "neutral" as const;
 }
 
+export function generateStaticParams() {
+  return sections.map((section) => ({
+    section,
+  }));
+}
+
 export default async function AdminSectionPage({
   params,
 }: {
