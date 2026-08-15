@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, type FormEvent } from "react";
+import { useState, type FormEvent } from "react";
 import { Icon } from "./icons";
 
 const API_BASE_URL =
@@ -24,7 +24,6 @@ function getErrorMessage(error: unknown) {
 }
 
 export function SupportRequestForm() {
-  const [userId, setUserId] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [topic, setTopic] = useState("");
@@ -32,27 +31,6 @@ export function SupportRequestForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-
-  useEffect(() => {
-    try {
-      const rawUser = window.localStorage.getItem("ofe_user");
-      if (!rawUser) {
-        return;
-      }
-
-      const user = JSON.parse(rawUser) as {
-        id?: string;
-        fullName?: string;
-        email?: string;
-      };
-
-      setUserId(user.id ?? "");
-      setName((current) => current || user.fullName || "");
-      setEmail((current) => current || user.email || "");
-    } catch {
-      window.localStorage.removeItem("ofe_user");
-    }
-  }, []);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -73,7 +51,6 @@ export function SupportRequestForm() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          userId: userId || undefined,
           name: name.trim(),
           email: email.trim(),
           topic,
@@ -138,7 +115,7 @@ export function SupportRequestForm() {
           type="email"
           value={email}
           onChange={(event) => setEmail(event.target.value)}
-          placeholder="jane@ofenetworks.ng"
+          placeholder="Enter your email address"
           className="w-full rounded-2xl border border-[#e7eee9] bg-[#f8fbf8] px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-emerald-300 focus:bg-white focus:ring-3 focus:ring-emerald-50"
         />
       </div>

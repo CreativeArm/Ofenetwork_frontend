@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import Link from "next/link";
 import { Reveal, Stagger, StaggerItem } from "../../components/homepage-motion";
 import { AppShell } from "../../components/shell";

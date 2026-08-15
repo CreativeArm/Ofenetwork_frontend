@@ -26,13 +26,13 @@ export default function SupportPage() {
               {[
                 {
                   title: "E-mail",
-                  value: "support@ofenetworks.ng",
+                  value: "info@ofenetworks.com",
                   text: "Best for proof review, transaction follow-up, and detailed support requests.",
                   icon: "chat" as const,
                 },
                 {
                   title: "Contact Us",
-                  value: "+234 800 000 0000",
+                  value: "+2348039888541",
                   text: "Use this line for urgent support coordination and account-related guidance.",
                   icon: "bell" as const,
                 },
