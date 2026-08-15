@@ -1,16 +1,14 @@
-export const dynamic = "force-dynamic";
-
 import Link from "next/link";
 import { Reveal, Stagger, StaggerItem } from "../../components/homepage-motion";
 import { AppShell } from "../../components/shell";
 import { Icon } from "../../components/icons";
-import { ServiceIcon, getRateServiceIconName } from "../../components/service-icon";
+import { ServiceIcon } from "../../components/service-icon";
+import { LiveRatesSnapshot } from "../../components/live-rates-snapshot";
 import { BonusBalanceAmount } from "../../components/bonus-balance";
 import { BonusCashoutPanel } from "../../components/bonus-cashout-panel";
 import { DashboardQuickStats } from "../../components/dashboard-quick-stats";
 import { UserTransactionHistory } from "../../components/user-transaction-history";
 import { homeRates, serviceConfigs } from "../../lib/mock-data";
-import { fetchRates, mapBackendRatesToBoard } from "../../lib/admin-backend";
 
 const onboardingSteps = [
   {
@@ -34,10 +32,8 @@ const supportHighlights = [
   "Buy4Me ordering for products outside Nigeria",
 ];
 
-export default async function DashboardPage() {
-  const liveRates = await fetchRates()
-    .then((rates) => mapBackendRatesToBoard(rates))
-    .catch(() => homeRates.map((rate, index) => ({ id: `fallback-${index}`, ...rate })));
+export default function DashboardPage() {
+  const initialRates = homeRates.map((rate, index) => ({ id: `fallback-${index}`, ...rate }));
 
   return (
     <AppShell
@@ -178,44 +174,7 @@ export default async function DashboardPage() {
 
         <Stagger className="grid gap-4 sm:gap-6 xl:grid-cols-[0.95fr_1.05fr]">
           <StaggerItem>
-          <div className="min-w-0 rounded-[26px] border border-[#e6ece8] bg-white p-4 shadow-[0_12px_30px_rgba(15,23,32,0.04)] transition-all duration-300 hover:shadow-[0_18px_40px_rgba(15,23,32,0.06)] sm:rounded-[30px] sm:p-6">
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
-              <div>
-                <h3 className="text-2xl font-semibold text-slate-900">Live Rates Snapshot</h3>
-                <p className="mt-1 text-sm text-slate-500">A quick view of current deposit and withdrawal rates.</p>
-              </div>
-              <Link href="/services/crypto" className="text-sm font-semibold text-[#0f7b36]">
-                View services
-              </Link>
-            </div>
-
-            <Stagger className="mt-6 space-y-3">
-              {liveRates.map((rate) => {
-                const iconName = getRateServiceIconName(rate.name);
-                return (
-                  <StaggerItem key={rate.id}>
-                  <div className="flex flex-col gap-3 rounded-[20px] border border-[#edf1ee] px-4 py-4 transition-colors duration-300 hover:border-[#dbe6df] hover:bg-[#fbfdfb] sm:flex-row sm:items-center sm:justify-between sm:gap-4">
-                    <div className="flex min-w-0 items-center gap-3">
-                      {iconName ? (
-                        <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#f6faf7]">
-                          <ServiceIcon name={iconName} className="h-5 w-5 object-contain" />
-                        </span>
-                      ) : null}
-                      <div className="min-w-0">
-                        <p className="break-words font-semibold text-slate-900">{rate.name}</p>
-                        <p className="text-xs text-slate-500">Updated in today&apos;s rate board</p>
-                      </div>
-                    </div>
-                    <div className="shrink-0 text-left sm:text-right">
-                      <p className="text-sm font-semibold text-[#0f7b36]">{rate.deposit}</p>
-                      <p className="text-xs text-slate-500">{rate.withdrawal}</p>
-                    </div>
-                  </div>
-                  </StaggerItem>
-                );
-              })}
-            </Stagger>
-          </div>
+          <LiveRatesSnapshot initialRates={initialRates} />
           </StaggerItem>
 
           <StaggerItem>

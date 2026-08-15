@@ -1,27 +1,17 @@
-export const dynamic = "force-dynamic";
-
 import Image from "next/image";
 import Link from "next/link";
 import { Reveal, Stagger, StaggerItem } from "../components/homepage-motion";
 import { Icon } from "../components/icons";
 import { PublicShell } from "../components/public-shell";
 import { ServiceIcon, type ServiceIconName } from "../components/service-icon";
-import { RatesBoard } from "../components/rates-board";
+import { LiveRatesBoard } from "../components/live-rates-board";
 import { TestimonialsCarousel } from "../components/testimonials-carousel";
 import { homeOffers, homeRates, testimonials } from "../lib/mock-data";
-import {
-  fetchRates,
-  fetchTestimonials,
-  mapBackendRatesToBoard,
-} from "../lib/admin-backend";
+import { fetchTestimonials } from "../lib/admin-backend";
 import heroBackground from "../images/Hero_background.png";
 
 export default async function HomePage() {
-  const liveRates = await fetchRates()
-    .then((rates) => mapBackendRatesToBoard(rates))
-    .catch(() =>
-      homeRates.map((rate, index) => ({ id: `fallback-${index}`, ...rate })),
-    );
+  const initialRates = homeRates.map((rate, index) => ({ id: `fallback-${index}`, ...rate }));
   const approvedTestimonials = await fetchTestimonials("APPROVED")
     .then((items) =>
       items.map((item) => ({
@@ -118,7 +108,7 @@ export default async function HomePage() {
         </Reveal>
 
         <Reveal className="mt-8 md:mt-10" delay={0.08}>
-          <RatesBoard rates={liveRates} marquee />
+          <LiveRatesBoard initialRates={initialRates} marquee />
         </Reveal>
       </section>
 
