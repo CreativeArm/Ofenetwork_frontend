@@ -6,12 +6,11 @@ import { PublicShell } from "../components/public-shell";
 import { ServiceIcon, type ServiceIconName } from "../components/service-icon";
 import { LiveRatesBoard } from "../components/live-rates-board";
 import { TestimonialsCarousel } from "../components/testimonials-carousel";
-import { homeOffers, homeRates, testimonials } from "../lib/mock-data";
+import { homeOffers, testimonials } from "../lib/mock-data";
 import { fetchTestimonials } from "../lib/admin-backend";
 import heroBackground from "../images/Hero_background.png";
 
 export default async function HomePage() {
-  const initialRates = homeRates.map((rate, index) => ({ id: `fallback-${index}`, ...rate }));
   const approvedTestimonials = await fetchTestimonials("APPROVED")
     .then((items) =>
       items.map((item) => ({
@@ -108,7 +107,7 @@ export default async function HomePage() {
         </Reveal>
 
         <Reveal className="mt-8 md:mt-10" delay={0.08}>
-          <LiveRatesBoard initialRates={initialRates} marquee />
+          <LiveRatesBoard marquee />
         </Reveal>
       </section>
 

@@ -8,7 +8,7 @@ import { BonusBalanceAmount } from "../../components/bonus-balance";
 import { BonusCashoutPanel } from "../../components/bonus-cashout-panel";
 import { DashboardQuickStats } from "../../components/dashboard-quick-stats";
 import { UserTransactionHistory } from "../../components/user-transaction-history";
-import { homeRates, serviceConfigs } from "../../lib/mock-data";
+import { serviceConfigs } from "../../lib/mock-data";
 
 const onboardingSteps = [
   {
@@ -33,8 +33,6 @@ const supportHighlights = [
 ];
 
 export default function DashboardPage() {
-  const initialRates = homeRates.map((rate, index) => ({ id: `fallback-${index}`, ...rate }));
-
   return (
     <AppShell
       activeSlug="dashboard"
@@ -174,7 +172,7 @@ export default function DashboardPage() {
 
         <Stagger className="grid gap-4 sm:gap-6 xl:grid-cols-[0.95fr_1.05fr]">
           <StaggerItem>
-          <LiveRatesSnapshot initialRates={initialRates} />
+          <LiveRatesSnapshot />
           </StaggerItem>
 
           <StaggerItem>

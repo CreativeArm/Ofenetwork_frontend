@@ -29,30 +29,21 @@ import {
   fetchAdminBuy4MeOrders,
   fetchAdminTransactions,
   fetchAdminUsers,
-  fetchRates,
   fetchSupportTickets,
   fetchTestimonials,
   formatCurrency,
   formatRelativeTime,
-  mapBackendRatesToBoard,
 } from "../../../lib/admin-backend";
 import {
   adminBonusRules,
-  adminBuy4MeOrders,
-  adminKycData,
   adminNotificationsData,
   adminPaymentData,
   adminSectionMeta,
   adminSecurityEvents,
   adminServiceHealth,
   adminSettingsData,
-  adminTestimonialsQueue,
-  adminTicketsData,
-  adminTransactionsData,
-  adminUsersData,
   type AdminSectionSlug,
 } from "../../../lib/admin-data";
-import { homeRates } from "../../../lib/mock-data";
 import { getPrimaryTransactionDetail } from "../../../lib/transaction-details";
 
 const sections = Object.keys(adminSectionMeta) as AdminSectionSlug[];
@@ -150,7 +141,7 @@ async function renderSection(section: AdminSectionSlug) {
                 adminActionHistory: item.adminActionHistory,
               };
             })
-          : adminTransactionsData;
+          : [];
 
       return (
         <div className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
@@ -169,8 +160,8 @@ async function renderSection(section: AdminSectionSlug) {
             <AdminCard>
               <h3 className="text-xl font-semibold">Fast Links</h3>
               <div className="mt-4 grid gap-3">
-                <Link href="/admin/rates" className="rounded-2xl border border-[#e5ebe7] px-4 py-3 text-sm font-semibold text-slate-700">Update rates</Link>
-                <Link href="/admin/notifications" className="rounded-2xl border border-[#e5ebe7] px-4 py-3 text-sm font-semibold text-slate-700">Send transaction notice</Link>
+                <Link href="/admin/rates" className="rounded-2xl border border-[#e5ebe7] px-4 py-3 text-sm font-semibold text-slate-700 hover:text-[#0f7b36]">Update rates</Link>
+                <Link href="/admin/notifications" className="rounded-2xl border border-[#e5ebe7] px-4 py-3 text-sm font-semibold text-slate-700 hover:text-[#0f7b36]">Send transaction notice</Link>
               </div>
             </AdminCard>
           </div>
@@ -190,33 +181,7 @@ async function renderSection(section: AdminSectionSlug) {
                 buy4meUsers.find((user) => user.id === order.userId)?.fullName ??
                 "Unknown user",
             }))
-          : adminBuy4MeOrders.map((order, index) => ({
-              id: order.id,
-              userId: `fallback-user-${index}`,
-              customer: order.customer,
-              productLink: order.source,
-              productDetails: order.item,
-              productCost: undefined,
-              shippingCost: undefined,
-              serviceCharge: undefined,
-              totalCost: Number(order.total.replace(/[^0-9.]/g, "")) || undefined,
-              paymentMethod: order.paymentMethod,
-              proofOfPaymentUrl: undefined,
-              timelineUpdate: order.eta,
-              adminNote: order.note,
-              status:
-                order.status === "Awaiting Payment"
-                  ? "AWAITING_PAYMENT"
-                  : order.status === "Processing"
-                    ? "PURCHASING"
-                    : order.status === "Shipped"
-                      ? "SHIPPED"
-                      : order.status === "Completed"
-                        ? "COMPLETED"
-                        : "ISSUE",
-              createdAt: new Date().toISOString(),
-              updatedAt: new Date().toISOString(),
-            })) as readonly AdminBuy4MeOrderRecord[];
+          : [];
 
       return (
         <div className="grid gap-6 xl:grid-cols-[1.15fr_0.85fr]">
@@ -238,21 +203,7 @@ async function renderSection(section: AdminSectionSlug) {
 
       return (
         <AdminCard>
-          {adminUsers.length > 0 ? (
-            <AdminUsersBonusManager users={adminUsers} />
-          ) : (
-            <div className="space-y-3">
-              {adminUsersData.map((user) => (
-                <div key={user.email} className="rounded-[22px] border border-[#edf1ee] p-4">
-                  <p className="font-semibold text-slate-900">{user.name}</p>
-                  <p className="text-sm text-slate-500">{user.email}</p>
-                  <p className="mt-2 text-sm text-slate-500">
-                    Live user data could not be loaded. Start the backend to manage bonuses.
-                  </p>
-                </div>
-              ))}
-            </div>
-          )}
+          <AdminUsersBonusManager users={adminUsers} />
         </AdminCard>
       );
     case "bonuses":
@@ -284,15 +235,9 @@ async function renderSection(section: AdminSectionSlug) {
         </div>
       );
     case "rates":
-      const rates = await fetchRates().catch(() => []);
-      const rateItems =
-        rates.length > 0
-          ? mapBackendRatesToBoard(rates)
-          : homeRates.map((rate, index) => ({ id: `fallback-${index}`, ...rate }));
-
       return (
         <AdminCard>
-          <AdminRatesEditor initialRates={rateItems} />
+          <AdminRatesEditor />
         </AdminCard>
       );
     case "services":
@@ -319,7 +264,7 @@ async function renderSection(section: AdminSectionSlug) {
       );
     case "testimonials":
       const liveTestimonials = await fetchTestimonials().catch(() => []);
-      const testimonialItems =
+      const testimonialItems: readonly TestimonialRecord[] =
         liveTestimonials.length > 0
           ? liveTestimonials.map((item) => ({
               id: item.id,
@@ -329,15 +274,7 @@ async function renderSection(section: AdminSectionSlug) {
               status: item.status,
               submittedAt: formatRelativeTime(item.submittedAt),
             }))
-          : adminTestimonialsQueue.map((item) => ({
-              ...item,
-              status:
-                item.status === "Approved"
-                  ? "APPROVED"
-                  : item.status === "Rejected"
-                    ? "REJECTED"
-                    : "PENDING_REVIEW",
-            })) as readonly TestimonialRecord[];
+          : [];
 
       return (
         <AdminCard>
@@ -373,13 +310,13 @@ async function renderSection(section: AdminSectionSlug) {
                 time: formatRelativeTime(message.time),
               })),
             }))
-          : adminTicketsData;
+          : [];
 
       return (
         <AdminCard>
           <AdminSupportQueue
             items={supportTicketItems}
-            liveMode={supportTickets.length > 0}
+            liveMode={true}
           />
         </AdminCard>
       );
@@ -396,7 +333,7 @@ async function renderSection(section: AdminSectionSlug) {
         .map((user) => ({
           id: `KYC-${user.id.slice(-8)}`,
           userId: user.id,
-          user: user.fullName,
+          user: user.fullName || "Unnamed User",
           document: user.kycDocumentType ?? "KYC document",
           risk: user.kycStatus === "REJECTED" ? "High" : "Low",
           status:
@@ -417,7 +354,7 @@ async function renderSection(section: AdminSectionSlug) {
 
       return (
         <AdminCard>
-          <AdminKycQueue items={liveKycItems.length > 0 ? liveKycItems : adminKycData} />
+          <AdminKycQueue items={liveKycItems} />
         </AdminCard>
       );
     case "settings":

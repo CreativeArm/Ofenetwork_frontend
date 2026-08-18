@@ -18,12 +18,10 @@ interface RateItem {
   withdrawal: string;
 }
 
-interface AdminRatesEditorProps {
-  initialRates: RateItem[];
-}
-
-export function AdminRatesEditor({ initialRates }: AdminRatesEditorProps) {
-  const [rates, setRates] = useState(initialRates);
+export function AdminRatesEditor() {
+  const [rates, setRates] = useState<RateItem[]>([]);
+  const [isLoadingRates, setIsLoadingRates] = useState(true);
+  const [ratesLoadFailed, setRatesLoadFailed] = useState(false);
 
   useEffect(() => {
     fetchRates()
@@ -33,7 +31,10 @@ export function AdminRatesEditor({ initialRates }: AdminRatesEditorProps) {
         }
       })
       .catch(() => {
-        // keeps initial static rates if offline
+        setRatesLoadFailed(true);
+      })
+      .finally(() => {
+        setIsLoadingRates(false);
       });
   }, []);
 
@@ -216,7 +217,13 @@ export function AdminRatesEditor({ initialRates }: AdminRatesEditorProps) {
           <p>Action</p>
         </div>
 
-        <div className="md:hidden">
+        {isLoadingRates ? (
+          <p className="px-5 py-6 text-sm text-slate-500">Loading live rates…</p>
+        ) : ratesLoadFailed || rates.length === 0 ? (
+          <p className="px-5 py-6 text-sm text-slate-500">Live rates are temporarily unavailable.</p>
+        ) : null}
+
+        {!isLoadingRates && !ratesLoadFailed && rates.length > 0 ? <div className="md:hidden">
           {rates.map((rate, index) => {
             const iconName = getRateServiceIconName(rate.name);
             return (
@@ -258,9 +265,9 @@ export function AdminRatesEditor({ initialRates }: AdminRatesEditorProps) {
               </div>
             );
           })}
-        </div>
+        </div> : null}
 
-        <div className="hidden md:block">
+        {!isLoadingRates && !ratesLoadFailed && rates.length > 0 ? <div className="hidden md:block">
           {rates.map((rate) => {
             const iconName = getRateServiceIconName(rate.name);
             return (
@@ -288,7 +295,7 @@ export function AdminRatesEditor({ initialRates }: AdminRatesEditorProps) {
               </div>
             );
           })}
-        </div>
+        </div> : null}
       </div>
 
       {activeRate ? (
