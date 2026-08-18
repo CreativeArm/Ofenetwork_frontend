@@ -125,7 +125,7 @@ function AppShellInner({ children, activeSlug, title, subtitle, admin = false }:
   const [notifications, setNotifications] = useState<ShellNotification[]>(
     admin ? adminNotifications : userNotifications,
   );
-  const unreadCount = notifications.length;
+  const unreadCount = notifications.filter((notification) => notification.unread).length;
   const profileName = storedUserName ?? (admin ? "Admin" : "User");
   const profileInitial = profileName.charAt(0);
   const isOverlayOpen =
@@ -220,41 +220,51 @@ function AppShellInner({ children, activeSlug, title, subtitle, admin = false }:
       process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") ??
       "http://127.0.0.1:4000/api";
 
-    fetch(`${apiBaseUrl}/notifications?userId=${encodeURIComponent(storedUserId)}`, {
-      cache: "no-store",
-    })
-      .then(async (response) => {
-        if (!response.ok) {
-          throw new Error("Failed to load notifications");
-        }
+    const loadNotifications = () => {
+      fetch(`${apiBaseUrl}/notifications?userId=${encodeURIComponent(storedUserId)}`, {
+        cache: "no-store",
+      })
+        .then(async (response) => {
+          if (!response.ok) {
+            throw new Error("Failed to load notifications");
+          }
 
-        return (await response.json()) as Array<{
-          id: string;
-          title: string;
-          message: string;
-          createdAt: string;
-          read: boolean;
-        }>;
-      })
-      .then((items) => {
-        setNotifications(
-          items.map((item) => ({
-            id: item.id,
-            title: item.title,
-            detail: item.message,
-            time: new Date(item.createdAt).toLocaleString("en-NG", {
-              month: "short",
-              day: "numeric",
-              hour: "numeric",
-              minute: "2-digit",
-            }),
-            unread: true,
-          })),
-        );
-      })
-      .catch(() => {
-        // Keep fallback notifications when the backend call is unavailable.
-      });
+          return (await response.json()) as Array<{
+            id: string;
+            title: string;
+            message: string;
+            createdAt: string;
+            read: boolean;
+          }>;
+        })
+        .then((items) => {
+          setNotifications(
+            items.map((item) => ({
+              id: item.id,
+              title: item.title,
+              detail: item.message,
+              time: new Date(item.createdAt).toLocaleString("en-NG", {
+                month: "short",
+                day: "numeric",
+                hour: "numeric",
+                minute: "2-digit",
+              }),
+              unread: !item.read,
+            })),
+          );
+        })
+        .catch(() => undefined);
+    };
+
+    loadNotifications();
+    const interval = window.setInterval(loadNotifications, 30_000);
+    const onFocus = () => loadNotifications();
+    window.addEventListener("focus", onFocus);
+
+    return () => {
+      window.clearInterval(interval);
+      window.removeEventListener("focus", onFocus);
+    };
   }, [storedUserId]);
 
   const handleLogout = () => {
@@ -359,7 +369,11 @@ function AppShellInner({ children, activeSlug, title, subtitle, admin = false }:
 
   const openNotification = (notification: ShellNotification) => {
     setActiveNotification(notification);
-    setNotifications((current) => current.filter((item) => item.id !== notification.id));
+    setNotifications((current) =>
+      current.map((item) =>
+        item.id === notification.id ? { ...item, unread: false } : item,
+      ),
+    );
     setIsNotificationOpen(false);
 
     const apiBaseUrl =
@@ -368,9 +382,7 @@ function AppShellInner({ children, activeSlug, title, subtitle, admin = false }:
 
     fetch(`${apiBaseUrl}/notifications/${encodeURIComponent(notification.id)}/read`, {
       method: "PATCH",
-    }).catch(() => {
-      // Fallback demo notifications are removed locally even when no backend row exists.
-    });
+    }).catch(() => undefined);
   };
 
   const brandBlock = (

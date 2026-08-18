@@ -368,8 +368,8 @@ export function AdminBuy4MeQueue({ items = [] }: AdminBuy4MeQueueProps) {
 
   return (
     <>
-      <div className="mb-5 flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
-        <div className="min-w-0 xl:max-w-[400px]">
+      <div className="mb-5 space-y-4">
+        <div className="min-w-0">
           <div className="flex items-center gap-3">
             <h3 className="text-xl font-semibold leading-tight">Order Pipeline ({orders.length})</h3>
             <button
@@ -386,7 +386,7 @@ export function AdminBuy4MeQueue({ items = [] }: AdminBuy4MeQueueProps) {
             Review product links, price quotes, confirm payment, and update tracking stages.
           </p>
         </div>
-        <div className="flex gap-2 overflow-x-auto pb-1 xl:shrink-0 xl:overflow-visible">
+        <div className="flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {filters.map((filter) => {
             const count = filterCounts[filter];
             return (

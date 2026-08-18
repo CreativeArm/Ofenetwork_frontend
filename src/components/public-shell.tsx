@@ -200,13 +200,13 @@ export function PublicShell({ children }: PublicShellProps) {
               &copy; 2026 Ofenetworks Solutions. All rights reserved.
             </p>
             <div className="mt-6 flex flex-wrap items-center justify-center gap-x-5 gap-y-3 text-xs text-slate-400">
-              <Link href="#" className="transition hover:text-white">
+              <Link href="/terms" className="transition hover:text-white">
                 Terms
               </Link>
               <Link href="/privacy-policy" className="transition hover:text-white">
                 Privacy
               </Link>
-              <Link href="#" className="transition hover:text-white">
+              <Link href="/cookies" className="transition hover:text-white">
                 Cookies
               </Link>
               <Link href="/services" className="transition hover:text-white">

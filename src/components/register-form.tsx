@@ -236,7 +236,7 @@ export function RegisterForm() {
             <label htmlFor="terms" className="text-xs leading-5 text-slate-500">
               I agree to the{" "}
               <Link
-                href="#"
+                href="/terms"
                 className="font-semibold text-emerald-600 transition-colors duration-300 hover:text-emerald-700 hover:underline"
               >
                 Terms of Service
