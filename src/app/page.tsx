@@ -4,6 +4,7 @@ import { Reveal, Stagger, StaggerItem } from "../components/homepage-motion";
 import { Icon } from "../components/icons";
 import { PublicShell } from "../components/public-shell";
 import { ServiceIcon, type ServiceIconName } from "../components/service-icon";
+import { LiveRatesTable } from "../components/live-rates-table";
 import { LiveRatesBoard } from "../components/live-rates-board";
 import { TestimonialsCarousel } from "../components/testimonials-carousel";
 import { homeOffers, testimonials } from "../lib/mock-data";
@@ -92,23 +93,24 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="relative left-1/2 right-1/2 mt-0 w-screen max-w-none -translate-x-1/2 overflow-hidden border-y border-[#e8f1eb] bg-[linear-gradient(180deg,#f8fcf9_0%,#eff7f1_100%)] py-10 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)] md:py-14">
-        <Reveal className="mx-auto max-w-3xl px-4 text-center md:px-8">
-          <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[#0f7b36]">
-            Live Exchange Rates
-          </p>
-          <h2 className="mt-3 text-3xl font-semibold tracking-tight text-slate-900 md:text-5xl">
-            All your current rates in one moving board
-          </h2>
-          <p className="mx-auto mt-4 max-w-2xl text-sm leading-7 text-slate-500 md:text-base">
-            Track deposit and withdrawal prices across our services in real
-            time. All displayed values are in NGN.
-          </p>
-        </Reveal>
+      <section className="relative left-1/2 right-1/2 mt-0 w-screen max-w-none -translate-x-1/2 overflow-hidden border-y border-[#e8f1eb] bg-[linear-gradient(180deg,#f8fcf9_0%,#eff7f1_100%)] py-12 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)] md:py-18">
+        <div className="mx-auto max-w-7xl px-4 md:px-8">
+          <Reveal className="mx-auto max-w-3xl text-center">
+            <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[#0f7b36]">
+              Live Market Rates
+            </p>
+            <h2 className="mt-3 text-3xl font-bold tracking-tight text-slate-900 md:text-5xl">
+              Real-time Exchange & Asset Prices
+            </h2>
+            <p className="mx-auto mt-4 max-w-2xl text-sm leading-7 text-slate-500 md:text-base">
+              Track live deposit and withdrawal rates across all our crypto, forex, e-wallets, and global services. Compare rates at a glance and start trading instantly.
+            </p>
+          </Reveal>
 
-        <Reveal className="mt-8 md:mt-10" delay={0.08}>
-          <LiveRatesBoard marquee />
-        </Reveal>
+          <Reveal className="mt-8 md:mt-12" delay={0.08}>
+            <LiveRatesTable />
+          </Reveal>
+        </div>
       </section>
 
       <section className="relative left-1/2 right-1/2 mt-0 w-screen max-w-none -translate-x-1/2 overflow-hidden bg-[radial-gradient(circle_at_12%_18%,rgba(15,123,54,0.08),transparent_28%),linear-gradient(180deg,#ffffff_0%,#f7fbf8_55%,#ffffff_100%)] px-4 py-12 md:px-8 md:py-16">
