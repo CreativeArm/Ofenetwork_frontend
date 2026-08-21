@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { fetchRates, type BackendRate } from "../lib/admin-backend";
+import { type BackendRate } from "../lib/admin-backend";
+import { getDefaultPublicRates, loadPublicRates } from "../lib/public-rates";
 import { getRateServiceIconName, ServiceIcon, type ServiceIconName } from "./service-icon";
 
 type ServiceMetadata = {
@@ -71,24 +72,17 @@ function TradeLink({ service }: { service: string }) {
 }
 
 export function LiveRatesTable() {
-  const [rates, setRates] = useState<BackendRate[] | null>(null);
-  const [loadFailed, setLoadFailed] = useState(false);
+  const [rates, setRates] = useState<BackendRate[]>(getDefaultPublicRates);
+  const [usingFallback, setUsingFallback] = useState(true);
 
   useEffect(() => {
     let active = true;
 
     const loadRates = async () => {
-      try {
-        const response = await fetchRates();
-        if (active) {
-          setRates(response);
-          setLoadFailed(false);
-        }
-      } catch {
-        if (active) {
-          setRates([]);
-          setLoadFailed(true);
-        }
+      const response = await loadPublicRates();
+      if (active) {
+        setRates(response.rates);
+        setUsingFallback(response.isFallback);
       }
     };
 
@@ -101,25 +95,7 @@ export function LiveRatesTable() {
     };
   }, []);
 
-  const updatedAt = useMemo(() => formatUpdatedAt(rates ?? []), [rates]);
-
-  if (rates === null) {
-    return (
-      <div className="rounded-[28px] border border-[#e1ece4] bg-white px-5 py-12 text-center shadow-[0_20px_60px_rgba(15,23,32,0.06)]">
-        <span className="inline-block h-5 w-5 animate-spin rounded-full border-2 border-[#c9e4d1] border-t-[#0f7b36]" />
-        <p className="mt-3 text-sm font-medium text-slate-500">Loading current service rates…</p>
-      </div>
-    );
-  }
-
-  if (loadFailed || rates.length === 0) {
-    return (
-      <div className="rounded-[28px] border border-[#e1ece4] bg-white px-5 py-12 text-center shadow-[0_20px_60px_rgba(15,23,32,0.06)]">
-        <p className="text-base font-semibold text-slate-800">Rates are temporarily unavailable.</p>
-        <p className="mt-2 text-sm text-slate-500">Please refresh the page or check back shortly.</p>
-      </div>
-    );
-  }
+  const updatedAt = useMemo(() => formatUpdatedAt(rates), [rates]);
 
   return (
     <div className="overflow-hidden rounded-[28px] border border-[#dceade] bg-white shadow-[0_20px_60px_rgba(15,23,32,0.06)]">
@@ -130,8 +106,9 @@ export function LiveRatesTable() {
         </div>
         <span className="inline-flex w-fit items-center gap-2 rounded-full border border-[#cae6d1] bg-white px-3 py-1.5 text-xs font-semibold text-[#0f7b36]">
           <span className="h-2 w-2 animate-pulse rounded-full bg-[#0f7b36]" />
-          Live Rate
+          {usingFallback ? "Rate snapshot" : "Live Rate"}
         </span>
+        {usingFallback ? <p className="text-xs text-amber-700">Showing the last available rates while live data reconnects.</p> : null}
       </div>
 
       <div className="hidden md:block">

@@ -174,9 +174,10 @@ export interface BackendSupportTicket {
   }>;
 }
 
-async function fetchApi<T>(path: string): Promise<T> {
+async function fetchApi<T>(path: string, init: RequestInit = {}): Promise<T> {
   const response = await fetch(`${API_BASE_URL}${path}`, {
     cache: "no-store",
+    ...init,
   });
 
   if (!response.ok) {
@@ -440,7 +441,28 @@ export async function updateBuy4MeStatus(
 }
 
 export async function fetchRates() {
-  return fetchApi<BackendRate[]>("/rates");
+  // Hosted services can take a few seconds to wake after inactivity. Retry a
+  // transient connection failure once so a brief cold start does not blank the
+  // public rate board.
+  let lastError: unknown;
+
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    const controller = new AbortController();
+    const timeout = window.setTimeout(() => controller.abort(), 15_000);
+
+    try {
+      return await fetchApi<BackendRate[]>("/rates", { signal: controller.signal });
+    } catch (error) {
+      lastError = error;
+      if (attempt === 0) {
+        await new Promise((resolve) => window.setTimeout(resolve, 1_000));
+      }
+    } finally {
+      window.clearTimeout(timeout);
+    }
+  }
+
+  throw lastError instanceof Error ? lastError : new Error("Unable to load rates.");
 }
 
 export async function fetchTestimonials(status?: BackendTestimonial["status"]) {

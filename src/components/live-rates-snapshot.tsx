@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ServiceIcon, getRateServiceIconName } from "./service-icon";
 import { Stagger, StaggerItem } from "./homepage-motion";
-import { fetchRates, mapBackendRatesToBoard } from "../lib/admin-backend";
+import { mapBackendRatesToBoard } from "../lib/admin-backend";
+import { getDefaultPublicRates, loadPublicRates } from "../lib/public-rates";
 
 interface RateItem {
   id: string;
@@ -14,22 +15,9 @@ interface RateItem {
 }
 
 export function LiveRatesSnapshot() {
-  const [rates, setRates] = useState<RateItem[] | null>(null);
-  const [loadFailed, setLoadFailed] = useState(false);
-
+  const [rates, setRates] = useState<RateItem[]>(() => mapBackendRatesToBoard(getDefaultPublicRates()));
   useEffect(() => {
-    fetchRates()
-      .then((fetched) => {
-        if (fetched && fetched.length > 0) {
-          setRates(mapBackendRatesToBoard(fetched));
-        } else {
-          setRates([]);
-        }
-      })
-      .catch(() => {
-        setLoadFailed(true);
-        setRates([]);
-      });
+    loadPublicRates().then(({ rates: fetched }) => setRates(mapBackendRatesToBoard(fetched)));
   }, []);
 
   return (
@@ -44,11 +32,6 @@ export function LiveRatesSnapshot() {
         </Link>
       </div>
 
-      {rates === null ? (
-        <p className="mt-6 text-sm text-slate-500">Loading live rates…</p>
-      ) : loadFailed || rates.length === 0 ? (
-        <p className="mt-6 text-sm text-slate-500">Live rates are temporarily unavailable.</p>
-      ) : (
       <Stagger className="mt-6 space-y-3">
         {rates.map((rate) => {
           const iconName = getRateServiceIconName(rate.name);
@@ -75,7 +58,6 @@ export function LiveRatesSnapshot() {
           );
         })}
       </Stagger>
-      )}
     </div>
   );
 }

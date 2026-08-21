@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { RatesBoard } from "./rates-board";
-import { fetchRates, mapBackendRatesToBoard } from "../lib/admin-backend";
+import { mapBackendRatesToBoard } from "../lib/admin-backend";
+import { getDefaultPublicRates, loadPublicRates } from "../lib/public-rates";
 
 interface RateItem {
   id: string;
@@ -16,31 +17,10 @@ interface LiveRatesBoardProps {
 }
 
 export function LiveRatesBoard({ marquee = false }: LiveRatesBoardProps) {
-  const [rates, setRates] = useState<RateItem[] | null>(null);
-  const [loadFailed, setLoadFailed] = useState(false);
-
+  const [rates, setRates] = useState<RateItem[]>(() => mapBackendRatesToBoard(getDefaultPublicRates()));
   useEffect(() => {
-    fetchRates()
-      .then((fetched) => {
-        if (fetched && fetched.length > 0) {
-          setRates(mapBackendRatesToBoard(fetched));
-        } else {
-          setRates([]);
-        }
-      })
-      .catch(() => {
-        setLoadFailed(true);
-        setRates([]);
-      });
+    loadPublicRates().then(({ rates: fetched }) => setRates(mapBackendRatesToBoard(fetched)));
   }, []);
-
-  if (rates === null) {
-    return <p className="py-4 text-center text-sm text-slate-500">Loading live rates…</p>;
-  }
-
-  if (loadFailed || rates.length === 0) {
-    return <p className="py-4 text-center text-sm text-slate-500">Live rates are temporarily unavailable.</p>;
-  }
 
   return <RatesBoard rates={rates} marquee={marquee} />;
 }
